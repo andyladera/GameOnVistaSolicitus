@@ -1,0 +1,157 @@
+/* Fuente general */
+body {
+    font-family: 'Montserrat', sans-serif;
+    background-color: #f2f2f2;
+    margin: 0;
+    padding: 0;
+}
+
+/* Página de autenticación */
+.auth-page {
+    display: flex;
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(to right, #000000, #00ff84);
+}
+
+.auth-image {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: transparent;
+}
+
+.auth-image::before {
+    content: "";
+    display: block;
+    width: 730px; /* ancho deseado */
+    height: 730px; /* alto deseado */
+    background-image: url("../../Resources/image_login.png");
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.auth-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 40px;
+    background: #ffffff;
+    border-radius: 10px 0 0 10px;
+    box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
+    max-width: 500px;
+}
+
+
+.auth-header h2 {
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.auth-header p {
+    margin-bottom: 30px;
+    color: #777;
+}
+
+.auth-body .form-group {
+    margin-bottom: 20px;
+}
+
+.form-control {
+    width: 100%;
+    padding: 12px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+}
+
+.password-field {
+    position: relative;
+}
+
+.toggle-password {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #666;
+}
+
+.btn-block {
+    width: 100%;
+}
+
+/* Botones */
+.btn {
+    padding: 12px 20px;
+    border: none;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    transition: background-color 0.3s ease;
+}
+
+.btn-primary {
+    background-color: #007bff;
+    color: #fff;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+}
+
+/* Mensajes de error */
+.alert-danger {
+    color: #a94442;
+    background-color: #f2dede;
+    padding: 10px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+}
+
+/* Selector de tipo de usuario */
+.user-type-selector {
+    display: flex;
+    justify-content: space-around;
+}
+
+.form-check {
+    display: flex;
+    align-items: center;
+}
+
+.form-check input {
+    margin-right: 8px;
+}
+
+/* Footer */
+.auth-footer {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.auth-footer a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.forgot-password {
+    margin-top: 10px;
+}
+
+.forgot-password a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+/* Utilidades */
+.text-center {
+    text-align: center;
+}

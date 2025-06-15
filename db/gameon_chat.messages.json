@@ -1,0 +1,810 @@
+[{
+  "_id": {
+    "$oid": "683e3403884818e05d09b9e6"
+  },
+  "conversation_id": "683e31ba884818e05d09b9e5",
+  "sender_id": 2,
+  "message": "¡Hola! ¿Cómo estás?",
+  "timestamp": {
+    "$date": "2025-06-02T23:00:11.000Z"
+  },
+  "read_by": [
+    2
+  ]
+},
+{
+  "_id": {
+    "$oid": "683e3403884818e05d09b9e7"
+  },
+  "conversation_id": "683e31ba884818e05d09b9e5",
+  "sender_id": 0,
+  "message": "¡Hola! Todo bien, ¿y tú qué tal?",
+  "timestamp": {
+    "$date": "2025-06-02T23:02:11.000Z"
+  },
+  "read_by": [
+    0
+  ]
+},
+{
+  "_id": {
+    "$oid": "683e3403884818e05d09b9e8"
+  },
+  "conversation_id": "683e31ba884818e05d09b9e5",
+  "sender_id": 2,
+  "message": "Bien también! ¿Te gustaría entrenar juntos este fin de semana?",
+  "timestamp": {
+    "$date": "2025-06-02T23:05:11.000Z"
+  },
+  "read_by": [
+    2
+  ]
+},
+{
+  "_id": {
+    "$oid": "683e3403884818e05d09b9e9"
+  },
+  "conversation_id": "683e31ba884818e05d09b9e5",
+  "sender_id": 0,
+  "message": "¡Por supuesto! ¿En qué lugar piensas?",
+  "timestamp": {
+    "$date": "2025-06-02T23:10:11.000Z"
+  },
+  "read_by": [
+    0
+  ]
+},
+{
+  "_id": {
+    "$oid": "683e3403884818e05d09b9ea"
+  },
+  "conversation_id": "683e31ba884818e05d09b9e5",
+  "sender_id": 2,
+  "message": "Podríamos ir a Top Gol Tacna, está muy bueno 🏈⚽",
+  "timestamp": {
+    "$date": "2025-06-02T23:15:11.000Z"
+  },
+  "read_by": [
+    2
+  ]
+},
+{
+  "_id": {
+    "$oid": "683e3403884818e05d09b9eb"
+  },
+  "conversation_id": "683e31ba884818e05d09b9e5",
+  "sender_id": 0,
+  "message": "¡Perfecto! ¿A qué hora quedamos?",
+  "timestamp": {
+    "$date": "2025-06-02T23:20:11.000Z"
+  },
+  "read_by": [
+    0
+  ]
+},
+{
+  "_id": {
+    "$oid": "683e3403884818e05d09b9ec"
+  },
+  "conversation_id": "683e31ba884818e05d09b9e5",
+  "sender_id": 2,
+  "message": "¿Qué tal a las 3 PM el sábado?",
+  "timestamp": {
+    "$date": "2025-06-02T23:22:11.000Z"
+  },
+  "read_by": [
+    2
+  ]
+},
+{
+  "_id": {
+    "$oid": "683e3403884818e05d09b9ed"
+  },
+  "conversation_id": "683e31ba884818e05d09b9e5",
+  "sender_id": 0,
+  "message": "¡Genial! Nos vemos allí 😊",
+  "timestamp": {
+    "$date": "2025-06-02T23:25:11.000Z"
+  },
+  "read_by": [
+    0
+  ]
+},
+{
+  "_id": {
+    "$oid": "683e3a83884818e05d09b9f6"
+  },
+  "conversation_id": "683e392c884818e05d09b9f4",
+  "sender_id": 2,
+  "message": "amiguito",
+  "timestamp": {
+    "$date": "2025-06-02T23:57:55.262Z"
+  },
+  "read_by": [
+    2
+  ]
+},
+{
+  "_id": {
+    "$oid": "683e3aa3884818e05d09b9f7"
+  },
+  "conversation_id": "683e392c884818e05d09b9f4",
+  "sender_id": 2,
+  "message": "Te quiero gfe",
+  "timestamp": {
+    "$date": "2025-06-02T23:58:27.020Z"
+  },
+  "read_by": [
+    2
+  ]
+},
+{
+  "_id": {
+    "$oid": "683e3ac4884818e05d09b9f8"
+  },
+  "conversation_id": "683e393a884818e05d09b9f5",
+  "sender_id": 2,
+  "message": "te quiero mucho amiguito",
+  "timestamp": {
+    "$date": "2025-06-02T23:59:00.488Z"
+  },
+  "read_by": [
+    2
+  ]
+},
+{
+  "_id": {
+    "$oid": "683e3cd5884818e05d09b9f9"
+  },
+  "conversation_id": "683e392c884818e05d09b9f4",
+  "sender_id": 3,
+  "message": "Yo te odio gfe",
+  "timestamp": {
+    "$date": "2025-06-03T00:07:49.187Z"
+  },
+  "read_by": [
+    3
+  ]
+},
+{
+  "_id": {
+    "$oid": "683f331af1d9fc38fb06a4f4"
+  },
+  "conversation_id": "683e392c884818e05d09b9f4",
+  "sender_id": 2,
+  "message": "Hola amiguito",
+  "timestamp": {
+    "$date": "2025-06-03T17:38:34.695Z"
+  },
+  "read_by": [
+    2
+  ]
+},
+{
+  "_id": {
+    "$oid": "683f35f5f1d9fc38fb06a4f5"
+  },
+  "conversation_id": "683e392c884818e05d09b9f4",
+  "sender_id": 2,
+  "message": "hola",
+  "timestamp": {
+    "$date": "2025-06-03T17:50:45.896Z"
+  },
+  "read_by": [
+    2
+  ]
+},
+{
+  "_id": {
+    "$oid": "683f373ff1d9fc38fb06a4f6"
+  },
+  "conversation_id": "683e392c884818e05d09b9f4",
+  "sender_id": 2,
+  "message": "GAAAAAA",
+  "timestamp": {
+    "$date": "2025-06-03T17:56:15.568Z"
+  },
+  "read_by": [
+    2
+  ]
+},
+{
+  "_id": {
+    "$oid": "683f3744f1d9fc38fb06a4f7"
+  },
+  "conversation_id": "683e392c884818e05d09b9f4",
+  "sender_id": 2,
+  "message": "GAAAAAAAA",
+  "timestamp": {
+    "$date": "2025-06-03T17:56:20.152Z"
+  },
+  "read_by": [
+    2
+  ]
+},
+{
+  "_id": {
+    "$oid": "683f3747f1d9fc38fb06a4f8"
+  },
+  "conversation_id": "683e392c884818e05d09b9f4",
+  "sender_id": 2,
+  "message": "gaaaaa",
+  "timestamp": {
+    "$date": "2025-06-03T17:56:23.829Z"
+  },
+  "read_by": [
+    2
+  ]
+},
+{
+  "_id": {
+    "$oid": "683f374af1d9fc38fb06a4f9"
+  },
+  "conversation_id": "683e392c884818e05d09b9f4",
+  "sender_id": 2,
+  "message": "edaedaed",
+  "timestamp": {
+    "$date": "2025-06-03T17:56:26.063Z"
+  },
+  "read_by": [
+    2
+  ]
+},
+{
+  "_id": {
+    "$oid": "683f374cf1d9fc38fb06a4fa"
+  },
+  "conversation_id": "683e392c884818e05d09b9f4",
+  "sender_id": 2,
+  "message": "frfsefaefsrf",
+  "timestamp": {
+    "$date": "2025-06-03T17:56:28.238Z"
+  },
+  "read_by": [
+    2
+  ]
+},
+{
+  "_id": {
+    "$oid": "683f374ef1d9fc38fb06a4fb"
+  },
+  "conversation_id": "683e392c884818e05d09b9f4",
+  "sender_id": 2,
+  "message": "daedeafefrs",
+  "timestamp": {
+    "$date": "2025-06-03T17:56:30.141Z"
+  },
+  "read_by": [
+    2
+  ]
+},
+{
+  "_id": {
+    "$oid": "683f3aa1f1d9fc38fb06a4fc"
+  },
+  "conversation_id": "683e393a884818e05d09b9f5",
+  "sender_id": 2,
+  "message": "Ese es mi chamo",
+  "timestamp": {
+    "$date": "2025-06-03T18:10:41.426Z"
+  },
+  "read_by": [
+    2
+  ]
+},
+{
+  "_id": {
+    "$oid": "683f3b04f1d9fc38fb06a4fd"
+  },
+  "conversation_id": "683e392c884818e05d09b9f4",
+  "sender_id": 2,
+  "message": "Por fin funciona carajoo",
+  "timestamp": {
+    "$date": "2025-06-03T18:12:20.480Z"
+  },
+  "read_by": [
+    2
+  ]
+},
+{
+  "_id": {
+    "$oid": "683f4795f1d9fc38fb06a4fe"
+  },
+  "conversation_id": "683e393a884818e05d09b9f5",
+  "sender_id": 2,
+  "message": "Hola mundo",
+  "timestamp": {
+    "$date": "2025-06-03T19:05:57.553Z"
+  },
+  "read_by": [
+    2
+  ]
+},
+{
+  "_id": {
+    "$oid": "683f512af1d9fc38fb06a501"
+  },
+  "conversation_id": "683e392c884818e05d09b9f4",
+  "sender_id": 2,
+  "message": "a",
+  "timestamp": {
+    "$date": "2025-06-03T19:46:50.455Z"
+  },
+  "read_by": [
+    2
+  ]
+},
+{
+  "_id": {
+    "$oid": "683f56c0f1d9fc38fb06a504"
+  },
+  "conversation_id": "683f56a8f1d9fc38fb06a503",
+  "sender_id": 2,
+  "message": "Hola gente",
+  "timestamp": {
+    "$date": "2025-06-03T20:10:40.219Z"
+  },
+  "read_by": [
+    2
+  ],
+  "is_team_message": true
+},
+{
+  "_id": {
+    "$oid": "683f56d0f1d9fc38fb06a505"
+  },
+  "conversation_id": "683f56a8f1d9fc38fb06a503",
+  "sender_id": 2,
+  "message": "Hola muchachos",
+  "timestamp": {
+    "$date": "2025-06-03T20:10:56.627Z"
+  },
+  "read_by": [
+    2
+  ],
+  "is_team_message": true
+},
+{
+  "_id": {
+    "$oid": "683f56d7f1d9fc38fb06a506"
+  },
+  "conversation_id": "683f56a4f1d9fc38fb06a502",
+  "sender_id": 2,
+  "message": "Hola muchachos",
+  "timestamp": {
+    "$date": "2025-06-03T20:11:03.577Z"
+  },
+  "read_by": [
+    2
+  ],
+  "is_team_message": true
+},
+{
+  "_id": {
+    "$oid": "683f571ef1d9fc38fb06a507"
+  },
+  "conversation_id": "683f56a8f1d9fc38fb06a503",
+  "sender_id": 2,
+  "message": "Hola perros",
+  "timestamp": {
+    "$date": "2025-06-03T20:12:14.623Z"
+  },
+  "read_by": [
+    2
+  ],
+  "is_team_message": true
+},
+{
+  "_id": {
+    "$oid": "683f5937f1d9fc38fb06a508"
+  },
+  "conversation_id": "683e392c884818e05d09b9f4",
+  "sender_id": 2,
+  "message": "HOLA GABYYY",
+  "timestamp": {
+    "$date": "2025-06-03T20:21:11.876Z"
+  },
+  "read_by": [
+    2
+  ]
+},
+{
+  "_id": {
+    "$oid": "683f593ff1d9fc38fb06a509"
+  },
+  "conversation_id": "683e393a884818e05d09b9f5",
+  "sender_id": 2,
+  "message": "HOLA CHAMOOOO",
+  "timestamp": {
+    "$date": "2025-06-03T20:21:19.791Z"
+  },
+  "read_by": [
+    2
+  ]
+},
+{
+  "_id": {
+    "$oid": "683f5962f1d9fc38fb06a50a"
+  },
+  "conversation_id": "683e392c884818e05d09b9f4",
+  "sender_id": 3,
+  "message": "HOLA CHEVIIII",
+  "timestamp": {
+    "$date": "2025-06-03T20:21:54.064Z"
+  },
+  "read_by": [
+    3
+  ]
+},
+{
+  "_id": {
+    "$oid": "683f5974f1d9fc38fb06a50b"
+  },
+  "conversation_id": "683e392c884818e05d09b9f4",
+  "sender_id": 3,
+  "message": "TE QUIERO PEGAR 😎",
+  "timestamp": {
+    "$date": "2025-06-03T20:22:12.284Z"
+  },
+  "read_by": [
+    3
+  ]
+},
+{
+  "_id": {
+    "$oid": "683f5a8bf1d9fc38fb06a50c"
+  },
+  "conversation_id": "683e392c884818e05d09b9f4",
+  "sender_id": 2,
+  "message": "Te quiero decir que me siento mal de la pata, me eh lesionado, no eres tu, soy yo, así que me dedicaré a envez de jugar al fuchibol, sere aguatero :(",
+  "timestamp": {
+    "$date": "2025-06-03T20:26:51.174Z"
+  },
+  "read_by": [
+    2
+  ]
+},
+{
+  "_id": {
+    "$oid": "683f5e14f1d9fc38fb06a50d"
+  },
+  "conversation_id": "683e393a884818e05d09b9f5",
+  "sender_id": 2,
+  "message": "HOLAAAAA",
+  "timestamp": {
+    "$date": "2025-06-03T20:41:56.456Z"
+  },
+  "read_by": [
+    2
+  ]
+},
+{
+  "_id": {
+    "$oid": "683f5e2ff1d9fc38fb06a50e"
+  },
+  "conversation_id": "683f56a8f1d9fc38fb06a503",
+  "sender_id": 2,
+  "message": "Hola mis estimados y estimadas",
+  "timestamp": {
+    "$date": "2025-06-03T20:42:23.779Z"
+  },
+  "read_by": [
+    2
+  ],
+  "is_team_message": true
+},
+{
+  "_id": {
+    "$oid": "683f5f036e0364ba550a3622"
+  },
+  "conversation_id": "683f56a8f1d9fc38fb06a503",
+  "sender_id": 2,
+  "message": "aaaaa",
+  "timestamp": {
+    "$date": "2025-06-03T20:45:55.015Z"
+  },
+  "read_by": [
+    2
+  ],
+  "is_team_message": true
+},
+{
+  "_id": {
+    "$oid": "683f5f846e0364ba550a3623"
+  },
+  "conversation_id": "683f56a8f1d9fc38fb06a503",
+  "sender_id": 2,
+  "message": "ESTERNOCLEIDO MASTOIDEO",
+  "timestamp": {
+    "$date": "2025-06-03T20:48:04.856Z"
+  },
+  "read_by": [
+    2
+  ],
+  "is_team_message": true
+},
+{
+  "_id": {
+    "$oid": "683f5ff26e0364ba550a3624"
+  },
+  "conversation_id": "683f56a8f1d9fc38fb06a503",
+  "sender_id": 2,
+  "message": "DE",
+  "timestamp": {
+    "$date": "2025-06-03T20:49:54.729Z"
+  },
+  "read_by": [
+    2
+  ],
+  "is_team_message": true
+},
+{
+  "_id": {
+    "$oid": "683f60276e0364ba550a3625"
+  },
+  "conversation_id": "683f56a8f1d9fc38fb06a503",
+  "sender_id": 2,
+  "message": "hola mundo",
+  "timestamp": {
+    "$date": "2025-06-03T20:50:47.111Z"
+  },
+  "read_by": [
+    2
+  ],
+  "is_team_message": true
+},
+{
+  "_id": {
+    "$oid": "683f61be6e0364ba550a3626"
+  },
+  "conversation_id": {
+    "$oid": "683f56a8f1d9fc38fb06a503"
+  },
+  "sender_id": 2,
+  "message": "HOLA MANADA",
+  "timestamp": {
+    "$date": "2025-06-03T20:57:34.116Z"
+  },
+  "read_by": [
+    2
+  ],
+  "is_team_message": true
+},
+{
+  "_id": {
+    "$oid": "683f61c86e0364ba550a3627"
+  },
+  "conversation_id": {
+    "$oid": "683f56a8f1d9fc38fb06a503"
+  },
+  "sender_id": 2,
+  "message": "Como andan familia",
+  "timestamp": {
+    "$date": "2025-06-03T20:57:44.027Z"
+  },
+  "read_by": [
+    2
+  ],
+  "is_team_message": true
+},
+{
+  "_id": {
+    "$oid": "683f61ce6e0364ba550a3628"
+  },
+  "conversation_id": {
+    "$oid": "683f56a4f1d9fc38fb06a502"
+  },
+  "sender_id": 2,
+  "message": "HOLAAAA",
+  "timestamp": {
+    "$date": "2025-06-03T20:57:50.992Z"
+  },
+  "read_by": [
+    2
+  ],
+  "is_team_message": true
+},
+{
+  "_id": {
+    "$oid": "683f62036e0364ba550a3629"
+  },
+  "conversation_id": {
+    "$oid": "683f56a8f1d9fc38fb06a503"
+  },
+  "sender_id": 2,
+  "message": "Hola mondo",
+  "timestamp": {
+    "$date": "2025-06-03T20:58:43.535Z"
+  },
+  "read_by": [
+    2
+  ],
+  "is_team_message": true
+},
+{
+  "_id": {
+    "$oid": "683f621a6e0364ba550a362a"
+  },
+  "conversation_id": {
+    "$oid": "683f56a8f1d9fc38fb06a503"
+  },
+  "sender_id": 2,
+  "message": "Ahora ya esta fino?",
+  "timestamp": {
+    "$date": "2025-06-03T20:59:06.807Z"
+  },
+  "read_by": [
+    2
+  ],
+  "is_team_message": true
+},
+{
+  "_id": {
+    "$oid": "683f621f6e0364ba550a362b"
+  },
+  "conversation_id": {
+    "$oid": "683f56a8f1d9fc38fb06a503"
+  },
+  "sender_id": 2,
+  "message": "aaaa",
+  "timestamp": {
+    "$date": "2025-06-03T20:59:11.832Z"
+  },
+  "read_by": [
+    2
+  ],
+  "is_team_message": true
+},
+{
+  "_id": {
+    "$oid": "683f64e96e0364ba550a362c"
+  },
+  "conversation_id": {
+    "$oid": "683f56a4f1d9fc38fb06a502"
+  },
+  "sender_id": 2,
+  "message": "A",
+  "timestamp": {
+    "$date": "2025-06-03T21:11:05.267Z"
+  },
+  "read_by": [
+    2
+  ],
+  "is_team_message": true
+},
+{
+  "_id": {
+    "$oid": "683f64ec6e0364ba550a362d"
+  },
+  "conversation_id": {
+    "$oid": "683f56a8f1d9fc38fb06a503"
+  },
+  "sender_id": 2,
+  "message": "A",
+  "timestamp": {
+    "$date": "2025-06-03T21:11:08.133Z"
+  },
+  "read_by": [
+    2
+  ],
+  "is_team_message": true
+},
+{
+  "_id": {
+    "$oid": "683f69d06e0364ba550a3630"
+  },
+  "conversation_id": {
+    "$oid": "683f56a4f1d9fc38fb06a502"
+  },
+  "sender_id": 2,
+  "message": "Hola gentita",
+  "timestamp": {
+    "$date": "2025-06-03T21:32:00.661Z"
+  },
+  "read_by": [
+    2
+  ],
+  "is_team_message": true
+},
+{
+  "_id": {
+    "$oid": "683f6a286e0364ba550a3631"
+  },
+  "conversation_id": {
+    "$oid": "683f56a4f1d9fc38fb06a502"
+  },
+  "sender_id": 3,
+  "message": "No me lo puedo creer gente, mi comisario me ama mucho <3",
+  "timestamp": {
+    "$date": "2025-06-03T21:33:28.774Z"
+  },
+  "read_by": [
+    3
+  ],
+  "is_team_message": true
+},
+{
+  "_id": {
+    "$oid": "683f6a7b6e0364ba550a3632"
+  },
+  "conversation_id": {
+    "$oid": "683f56a4f1d9fc38fb06a502"
+  },
+  "sender_id": 4,
+  "message": "Tedible",
+  "timestamp": {
+    "$date": "2025-06-03T21:34:51.302Z"
+  },
+  "read_by": [
+    4
+  ],
+  "is_team_message": true
+},
+{
+  "_id": {
+    "$oid": "6840bb745465c4e3cc06c664"
+  },
+  "conversation_id": {
+    "$oid": "683f6ef76e0364ba550a3633"
+  },
+  "sender_id": 3,
+  "message": "holaaaa",
+  "timestamp": {
+    "$date": "2025-06-04T21:32:36.363Z"
+  },
+  "read_by": [
+    3
+  ],
+  "is_team_message": true
+},
+{
+  "_id": {
+    "$oid": "6842306234f004ff15044f53"
+  },
+  "conversation_id": {
+    "$oid": "6842304134f004ff15044f52"
+  },
+  "sender_id": 2,
+  "message": "Victor eres un chamo",
+  "timestamp": {
+    "$date": "2025-06-06T00:03:46.796Z"
+  },
+  "read_by": [
+    2
+  ],
+  "is_team_message": true
+},
+{
+  "_id": {
+    "$oid": "684234b334f004ff15044f57"
+  },
+  "conversation_id": {
+    "$oid": "684234ae34f004ff15044f56"
+  },
+  "sender_id": 2,
+  "message": "holaaaaa",
+  "timestamp": {
+    "$date": "2025-06-06T00:22:11.844Z"
+  },
+  "read_by": [
+    2
+  ],
+  "is_team_message": true
+},
+{
+  "_id": {
+    "$oid": "684234b634f004ff15044f58"
+  },
+  "conversation_id": {
+    "$oid": "684234ae34f004ff15044f56"
+  },
+  "sender_id": 2,
+  "message": "como es",
+  "timestamp": {
+    "$date": "2025-06-06T00:22:14.143Z"
+  },
+  "read_by": [
+    2
+  ],
+  "is_team_message": true
+}]

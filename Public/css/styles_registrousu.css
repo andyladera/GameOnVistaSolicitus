@@ -1,0 +1,213 @@
+/* Estilos para el formulario de registro y login con división exacta 50/50 */
+body {
+    margin: 0;
+    font-family: 'Montserrat', sans-serif;
+    background: #ffffff;
+    color: #222;
+    height: 100vh;
+    overflow-x: hidden;
+}
+
+/* Estructura principal de la página de autenticación */
+.auth-page {
+    display: flex;
+    height: 100vh;
+    width: 100%;
+}
+
+/* Panel izquierdo con imagen - exactamente 50% */
+.auth-image {
+    width: 50%;
+    flex: 0 0 50%; /* No crecerá ni se encogerá, permanecerá en 50% */
+    display: flex;
+    flex-direction: column;
+    background: linear-gradient(135deg, #00a86b 0%, #008a5b 50%, #002117 100%);
+    padding: 40px;
+    box-sizing: border-box; /* Para que el padding no aumente el ancho total */
+    position: relative;
+    overflow: hidden;
+}
+
+.welcome-text {
+    color: white;
+    z-index: 2;
+    margin-bottom: 30px;
+}
+
+.welcome-text h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.image-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-grow: 1;
+}
+
+.image-container img {
+    max-width: 80%;
+    max-height: 70%;
+    object-fit: contain;
+}
+
+/* Panel derecho con el formulario - exactamente 50% */
+.auth-container {
+    width: 50%;
+    flex: 0 0 50%; /* No crecerá ni se encogerá, permanecerá en 50% */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+    box-sizing: border-box; /* Para que el padding no aumente el ancho total */
+    overflow-y: auto;
+}
+
+.form-container {
+    background: #f8f8f8;
+    border: 1px solid #ddd;
+    border-radius: 16px;
+    width: 100%;
+    max-width: 450px;
+    padding: 30px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+    margin-top: 0;
+    font-weight: 700;
+    color: #006644;
+    text-align: center;
+}
+
+p {
+    text-align: center;
+    color: #333;
+}
+
+.form-row {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.form-row .form-group {
+    flex: 1;
+    margin-bottom: 0;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #444;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="date"],
+input[type="password"],
+select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 14px;
+    box-sizing: border-box;
+}
+
+input:focus, select:focus {
+    border-color: #00bcd4;
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(0, 188, 212, 0.2);
+}
+
+.btn-submit {
+    background-color: #006644;
+    color: white;
+    padding: 14px;
+    width: 100%;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn-submit:hover {
+    background-color: #00875a;
+}
+
+.alert {
+    padding: 12px;
+    margin-bottom: 15px;
+    border-radius: 8px;
+    font-weight: 600;
+    text-align: center;
+}
+
+.alert.error {
+    background-color: #f44336;
+    color: white;
+}
+
+.alert.success {
+    background-color: #4caf50;
+    color: white;
+}
+
+.login-link {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.login-link a {
+    color: #00bcd4;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.login-link a:hover {
+    text-decoration: underline;
+}
+
+/* Responsive design */
+@media (max-width: 992px) {
+    .auth-page {
+        flex-direction: column;
+        height: auto;
+    }
+    
+    .auth-image,
+    .auth-container {
+        width: 100%;
+        flex: 0 0 100%;
+    }
+    
+    .auth-image {
+        min-height: 300px;
+    }
+    
+    .welcome-text h1 {
+        font-size: 1.8rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .form-row {
+        flex-direction: column;
+        gap: 0;
+    }
+    
+    .form-container {
+        padding: 20px;
+    }
+}

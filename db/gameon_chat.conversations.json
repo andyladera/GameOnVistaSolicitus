@@ -1,0 +1,121 @@
+[{
+  "_id": {
+    "$oid": "683e31ba884818e05d09b9e5"
+  },
+  "participants": [
+    2,
+    0
+  ],
+  "type": "private",
+  "created_at": {
+    "$date": "2025-06-02T23:20:26.841Z"
+  },
+  "updated_at": {
+    "$date": "2025-06-02T23:30:11.442Z"
+  },
+  "last_message": "¡Genial! Nos vemos allí 😊"
+},
+{
+  "_id": {
+    "$oid": "683e392c884818e05d09b9f4"
+  },
+  "participants": [
+    2,
+    3
+  ],
+  "type": "private",
+  "created_at": {
+    "$date": "2025-06-02T23:52:12.777Z"
+  },
+  "updated_at": {
+    "$date": "2025-06-03T20:26:51.175Z"
+  },
+  "last_message": "Te quiero decir que me siento mal de la pata, me eh lesionado, no eres tu, soy yo, así que me dedicaré a envez de jugar al fuchibol, sere aguatero :("
+},
+{
+  "_id": {
+    "$oid": "683e393a884818e05d09b9f5"
+  },
+  "participants": [
+    2,
+    4
+  ],
+  "type": "private",
+  "created_at": {
+    "$date": "2025-06-02T23:52:26.417Z"
+  },
+  "updated_at": {
+    "$date": "2025-06-03T20:41:56.456Z"
+  },
+  "last_message": "HOLAAAAA"
+},
+{
+  "_id": {
+    "$oid": "683f56a4f1d9fc38fb06a502"
+  },
+  "team_id": 1,
+  "type": "team",
+  "created_at": {
+    "$date": "2025-06-03T20:10:12.717Z"
+  },
+  "updated_at": {
+    "$date": "2025-06-03T20:11:03.579Z"
+  },
+  "last_message": "Hola muchachos"
+},
+{
+  "_id": {
+    "$oid": "683f56a8f1d9fc38fb06a503"
+  },
+  "team_id": 2,
+  "type": "team",
+  "created_at": {
+    "$date": "2025-06-03T20:10:16.711Z"
+  },
+  "updated_at": {
+    "$date": "2025-06-03T20:50:47.112Z"
+  },
+  "last_message": "hola mundo"
+},
+{
+  "_id": {
+    "$oid": "683f6ef76e0364ba550a3633"
+  },
+  "team_id": 3,
+  "type": "team",
+  "created_at": {
+    "$date": "2025-06-03T21:53:59.821Z"
+  },
+  "updated_at": {
+    "$date": "2025-06-03T21:53:59.821Z"
+  },
+  "last_message": "Conversación de equipo iniciada"
+},
+{
+  "_id": {
+    "$oid": "6842304134f004ff15044f52"
+  },
+  "team_id": 4,
+  "type": "team",
+  "created_at": {
+    "$date": "2025-06-06T00:03:13.933Z"
+  },
+  "updated_at": {
+    "$date": "2025-06-06T00:03:13.933Z"
+  },
+  "last_message": "Conversación de equipo iniciada"
+},
+{
+  "_id": {
+    "$oid": "684234ae34f004ff15044f56"
+  },
+  "team_id": 5,
+  "type": "team",
+  "created_at": {
+    "$date": "2025-06-06T00:22:06.087Z"
+  },
+  "updated_at": {
+    "$date": "2025-06-06T00:22:06.087Z"
+  },
+  "last_message": "Conversación de equipo iniciada"
+}]

@@ -1,0 +1,517 @@
+/* Public/css/styles_torneos.css - VERSION INDEPENDIENTE */
+
+/* ========== RESET Y BASE ========== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Montserrat', Arial, sans-serif !important;
+    background-color: #1e1e1e !important; /* ← MISMO GRIS EXACTO */
+    color: #ffffff !important;
+    line-height: 1.6 !important;
+}
+
+/* ========== HEADER ESPECÍFICO PARA TORNEOS ========== */
+.main-header {
+    background-color: #000000 !important;
+    padding: 15px 30px !important;
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5) !important;
+}
+
+.logo img {
+    height: 40px !important;
+}
+
+.main-nav ul {
+    display: flex !important;
+    list-style: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.main-nav ul li {
+    margin-left: 20px !important;
+}
+
+.main-nav ul li a {
+    color: #ffffff !important;
+    text-decoration: none !important;
+    font-weight: 600 !important;
+    font-size: 14px !important;
+    transition: color 0.3s !important;
+}
+
+.main-nav ul li a:hover {
+    color: #00bcd4 !important;
+}
+
+/* ========== CONTENIDO PRINCIPAL ========== */
+.main-content {
+    background-color: #1e1e1e !important; /* ← MISMO GRIS EXACTO */
+    min-height: 100vh !important;
+    padding: 0 !important;
+}
+
+.container {
+    background-color: transparent !important;
+    max-width: 1200px !important;
+    margin: 0 auto !important;
+    padding: 0 15px !important;
+}
+
+/* ========== TÍTULO PRINCIPAL ========== */
+h2 {
+    color: #ffffff !important; /* ← BLANCO */
+    font-size: 2rem !important;
+    font-weight: 700 !important;
+    margin-bottom: 30px !important;
+    text-align: center !important;
+    border-bottom: none !important;
+    padding-bottom: 0 !important;
+}
+
+h2 i {
+    color: #007bff !important;
+    margin-right: 10px !important;
+}
+
+/* ========== FILTROS ========== */
+.filtros-torneos {
+    background-color: #2d2d2d !important; /* ← MISMO GRIS CARDS DASHBOARD */
+    border-radius: 12px !important;
+    padding: 25px !important;
+    margin-bottom: 30px !important;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3) !important; /* ← MISMA SOMBRA */
+    border: 1px solid #444 !important; /* ← MISMO BORDE */
+}
+
+.filtros-torneos h4 {
+    color: #ffffff !important; /* ← BLANCO */
+    font-size: 1.2rem !important;
+    margin-bottom: 20px !important;
+    border-bottom: 2px solid #007bff !important;
+    padding-bottom: 10px !important;
+}
+
+.filtros-torneos h4 i {
+    color: #007bff !important;
+    margin-right: 8px !important;
+}
+
+.filtros-torneos h6 {
+    color: #ecf0f1 !important; /* ← BLANCO SUAVE */
+    font-size: 1rem !important;
+    margin-bottom: 15px !important;
+    font-weight: 600 !important;
+}
+
+/* ========== FORM CONTROLS ========== */
+.form-group {
+    margin-bottom: 20px !important;
+}
+
+.form-group label {
+    color: #ffffff !important; /* ← BLANCO */
+    font-weight: 600 !important;
+    margin-bottom: 8px !important;
+    display: block !important;
+    font-size: 0.9rem !important;
+}
+
+.form-control {
+    background-color: #34495e !important; /* ← GRIS OSCURO */
+    border: 2px solid #4a5f7a !important;
+    border-radius: 8px !important;
+    padding: 10px 15px !important;
+    font-size: 0.9rem !important;
+    color: #ffffff !important; /* ← LETRAS BLANCAS */
+    transition: all 0.3s ease !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+}
+
+.form-control:focus {
+    border-color: #007bff !important;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25) !important;
+    outline: none !important;
+}
+
+/* ========== BOTONES ========== */
+.btn-filtro {
+    background: linear-gradient(135deg, #007bff 0%, #0056b3 100%) !important;
+    border: none !important;
+    border-radius: 8px !important;
+    padding: 10px 20px !important;
+    margin: 5px !important;
+    color: white !important;
+    font-weight: 600 !important;
+    font-size: 0.9rem !important;
+    cursor: pointer !important;
+    transition: all 0.3s ease !important;
+    text-decoration: none !important;
+    display: inline-block !important;
+}
+
+.btn-filtro:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 4px 15px rgba(0,123,255,0.4) !important;
+    color: white !important;
+}
+
+.btn-filtro.active {
+    background: linear-gradient(135deg, #28a745 0%, #20c997 100%) !important;
+    box-shadow: 0 4px 15px rgba(40,167,69,0.4) !important;
+}
+
+/* ========== GRID DE TORNEOS ========== */
+.torneos-grid {
+    display: grid !important;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)) !important;
+    gap: 25px !important;
+    padding: 20px 0 !important;
+}
+
+.torneo-card {
+    background: white !important;
+    border-radius: 15px !important;
+    overflow: hidden !important;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1) !important;
+    transition: all 0.3s ease !important;
+    border: 1px solid #e9ecef !important;
+}
+
+.torneo-card:hover {
+    transform: translateY(-5px) !important;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.15) !important;
+}
+
+.torneo-imagen {
+    width: 100% !important;
+    height: 200px !important;
+    object-fit: cover !important;
+    background: linear-gradient(135deg, #007bff 0%, #28a745 100%) !important;
+    display: block !important;
+}
+
+.torneo-content {
+    padding: 20px !important;
+}
+
+.torneo-titulo {
+    font-size: 1.25rem !important;
+    font-weight: 600 !important;
+    color: #2c3e50 !important;
+    margin-bottom: 10px !important;
+    line-height: 1.3 !important;
+}
+
+.torneo-deporte {
+    display: inline-block !important;
+    background: linear-gradient(135deg, #007bff 0%, #0056b3 100%) !important;
+    color: white !important;
+    padding: 4px 12px !important;
+    border-radius: 20px !important;
+    font-size: 0.85rem !important;
+    font-weight: 500 !important;
+    margin-bottom: 15px !important;
+}
+
+.torneo-info {
+    font-size: 0.9rem !important;
+    color: #6c757d !important;
+    margin-bottom: 8px !important;
+    display: flex !important;
+    align-items: center !important;
+}
+
+.torneo-info i {
+    width: 16px !important;
+    margin-right: 8px !important;
+    color: #007bff !important;
+    flex-shrink: 0 !important;
+}
+
+.torneo-estado {
+    display: inline-block !important;
+    padding: 6px 12px !important;
+    border-radius: 20px !important;
+    font-size: 0.8rem !important;
+    font-weight: 600 !important;
+    margin: 10px 0 !important;
+}
+
+.estado-inscripciones-abiertas {
+    background: linear-gradient(135deg, #28a745 0%, #20c997 100%) !important;
+    color: white !important;
+}
+
+.estado-proximo {
+    background: linear-gradient(135deg, #ffc107 0%, #fd7e14 100%) !important;
+    color: white !important;
+}
+
+.estado-activo {
+    background: linear-gradient(135deg, #dc3545 0%, #e91e63 100%) !important;
+    color: white !important;
+}
+
+.estado-finalizado {
+    background: linear-gradient(135deg, #6c757d 0%, #495057 100%) !important;
+    color: white !important;
+}
+
+.torneo-acciones {
+    display: flex !important;
+    gap: 10px !important;
+    margin-top: 15px !important;
+}
+
+.btn-torneo {
+    flex: 1 !important;
+    padding: 10px !important;
+    border: none !important;
+    border-radius: 8px !important;
+    font-weight: 600 !important;
+    font-size: 0.9rem !important;
+    cursor: pointer !important;
+    transition: all 0.3s ease !important;
+    text-decoration: none !important;
+    text-align: center !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+.btn-ver-detalles {
+    background: linear-gradient(135deg, #17a2b8 0%, #138496 100%) !important;
+    color: white !important;
+}
+
+.btn-inscribir {
+    background: linear-gradient(135deg, #28a745 0%, #20c997 100%) !important;
+    color: white !important;
+}
+
+.btn-torneo:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2) !important;
+    color: white !important;
+    text-decoration: none !important;
+}
+
+.torneo-precio {
+    font-size: 1.1rem !important;
+    font-weight: 700 !important;
+    color: #28a745 !important;
+    margin: 10px 0 !important;
+}
+
+.torneo-precio.gratis {
+    color: #007bff !important;
+}
+
+.sede-info {
+    background: #f8f9fa !important;
+    padding: 12px !important;
+    border-radius: 8px !important;
+    margin: 10px 0 !important;
+    border-left: 4px solid #007bff !important;
+}
+
+.calificacion-sede {
+    color: #ffc107 !important;
+    font-size: 0.9rem !important;
+}
+
+/* ========== ESTADOS SIN CONTENIDO ========== */
+.sin-torneos {
+    text-align: center !important;
+    padding: 60px 20px !important;
+    color: #b0b0b0 !important; /* ← MISMO COLOR SECUNDARIO */
+    background: #2d2d2d !important; /* ← MISMO FONDO CARDS */
+    border-radius: 15px !important;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3) !important;
+}
+
+.sin-torneos i {
+    font-size: 4rem !important;
+    margin-bottom: 20px !important;
+    color: #dee2e6 !important;
+}
+
+.sin-torneos h4 {
+    color: #ffffff !important; /* ← BLANCO */
+    margin-bottom: 10px !important;
+}
+
+.sin-torneos p {
+    color: #ecf0f1 !important; /* ← GRIS CLARO */
+}
+
+/* ========== LOADING ========== */
+.loading-spinner {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    padding: 60px !important;
+    background: #2d2d2d !important; /* ← MISMO FONDO CARDS */
+    border-radius: 15px !important;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3) !important;
+}
+
+.spinner {
+    width: 40px !important;
+    height: 40px !important;
+    border: 4px solid #f3f4f6 !important;
+    border-top: 4px solid #007bff !important;
+    border-radius: 50% !important;
+    animation: spin 1s linear infinite !important;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* ========== FOOTER ========== */
+.main-footer {
+    background-color: #151515 !important;
+    padding: 30px !important;
+    margin-top: 40px !important;
+    color: #ffffff !important;
+}
+
+.footer-content {
+    max-width: 1200px !important;
+    margin: 0 auto !important;
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    flex-wrap: wrap !important;
+}
+
+.footer-info {
+    max-width: 60% !important;
+}
+
+.footer-info h3 {
+    margin-bottom: 10px !important;
+    color: #00bcd4 !important;
+}
+
+.footer-info p {
+    color: #b0b0b0 !important;
+    font-size: 14px !important;
+}
+
+.social-links {
+    display: flex !important;
+    gap: 15px !important;
+}
+
+.social-icon {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    width: 40px !important;
+    height: 40px !important;
+    border-radius: 50% !important;
+    background: #333 !important;
+    color: #ffffff !important;
+    transition: all 0.3s !important;
+    text-decoration: none !important;
+}
+
+.social-icon:hover {
+    background: #006644 !important;
+    transform: translateY(-3px) !important;
+    color: #ffffff !important;
+}
+
+/* ========== RESPONSIVE ========== */
+@media (max-width: 768px) {
+    .torneos-grid {
+        grid-template-columns: 1fr !important;
+        gap: 15px !important;
+        padding: 15px 0 !important;
+    }
+    
+    .torneo-acciones {
+        flex-direction: column !important;
+    }
+    
+    .filtros-torneos .row > div {
+        margin-bottom: 15px !important;
+    }
+    
+    .filtros-torneos {
+        padding: 20px 15px !important;
+    }
+    
+    .container {
+        padding: 0 10px !important;
+    }
+    
+    h2 {
+        font-size: 1.5rem !important;
+        margin-bottom: 20px !important;
+    }
+    
+    .footer-content {
+        flex-direction: column !important;
+        text-align: center !important;
+        gap: 20px !important;
+    }
+    
+    .footer-info {
+        max-width: 100% !important;
+    }
+}
+
+@media (max-width: 992px) {
+    .filtros-row {
+        flex-direction: column !important;
+        align-items: stretch !important;
+    }
+    
+    .filtro-col,
+    .filtro-col-busqueda,
+    .filtro-col-boton {
+        flex: 1 !important;
+        min-width: 100% !important;
+        margin-bottom: 15px !important;
+    }
+}
+
+/* ========== OVERRIDE BOOTSTRAP CONFLICTOS ========== */
+.row {
+    margin-left: -15px !important;
+    margin-right: -15px !important;
+}
+
+.col-md-2, .col-md-4 {
+    padding-left: 15px !important;
+    padding-right: 15px !important;
+}
+
+.mb-4 {
+    margin-bottom: 1.5rem !important;
+}
+
+.mt-4 {
+    margin-top: 1.5rem !important;
+}
+
+.mt-3 {
+    margin-top: 1rem !important;
+}
+
+.w-100 {
+    width: 100% !important;
+}

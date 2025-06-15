@@ -1,0 +1,376 @@
+/* Modales del Dashboard - Estilo similar al de horarios_modal.css */
+
+.modal-dashboard {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+.modal-dashboard.show {
+    display: flex;
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal-backdrop {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-container-dashboard {
+    background: linear-gradient(135deg, #2d2d2d, #3a3a3a);
+    border-radius: 15px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+    width: 90%;
+    max-width: 600px;
+    max-height: 90vh;
+    overflow-y: auto;
+    position: relative;
+    z-index: 1001;
+    animation: modalSlideIn 0.3s ease;
+}
+
+@keyframes modalSlideIn {
+    from {
+        transform: scale(0.8) translateY(-50px);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1) translateY(0);
+        opacity: 1;
+    }
+}
+
+.modal-header-dashboard {
+    background: linear-gradient(135deg, var(--primary-color), #007f56);
+    color: white;
+    padding: 20px 25px;
+    border-radius: 15px 15px 0 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-title-dashboard {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.modal-close-btn {
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    color: white;
+    font-size: 24px;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.modal-close-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: rotate(90deg);
+}
+
+.modal-body-dashboard {
+    padding: 25px;
+}
+
+/* Estilos para el formulario de perfil */
+.form-dashboard {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.form-row-dashboard {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+
+.form-group-dashboard {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group-dashboard label {
+    color: var(--text-light);
+    font-weight: 600;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.form-group-dashboard label i {
+    color: var(--secondary-color);
+}
+
+.form-input-dashboard {
+    padding: 12px 15px;
+    border: 2px solid #555;
+    border-radius: 8px;
+    background: #333;
+    color: var(--text-light);
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
+
+.form-input-dashboard:focus {
+    border-color: var(--secondary-color);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(0, 188, 212, 0.1);
+}
+
+.form-actions-dashboard {
+    display: flex;
+    gap: 15px;
+    justify-content: flex-end;
+    margin-top: 20px;
+}
+
+.btn-dashboard {
+    padding: 12px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-cancel-dashboard {
+    background: linear-gradient(135deg, #666, #777);
+    color: white;
+}
+
+.btn-cancel-dashboard:hover {
+    background: linear-gradient(135deg, #777, #888);
+    transform: translateY(-2px);
+}
+
+.btn-save-dashboard {
+    background: linear-gradient(135deg, var(--primary-color), #007f56);
+    color: white;
+}
+
+.btn-save-dashboard:hover {
+    background: linear-gradient(135deg, #007f56, var(--primary-color));
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 102, 68, 0.4);
+}
+
+/* Estilos para la lista de deportes */
+.deportes-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 15px;
+    max-height: 400px;
+    overflow-y: auto;
+    padding-right: 10px;
+}
+
+.deporte-item {
+    background: linear-gradient(135deg, #333, #444);
+    border-radius: 12px;
+    padding: 15px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    border: 2px solid transparent;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.deporte-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+    transition: left 0.5s;
+}
+
+.deporte-item:hover::before {
+    left: 100%;
+}
+
+.deporte-item:hover {
+    border-color: var(--secondary-color);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 188, 212, 0.3);
+}
+
+.deporte-item.agregado {
+    border-color: var(--primary-color);
+    background: linear-gradient(135deg, rgba(0, 102, 68, 0.2), rgba(0, 127, 86, 0.2));
+}
+
+.deporte-icono {
+    font-size: 24px;
+    color: var(--secondary-color);
+    min-width: 30px;
+    text-align: center;
+}
+
+.deporte-info {
+    flex: 1;
+}
+
+.deporte-info h4 {
+    color: var(--text-light);
+    margin: 0;
+    font-size: 16px;
+}
+
+.deporte-accion {
+    min-width: 100px;
+}
+
+.btn-deporte {
+    padding: 8px 15px;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 12px;
+    transition: all 0.3s ease;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+}
+
+.btn-agregar {
+    background: linear-gradient(135deg, var(--secondary-color), #00a0b4);
+    color: white;
+}
+
+.btn-agregar:hover {
+    background: linear-gradient(135deg, #00a0b4, var(--secondary-color));
+    transform: translateY(-1px);
+    box-shadow: 0 3px 10px rgba(0, 188, 212, 0.4);
+}
+
+.btn-eliminar {
+    background: linear-gradient(135deg, #666, #777);
+    color: #ccc;
+    cursor: not-allowed;
+}
+
+/* Notificaciones */
+#notificaciones-container {
+    position: fixed;
+    top: 80px;
+    right: 20px;
+    z-index: 1002;
+}
+
+.notificacion-toast {
+    background: linear-gradient(135deg, #28a745, #20c997);
+    color: white;
+    padding: 15px 20px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    box-shadow: 0 5px 15px rgba(40, 167, 69, 0.3);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    animation: slideInRight 0.3s ease;
+    min-width: 280px;
+}
+
+.notificacion-toast.error {
+    background: linear-gradient(135deg, #dc3545, #e74c3c);
+    box-shadow: 0 5px 15px rgba(220, 53, 69, 0.3);
+}
+
+.notificacion-toast i {
+    font-size: 16px;
+}
+
+@keyframes slideInRight {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .modal-container-dashboard {
+        width: 95%;
+        margin: 10px;
+    }
+    
+    .form-row-dashboard {
+        grid-template-columns: 1fr;
+    }
+    
+    .deportes-container {
+        grid-template-columns: 1fr;
+    }
+    
+    .form-actions-dashboard {
+        flex-direction: column;
+    }
+    
+    .deporte-item {
+        flex-direction: column;
+        text-align: center;
+        gap: 10px;
+    }
+}
+
+/* Scrollbar personalizado para la lista de deportes */
+.deportes-container::-webkit-scrollbar {
+    width: 6px;
+}
+
+.deportes-container::-webkit-scrollbar-track {
+    background: #333;
+    border-radius: 3px;
+}
+
+.deportes-container::-webkit-scrollbar-thumb {
+    background: var(--secondary-color);
+    border-radius: 3px;
+}
+
+.deportes-container::-webkit-scrollbar-thumb:hover {
+    background: #00a0b4;
+}
