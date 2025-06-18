@@ -36,22 +36,48 @@ CREATE TABLE IF NOT EXISTS `amistades` (
 
 -- La exportación de datos fue deseleccionada.
 
+-- Volcando estructura para tabla gameon.areas_deportivas
+CREATE TABLE IF NOT EXISTS `areas_deportivas` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `institucion_deportiva_id` int(11) NOT NULL,
+  `deporte_id` int(11) NOT NULL,
+  `nombre_area` varchar(100) NOT NULL,
+  `descripcion` text DEFAULT NULL,
+  `capacidad_jugadores` int(11) DEFAULT NULL,
+  `tarifa_por_hora` decimal(10,2) NOT NULL,
+  `estado` enum('activa','mantenimiento','inactiva') DEFAULT 'activa',
+  `imagen_area` varchar(255) DEFAULT NULL,
+  `creado_en` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`),
+  KEY `institucion_deportiva_id` (`institucion_deportiva_id`),
+  KEY `deporte_id` (`deporte_id`),
+  CONSTRAINT `areas_deportivas_ibfk_1` FOREIGN KEY (`institucion_deportiva_id`) REFERENCES `instituciones_deportivas` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `areas_deportivas_ibfk_2` FOREIGN KEY (`deporte_id`) REFERENCES `deportes` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- La exportación de datos fue deseleccionada.
+
+-- Volcando estructura para tabla gameon.areas_horarios
+CREATE TABLE IF NOT EXISTS `areas_horarios` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `area_deportiva_id` int(11) NOT NULL,
+  `dia` enum('Lunes','Martes','Miercoles','Jueves','Viernes','Sabado','Domingo') NOT NULL,
+  `hora_apertura` time NOT NULL,
+  `hora_cierre` time NOT NULL,
+  `disponible` tinyint(1) DEFAULT 1,
+  PRIMARY KEY (`id`),
+  KEY `area_deportiva_id` (`area_deportiva_id`),
+  CONSTRAINT `areas_horarios_ibfk_1` FOREIGN KEY (`area_deportiva_id`) REFERENCES `areas_deportivas` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=99 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- La exportación de datos fue deseleccionada.
+
 -- Volcando estructura para tabla gameon.deportes
 CREATE TABLE IF NOT EXISTS `deportes` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `nombre` varchar(50) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- La exportación de datos fue deseleccionada.
-
--- Volcando estructura para tabla gameon.disponibilidad
-CREATE TABLE IF NOT EXISTS `disponibilidad` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `dia` varchar(15) NOT NULL,
-  `franja_horaria` varchar(20) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- La exportación de datos fue deseleccionada.
 
@@ -165,6 +191,7 @@ CREATE TABLE IF NOT EXISTS `instituciones_deportivas` (
   `direccion` varchar(200) NOT NULL,
   `latitud` decimal(10,8) NOT NULL,
   `longitud` decimal(11,8) NOT NULL,
+  `imagen` varchar(255) DEFAULT NULL,
   `tarifa` decimal(10,2) NOT NULL,
   `calificacion` decimal(3,2) DEFAULT 0.00,
   `telefono` varchar(20) NOT NULL,
@@ -183,22 +210,18 @@ CREATE TABLE IF NOT EXISTS `instituciones_deportivas` (
 CREATE TABLE IF NOT EXISTS `reservas` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `id_usuario` int(11) NOT NULL,
-  `id_institucion` int(11) NOT NULL,
-  `deporte_id` int(11) NOT NULL,
+  `area_deportiva_id` int(11) NOT NULL,
   `fecha` date NOT NULL,
   `hora_inicio` time NOT NULL,
   `hora_fin` time NOT NULL,
-  `estado` varchar(20) DEFAULT 'pendiente',
+  `estado` enum('pendiente','confirmada','cancelada') NOT NULL DEFAULT 'pendiente',
   `creado_en` timestamp NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`id`),
   KEY `id_usuario` (`id_usuario`),
-  KEY `id_institucion` (`id_institucion`),
-  KEY `deporte_id` (`deporte_id`),
-  KEY `idx_fecha` (`fecha`),
-  CONSTRAINT `reservas_ibfk_1` FOREIGN KEY (`id_usuario`) REFERENCES `usuarios_deportistas` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `reservas_ibfk_2` FOREIGN KEY (`id_institucion`) REFERENCES `instituciones_deportivas` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `reservas_ibfk_3` FOREIGN KEY (`deporte_id`) REFERENCES `deportes` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  KEY `area_deportiva_id` (`area_deportiva_id`),
+  CONSTRAINT `reservas_ibfk_area` FOREIGN KEY (`area_deportiva_id`) REFERENCES `areas_deportivas` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `reservas_ibfk_usuario` FOREIGN KEY (`id_usuario`) REFERENCES `usuarios_deportistas` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- La exportación de datos fue deseleccionada.
 
@@ -336,19 +359,7 @@ CREATE TABLE IF NOT EXISTS `usuarios_deportistas` (
   `creado_en` timestamp NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- La exportación de datos fue deseleccionada.
-
--- Volcando estructura para tabla gameon.usuarios_disponibilidad
-CREATE TABLE IF NOT EXISTS `usuarios_disponibilidad` (
-  `usuario_id` int(11) NOT NULL,
-  `disponibilidad_id` int(11) NOT NULL,
-  PRIMARY KEY (`usuario_id`,`disponibilidad_id`),
-  KEY `disponibilidad_id` (`disponibilidad_id`),
-  CONSTRAINT `usuarios_disponibilidad_ibfk_1` FOREIGN KEY (`usuario_id`) REFERENCES `usuarios_deportistas` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `usuarios_disponibilidad_ibfk_2` FOREIGN KEY (`disponibilidad_id`) REFERENCES `disponibilidad` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- La exportación de datos fue deseleccionada.
 
