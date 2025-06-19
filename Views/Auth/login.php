@@ -33,7 +33,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </head>
 <body>
     <div class="auth-page">
-        <div class="auth-image"></div>
+        <div class="auth-image">
+            <div class="welcome-content">
+                <h1>GameOn Network</h1>
+                <p>La plataforma líder para conectar deportistas con las mejores instalaciones de Tacna</p>
+                <ul class="features-list">
+                    <li><i class="fas fa-calendar-check"></i> Reserva instalaciones fácilmente</li>
+                    <li><i class="fas fa-users"></i> Conecta con otros deportistas</li>
+                    <li><i class="fas fa-trophy"></i> Participa en torneos</li>
+                    <li><i class="fas fa-star"></i> Califica y reseña instalaciones</li>
+                </ul>
+            </div>
+        </div>
         <div class="auth-container">
             <div class="auth-header">
                 <img src="../../Resources/logo_ipd_3.png" alt="Logo GameOn Network" style="width: 400px; height: auto;">

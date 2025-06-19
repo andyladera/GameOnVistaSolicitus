@@ -1,157 +1,460 @@
+/* Variables personalizadas */
+:root {
+    --primary-green: #006644;
+    --dark-green: #004d33;
+    --accent-cyan: #00bcd4;
+    --light-gray: #f8f9fa;
+    --text-dark: #212529;
+    --text-light: #ffffff;
+}
+
 /* Fuente general */
 body {
-    font-family: 'Montserrat', sans-serif;
-    background-color: #f2f2f2;
     margin: 0;
-    padding: 0;
+    font-family: 'Montserrat', sans-serif;
+    background: var(--light-gray);
+    color: var(--text-dark);
+    height: 100vh;
+    overflow: hidden;
 }
 
 /* Página de autenticación */
 .auth-page {
     display: flex;
-    min-height: 100vh;
-    margin: 0;
-    padding: 0;
-    background: linear-gradient(to right, #000000, #00ff84);
+    height: 100vh;
+    width: 100%;
 }
 
+/* ✅ PANEL IZQUIERDO: CON IMAGEN DE FONDO DEPORTIVA */
 .auth-image {
-    flex: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: transparent;
-}
-
-.auth-image::before {
-    content: "";
-    display: block;
-    width: 730px; /* ancho deseado */
-    height: 730px; /* alto deseado */
-    background-image: url("../../Resources/image_login.png");
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
-}
-
-.auth-container {
-    flex: 1;
+    width: 50%;
+    flex: 0 0 50%;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    padding: 40px;
-    background: #ffffff;
-    border-radius: 10px 0 0 10px;
-    box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
-    max-width: 500px;
+    align-items: center;
+    box-sizing: border-box;
+    position: relative;
+    overflow: hidden;
+    padding: 50px;
+    
+    /* Imagen de fondo con capa oscura para legibilidad */
+    background-image: 
+        linear-gradient(rgba(0, 60, 40, 0.8), rgba(0, 20, 10, 0.9)),
+        url('../../Resources/sport_background.jpg');
+    background-size: cover;
+    background-position: center;
+    color: var(--text-light);
 }
 
+/* ✅ CONTENIDO DEL LADO IZQUIERDO */
+.welcome-content {
+    text-align: center;
+    z-index: 2;
+    max-width: 400px;
+}
+
+.welcome-content h1 {
+    font-size: 3rem;
+    font-weight: 700;
+    text-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+    margin-bottom: 20px;
+    line-height: 1.1;
+    background: linear-gradient(45deg, var(--text-light), #00ff84);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.welcome-content p {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.9);
+    margin-bottom: 30px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.features-list {
+    list-style: none;
+    padding: 0;
+    margin-top: 30px;
+}
+
+.features-list li {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 15px;
+    font-size: 1rem;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.features-list i {
+    color: #00ff84;
+    font-size: 1.2rem;
+}
+
+/* ✅ PANEL DERECHO: FORMULARIO MEJORADO */
+.auth-container {
+    width: 50%;
+    flex: 0 0 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 50px;
+    box-sizing: border-box;
+    background: #ffffff;
+    position: relative;
+    box-shadow: -10px 0 30px rgba(0, 0, 0, 0.1);
+}
+
+/* Elemento decorativo */
+.auth-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 120px;
+    height: 120px;
+    background: linear-gradient(135deg, var(--accent-cyan), #00ff84);
+    clip-path: polygon(0 0, 100% 0, 100% 100%);
+    opacity: 0.1;
+}
+
+/* ✅ HEADER DEL FORMULARIO */
+.auth-header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.auth-header img {
+    width: 350px;
+    height: auto;
+    margin-bottom: 20px;
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
+}
 
 .auth-header h2 {
     margin-bottom: 10px;
-    color: #333;
+    font-weight: 700;
+    font-size: 2.2rem;
+    background: linear-gradient(45deg, var(--primary-green), var(--accent-cyan));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
 }
 
 .auth-header p {
     margin-bottom: 30px;
-    color: #777;
+    color: #666;
+    font-size: 1rem;
 }
 
+/* ✅ FORMULARIO */
 .auth-body .form-group {
-    margin-bottom: 20px;
+    margin-bottom: 25px;
+    position: relative;
 }
 
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--text-dark);
+    font-weight: 600;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.form-group label i {
+    color: var(--accent-cyan);
+    width: 16px;
+}
+
+/* ✅ INPUTS MODERNOS */
 .form-control {
     width: 100%;
-    padding: 12px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
+    padding: 15px 20px;
+    border: 2px solid #e1e5e9;
+    border-radius: 12px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    background: #fafbfc;
+    color: var(--text-dark);
     box-sizing: border-box;
 }
 
+.form-control:focus {
+    outline: none;
+    border-color: var(--accent-cyan);
+    background: var(--text-light);
+    box-shadow: 0 0 0 4px rgba(0, 188, 212, 0.1);
+    transform: translateY(-1px);
+}
+
+.form-control::placeholder {
+    color: #9ca3af;
+    font-weight: 400;
+}
+
+/* ✅ CAMPO DE CONTRASEÑA */
 .password-field {
     position: relative;
 }
 
 .toggle-password {
     position: absolute;
-    right: 12px;
+    right: 20px;
     top: 50%;
     transform: translateY(-50%);
     cursor: pointer;
     color: #666;
+    font-size: 1.1rem;
+    transition: color 0.3s ease;
+    z-index: 10;
+}
+
+.toggle-password:hover {
+    color: var(--accent-cyan);
+}
+
+/* ✅ SELECTOR DE TIPO DE USUARIO MODERNIZADO */
+.user-type-selector {
+    display: flex;
+    gap: 15px;
+    margin-top: 10px;
+}
+
+.form-check {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 15px;
+    border: 2px solid #e1e5e9;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: #fafbfc;
+    position: relative;
+    overflow: hidden;
+}
+
+.form-check::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(0, 188, 212, 0.1), transparent);
+    transition: left 0.5s ease;
+}
+
+.form-check:hover::before {
+    left: 100%;
+}
+
+.form-check:hover {
+    border-color: var(--accent-cyan);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 188, 212, 0.15);
+}
+
+.form-check.selected {
+    border-color: var(--accent-cyan);
+    background: linear-gradient(135deg, 
+        rgba(0, 188, 212, 0.1), 
+        rgba(0, 255, 132, 0.05)
+    );
+    box-shadow: 0 4px 15px rgba(0, 188, 212, 0.2);
+}
+
+.form-check input[type="radio"] {
+    display: none;
+}
+
+.form-check label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--text-dark);
+    cursor: pointer;
+    margin: 0;
+}
+
+.form-check i {
+    font-size: 1.2rem;
+    color: var(--accent-cyan);
+}
+
+/* ✅ CHECKBOX REMEMBER ME */
+.form-check input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    margin-right: 8px;
+    accent-color: var(--accent-cyan);
+}
+
+/* ✅ BOTÓN PRINCIPAL */
+.btn {
+    padding: 16px 24px;
+    border: none;
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.5s ease;
+}
+
+.btn:hover::before {
+    left: 100%;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--primary-green), var(--accent-cyan));
+    color: var(--text-light);
+    box-shadow: 0 4px 15px rgba(0, 102, 68, 0.3);
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 102, 68, 0.4);
+}
+
+.btn-primary:active {
+    transform: translateY(0);
 }
 
 .btn-block {
     width: 100%;
 }
 
-/* Botones */
-.btn {
-    padding: 12px 20px;
-    border: none;
-    border-radius: 5px;
-    font-weight: bold;
-    cursor: pointer;
-    text-decoration: none;
-    display: inline-block;
-    transition: background-color 0.3s ease;
-}
-
-.btn-primary {
-    background-color: #007bff;
-    color: #fff;
-}
-
-.btn-primary:hover {
-    background-color: #0056b3;
-}
-
-/* Mensajes de error */
+/* ✅ MENSAJES DE ERROR */
 .alert-danger {
-    color: #a94442;
-    background-color: #f2dede;
-    padding: 10px;
-    margin-bottom: 20px;
-    border-radius: 5px;
-}
-
-/* Selector de tipo de usuario */
-.user-type-selector {
-    display: flex;
-    justify-content: space-around;
-}
-
-.form-check {
+    color: #dc3545;
+    background: linear-gradient(135deg, #ffebee, #fce4e4);
+    padding: 16px 20px;
+    margin-bottom: 25px;
+    border-radius: 12px;
+    border: 1px solid #f5c6cb;
     display: flex;
     align-items: center;
+    gap: 10px;
+    font-weight: 500;
+    animation: slideInDown 0.3s ease;
 }
 
-.form-check input {
-    margin-right: 8px;
+@keyframes slideInDown {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
-/* Footer */
-.auth-footer {
+/* ✅ ENLACES */
+.forgot-password {
     margin-top: 20px;
     text-align: center;
 }
 
+.forgot-password a,
 .auth-footer a {
-    color: #007bff;
+    color: var(--accent-cyan);
     text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
 }
 
-.forgot-password {
-    margin-top: 10px;
+.forgot-password a:hover,
+.auth-footer a:hover {
+    color: var(--primary-green);
+    transform: translateY(-1px);
 }
 
-.forgot-password a {
-    color: #007bff;
-    text-decoration: none;
+.auth-footer {
+    margin-top: 30px;
+    text-align: center;
+    color: #666;
+    font-size: 0.9rem;
+    line-height: 1.6;
 }
 
-/* Utilidades */
+/* ✅ RESPONSIVE DESIGN */
+@media (max-width: 1024px) {
+    .auth-page {
+        flex-direction: column;
+        overflow: auto;
+        height: auto;
+        min-height: 100vh;
+    }
+    
+    .auth-image,
+    .auth-container {
+        width: 100%;
+        flex: none;
+    }
+    
+    .auth-image {
+        height: 400px;
+        padding: 30px;
+    }
+    
+    .welcome-content h1 {
+        font-size: 2.5rem;
+    }
+    
+    .auth-container {
+        padding: 40px 30px;
+    }
+}
+
+@media (max-width: 576px) {
+    .auth-container {
+        padding: 30px 20px;
+    }
+    
+    .user-type-selector {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .auth-header img {
+        width: 280px;
+    }
+    
+    .auth-header h2 {
+        font-size: 1.8rem;
+    }
+    
+    .welcome-content h1 {
+        font-size: 2rem;
+    }
+}
+
 .text-center {
     text-align: center;
 }
