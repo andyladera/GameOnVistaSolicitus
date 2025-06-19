@@ -30,16 +30,16 @@ class AuthController {
             $_SESSION['username'] = $usuario['username'];
             $_SESSION['user_type'] = $user_type;
 
-            // ✅ USAR RUTAS ABSOLUTAS Y VERIFICAR ARCHIVOS
+            // ✅ USAR LAS MISMAS RUTAS QUE FUNCIONAN PARA INSTALACIONES
             switch ($user_type) {
                 case 'deportista':
-                    // ✅ USAR RUTA ABSOLUTA
-                    header("Location: /Views/UserDep/dashboard.php");
+                    // ✅ COPIAR EXACTAMENTE LA ESTRUCTURA DE INSTALACIONES
+                    header("Location: ../UserDep/dashboard.php");
                     break;
                     
                 case 'instalacion':
-                    // ✅ USAR RUTA ABSOLUTA  
-                    header("Location: /Views/UserInsD/dashboard.php");
+                    // ✅ ESTA RUTA YA FUNCIONA
+                    header("Location: ../UserInsD/dashboard.php");
                     break;
                     
                 default:
