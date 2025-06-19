@@ -29,9 +29,9 @@ $franjas_horarias = $data['franjas_horarias'];
         <!-- ✅ LADO IZQUIERDO CON DISEÑO MEJORADO -->
         <div class="auth-image">
             <div class="welcome-text">
-                <h1>⚽🏀🏐🏸🥋🥇🥈🥉🏆⚽🏀🏐🏸🥋🥇</h1>
+                <h1>⚽🏀🏐🏸🥋🥇🥈🥉🏆⚽</h1>
                 <h1>Únete a la Comunidad Deportiva Líder.</h1>
-                <h1>⚽🏀🏐🏸🥋🥇🥈🥉🏆⚽🏀🏐🏸🥋🥇</h1>
+                <h1>⚽🏀🏐🏸🥋🥇🥈🥉🏆⚽</h1>
                 <p>
                     En GameOn Network, conectamos tu pasión por el deporte con las mejores instalaciones de Tacna. Encuentra, reserva y juega como nunca antes.
                 </p>

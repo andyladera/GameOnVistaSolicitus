@@ -15,7 +15,6 @@ class UsuarioModel {
             $stmt = $this->conn->prepare("SELECT id, username, password, estado FROM $table WHERE username = ?");
         } else if ($user_type === 'instalacion') {
             $table = 'usuarios_instalaciones';
-            // SOLO instalaciones privadas (excluir IPD)
             $stmt = $this->conn->prepare("SELECT id, username, password, estado FROM $table WHERE username = ? AND tipo_usuario = 'privado'");
         } else {
             return false;
@@ -23,10 +22,8 @@ class UsuarioModel {
 
         $stmt->bind_param("s", $username);
         $stmt->execute();
-
         $result = $stmt->get_result();
         $usuario = $result->fetch_assoc();
-
         $stmt->close();
         return $usuario;
     }
@@ -34,9 +31,14 @@ class UsuarioModel {
     public function registrarDeportista($data) {
         $stmt = $this->conn->prepare("INSERT INTO usuarios_deportistas (
             nombre, apellidos, email, username, password, telefono, fecha_nacimiento, genero, nivel_habilidad, estado
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 'activo')");
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 1)");
 
         $password_hashed = password_hash($data['password'], PASSWORD_DEFAULT);
+        $telefono = !empty($data['telefono']) ? $data['telefono'] : null;
+        $fecha_nacimiento = !empty($data['fecha_nacimiento']) ? $data['fecha_nacimiento'] : null;
+        $genero = !empty($data['genero']) ? ucfirst($data['genero']) : 'Masculino';
+        $nivel_habilidad = !empty($data['nivel_habilidad']) ? ucfirst($data['nivel_habilidad']) : 'Principiante';
+        
         $stmt->bind_param(
             "sssssssss",
             $data['nombre'],
@@ -44,42 +46,19 @@ class UsuarioModel {
             $data['email'],
             $data['username'],
             $password_hashed,
-            $data['telefono'],
-            $data['fecha_nacimiento'],
-            $data['genero'],
-            $data['nivel_habilidad']
+            $telefono,
+            $fecha_nacimiento,
+            $genero,
+            $nivel_habilidad
         );
 
         if (!$stmt->execute()) {
-            return ['error' => $stmt->error];
+            return ['error' => 'Error al registrar: ' . $stmt->error];
         }
 
         $usuario_id = $stmt->insert_id;
         $stmt->close();
-
-        // Deportes favoritos
-        if (!empty($data['deportes_favoritos'])) {
-            foreach ($data['deportes_favoritos'] as $deporte_id) {
-                $insertDeporte = $this->conn->prepare("INSERT INTO usuarios_deportes (usuario_id, deporte_id) VALUES (?, ?)");
-                $insertDeporte->bind_param("ii", $usuario_id, $deporte_id);
-                $insertDeporte->execute();
-                $insertDeporte->close();
-            }
-        }
-
-        // Disponibilidad
-        if (!empty($data['disponibilidad'])) {
-            foreach ($data['disponibilidad'] as $dia => $franjas) {
-                foreach ($franjas as $franja) {
-                    $insertDisponibilidad = $this->conn->prepare("INSERT INTO usuarios_disponibilidad (usuario_id, disponibilidad_id) VALUES (?, ?)");
-                    $insertDisponibilidad->bind_param("ii", $usuario_id, $franja);
-                    $insertDisponibilidad->execute();
-                    $insertDisponibilidad->close();
-                }
-            }
-        }
-
-        return ['success' => true];
+        return ['success' => true, 'usuario_id' => $usuario_id];
     }
 
     public function registrarInstalacion($data) {
@@ -103,6 +82,26 @@ class UsuarioModel {
         $stmt->close();
 
         return ['success' => true, 'usuario_id' => $usuario_id];
+    }
+
+    public function usernameExiste($username) {
+        $stmt = $this->conn->prepare("SELECT COUNT(*) as total FROM usuarios_deportistas WHERE username = ?");
+        $stmt->bind_param("s", $username);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $row = $result->fetch_assoc();
+        $stmt->close();
+        return $row['total'] > 0;
+    }
+
+    public function emailExiste($email) {
+        $stmt = $this->conn->prepare("SELECT COUNT(*) as total FROM usuarios_deportistas WHERE email = ?");
+        $stmt->bind_param("s", $email);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $row = $result->fetch_assoc();
+        $stmt->close();
+        return $row['total'] > 0;
     }
 }
 ?>
