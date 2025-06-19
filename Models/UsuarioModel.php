@@ -10,33 +10,25 @@ class UsuarioModel {
     }
 
     public function obtenerUsuarioPorUsername($username, $user_type) {
-        try {
-            if ($user_type === 'deportista') {
-                $sql = "SELECT id, username, password, estado FROM usuarios_deportistas WHERE username = ?";
-                $stmt = $this->conn->prepare($sql);
-                $stmt->bind_param("s", $username);
-            } else if ($user_type === 'instalacion') {
-                $sql = "SELECT id, username, password, estado FROM usuarios_instalaciones WHERE username = ? AND tipo_usuario = 'privado'";
-                $stmt = $this->conn->prepare($sql);
-                $stmt->bind_param("s", $username);
-            } else {
-                return false;
-            }
-
-            $stmt->execute();
-            $result = $stmt->get_result();
-            $usuario = $result->fetch_assoc();
-            $stmt->close();
-            
-            // ✅ DEBUG: Agregar log para ver qué pasa
-            error_log("🔍 USUARIO ENCONTRADO: " . ($usuario ? "SÍ - ID: " . $usuario['id'] : "NO") . " para username: $username");
-            
-            return $usuario;
-            
-        } catch (Exception $e) {
-            error_log("❌ ERROR en obtenerUsuarioPorUsername: " . $e->getMessage());
+        if ($user_type === 'deportista') {
+            $table = 'usuarios_deportistas';
+            $stmt = $this->conn->prepare("SELECT id, username, password, estado FROM $table WHERE username = ?");
+        } else if ($user_type === 'instalacion') {
+            $table = 'usuarios_instalaciones';
+            // SOLO instalaciones privadas (excluir IPD)
+            $stmt = $this->conn->prepare("SELECT id, username, password, estado FROM $table WHERE username = ? AND tipo_usuario = 'privado'");
+        } else {
             return false;
         }
+
+        $stmt->bind_param("s", $username);
+        $stmt->execute();
+
+        $result = $stmt->get_result();
+        $usuario = $result->fetch_assoc();
+
+        $stmt->close();
+        return $usuario;
     }
 
     public function registrarDeportista($data) {
