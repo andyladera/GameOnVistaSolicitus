@@ -1,6 +1,6 @@
 <?php
 // filepath: c:\xampp\htdocs\GameOn_Network\Controllers\PerfilController.php
-require_once __DIR__ . '/../Config/Database.php';
+require_once __DIR__ . '/../Config/database.php';
 
 class PerfilController {
     private $conn;
