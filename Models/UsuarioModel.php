@@ -10,87 +10,99 @@ class UsuarioModel {
     }
 
     public function obtenerUsuarioPorUsername($username, $user_type) {
-        $table = '';
-        $extra_condition = '';
-        
         if ($user_type === 'deportista') {
             $table = 'usuarios_deportistas';
+            $stmt = $this->conn->prepare("SELECT id, username, password, estado FROM $table WHERE username = ?");
         } else if ($user_type === 'instalacion') {
             $table = 'usuarios_instalaciones';
-            $extra_condition = " AND tipo_usuario = 'privado'";
+            // SOLO instalaciones privadas (excluir IPD)
+            $stmt = $this->conn->prepare("SELECT id, username, password, estado FROM $table WHERE username = ? AND tipo_usuario = 'privado'");
         } else {
             return false;
         }
 
-        $sql = "SELECT id, username, password, estado FROM $table WHERE username = ?$extra_condition";
-        $stmt = $this->conn->prepare($sql);
-        $stmt->execute([$username]);
-        
-        return $stmt->fetch(); // PDO fetch() en lugar de fetch_assoc()
+        $stmt->bind_param("s", $username);
+        $stmt->execute();
+
+        $result = $stmt->get_result();
+        $usuario = $result->fetch_assoc();
+
+        $stmt->close();
+        return $usuario;
     }
 
     public function registrarDeportista($data) {
-        try {
-            $sql = "INSERT INTO usuarios_deportistas (nombre, apellidos, email, telefono, fecha_nacimiento, genero, nivel_habilidad, username, password) 
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-            
-            $stmt = $this->conn->prepare($sql);
-            $result = $stmt->execute([
-                $data['nombre'],
-                $data['apellidos'],
-                $data['email'],
-                $data['telefono'],
-                $data['fecha_nacimiento'],
-                $data['genero'],
-                $data['nivel_habilidad'],
-                $data['username'],
-                password_hash($data['password'], PASSWORD_DEFAULT)
-            ]);
-            
-            if ($result) {
-                return $this->conn->lastInsertId();
-            }
-            return false;
-        } catch (PDOException $e) {
-            throw new RuntimeException('Error al registrar deportista: ' . $e->getMessage());
+        $stmt = $this->conn->prepare("INSERT INTO usuarios_deportistas (
+            nombre, apellidos, email, username, password, telefono, fecha_nacimiento, genero, nivel_habilidad, estado
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 'activo')");
+
+        $password_hashed = password_hash($data['password'], PASSWORD_DEFAULT);
+        $stmt->bind_param(
+            "sssssssss",
+            $data['nombre'],
+            $data['apellidos'],
+            $data['email'],
+            $data['username'],
+            $password_hashed,
+            $data['telefono'],
+            $data['fecha_nacimiento'],
+            $data['genero'],
+            $data['nivel_habilidad']
+        );
+
+        if (!$stmt->execute()) {
+            return ['error' => $stmt->error];
         }
+
+        $usuario_id = $stmt->insert_id;
+        $stmt->close();
+
+        // Deportes favoritos
+        if (!empty($data['deportes_favoritos'])) {
+            foreach ($data['deportes_favoritos'] as $deporte_id) {
+                $insertDeporte = $this->conn->prepare("INSERT INTO usuarios_deportes (usuario_id, deporte_id) VALUES (?, ?)");
+                $insertDeporte->bind_param("ii", $usuario_id, $deporte_id);
+                $insertDeporte->execute();
+                $insertDeporte->close();
+            }
+        }
+
+        // Disponibilidad
+        if (!empty($data['disponibilidad'])) {
+            foreach ($data['disponibilidad'] as $dia => $franjas) {
+                foreach ($franjas as $franja) {
+                    $insertDisponibilidad = $this->conn->prepare("INSERT INTO usuarios_disponibilidad (usuario_id, disponibilidad_id) VALUES (?, ?)");
+                    $insertDisponibilidad->bind_param("ii", $usuario_id, $franja);
+                    $insertDisponibilidad->execute();
+                    $insertDisponibilidad->close();
+                }
+            }
+        }
+
+        return ['success' => true];
     }
 
     public function registrarInstalacion($data) {
-        try {
-            $sql = "INSERT INTO usuarios_instalaciones (username, password, tipo_usuario) VALUES (?, ?, 'privado')";
-            
-            $stmt = $this->conn->prepare($sql);
-            $result = $stmt->execute([
-                $data['username'],
-                password_hash($data['password'], PASSWORD_DEFAULT)
-            ]);
-            
-            if ($result) {
-                return $this->conn->lastInsertId();
-            }
-            return false;
-        } catch (PDOException $e) {
-            throw new RuntimeException('Error al registrar instalación: ' . $e->getMessage());
+        $stmt = $this->conn->prepare("INSERT INTO usuarios_instalaciones (
+            username, password, tipo_usuario, estado
+        ) VALUES (?, ?, ?, 1)");
+
+        $password_hashed = password_hash($data['password'], PASSWORD_DEFAULT);
+        $stmt->bind_param(
+            "sss",
+            $data['username'],
+            $password_hashed,
+            $data['tipo_usuario'] ?? 'privado'
+        );
+
+        if (!$stmt->execute()) {
+            return ['error' => $stmt->error];
         }
-    }
 
-    public function usernameExiste($username, $user_type) {
-        $table = ($user_type === 'deportista') ? 'usuarios_deportistas' : 'usuarios_instalaciones';
-        
-        $sql = "SELECT COUNT(*) FROM $table WHERE username = ?";
-        $stmt = $this->conn->prepare($sql);
-        $stmt->execute([$username]);
-        
-        return $stmt->fetchColumn() > 0;
-    }
+        $usuario_id = $stmt->insert_id;
+        $stmt->close();
 
-    public function emailExiste($email) {
-        $sql = "SELECT COUNT(*) FROM usuarios_deportistas WHERE email = ?";
-        $stmt = $this->conn->prepare($sql);
-        $stmt->execute([$email]);
-        
-        return $stmt->fetchColumn() > 0;
+        return ['success' => true, 'usuario_id' => $usuario_id];
     }
 }
 ?>
