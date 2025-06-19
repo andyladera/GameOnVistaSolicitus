@@ -29,7 +29,9 @@ $franjas_horarias = $data['franjas_horarias'];
         <!-- ✅ LADO IZQUIERDO CON DISEÑO MEJORADO -->
         <div class="auth-image">
             <div class="welcome-text">
+                <h1>⚽🏀🏐🏸🥋🥇🥈🥉🏆⚽🏀🏐🏸🥋🥇</h1>
                 <h1>Únete a la Comunidad Deportiva Líder.</h1>
+                <h1>⚽🏀🏐🏸🥋🥇🥈🥉🏆⚽🏀🏐🏸🥋🥇</h1>
                 <p>
                     En GameOn Network, conectamos tu pasión por el deporte con las mejores instalaciones de Tacna. Encuentra, reserva y juega como nunca antes.
                 </p>
@@ -41,7 +43,7 @@ $franjas_horarias = $data['franjas_horarias'];
             <!-- ✅ SECCIÓN DE PATROCINADORES REUBICADA -->
             <div class="sponsors-section">
                 <h2>Patrocinador Oficial:</h2>
-                <img src="../../Resources/logo_ipd.png" alt="Logo IPD">
+                <img src="../../Resources/logo_ipd_2.png" alt="Logo IPD">
             </div>
         </div>
         
