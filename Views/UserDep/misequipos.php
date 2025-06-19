@@ -4,26 +4,29 @@ if (!isset($_SESSION['user_id']) || !isset($_SESSION['user_type']) || $_SESSION[
     header("Location: ../Auth/login.php"); 
     exit(); 
 }
-include_once 'header.php'; 
-?> 
-<link rel="stylesheet" href="../../Public/css/modales.css">
+include_once 'header.php';
+?>
+
+<link rel="stylesheet" href="../../Public/css/misequipos_dep.css">
 
 <div class="container mt-4">
     <!-- Panel de opciones de Chat --> 
     <div class="dashboard-wide-card"> 
-        <h2>Opciones de Chat</h2>
+        <h2><i class="fas fa-cogs"></i> Opciones de Chat</h2>
         <div class="row">
-            <div class="col-md-3">
-                <button class="btn btn-primary w-100 mb-2" data-modal="modalCrearEquipo">
-                    <i class="fas fa-plus"></i> Crear Equipo
-                </button>
-                <button class="btn btn-primary w-100 mb-2" data-modal="modalBuscarAmigos">
-                    <i class="fas fa-user-plus"></i> Añadir Amigos
-                </button>
-                <button class="btn btn-primary w-100 mb-2" data-modal="modalSolicitudes">
-                    <i class="fas fa-inbox"></i> Solicitudes
-                    <span id="contadorSolicitudes" class="badge bg-danger ms-1" style="display: none;">0</span>
-                </button>
+            <div class="col-md-12"> <!-- ✅ CAMBIAR A col-md-12 para usar todo el ancho -->
+                <div class="opciones-chat-container"> <!-- ✅ NUEVO CONTENEDOR -->
+                    <button class="btn-opcion-chat btn-crear-equipo" data-modal="modalCrearEquipo">
+                        <i class="fas fa-plus"></i> Crear Equipo
+                    </button>
+                    <button class="btn-opcion-chat btn-anadir-amigos" data-modal="modalBuscarAmigos">
+                        <i class="fas fa-user-plus"></i> Añadir Amigos
+                    </button>
+                    <button class="btn-opcion-chat btn-solicitudes" data-modal="modalSolicitudes">
+                        <i class="fas fa-inbox"></i> Solicitudes
+                        <span id="contadorSolicitudes" class="badge bg-danger" style="display: none;">0</span>
+                    </button>
+                </div>
             </div>
         </div>
     </div> 
@@ -71,7 +74,8 @@ include_once 'header.php';
 <!-- Modal Crear Equipo -->
 <div class="custom-modal" id="modalCrearEquipo">
     <div class="custom-modal-content">
-        <h3>Crear Nuevo Equipo</h3>
+        <button class="custom-modal-close" data-close-modal="modalCrearEquipo">&times;</button>
+        <h3><i class="fas fa-users"></i> Crear Nuevo Equipo</h3>
         <form id="formCrearEquipo">
             <div class="mb-3">
                 <label>Nombre del equipo</label>
@@ -106,7 +110,8 @@ include_once 'header.php';
 <!-- Modal Buscar Amigos -->
 <div class="custom-modal" id="modalBuscarAmigos">
     <div class="custom-modal-content">
-        <h3>Buscar Usuarios</h3>
+        <button class="custom-modal-close" data-close-modal="modalBuscarAmigos">&times;</button>
+        <h3><i class="fas fa-search"></i> Buscar Usuarios</h3>
         <form id="formBuscarAmigos">
             <div class="mb-3">
                 <input type="text" id="busquedaAmigos" name="busqueda" class="form-control" placeholder="Buscar por nombre o username">
@@ -120,7 +125,8 @@ include_once 'header.php';
 <!-- Modal Solicitudes de Amistad -->
 <div class="custom-modal" id="modalSolicitudes">
     <div class="custom-modal-content">
-        <h3>Solicitudes de Amistad</h3>
+        <button class="custom-modal-close" data-close-modal="modalSolicitudes">&times;</button>
+        <h3><i class="fas fa-envelope"></i> Solicitudes de Amistad</h3>
         <div id="solicitudesPendientes">
             <div class="text-center">
                 <div class="spinner-border" role="status">
@@ -141,15 +147,42 @@ include_once 'header.php';
     </div>
 </div>
 
-<!-- HABILITAR chat específicamente para esta página -->
+<!-- ANTES DEL userDataContainer, agregar verificación -->
 <script>
+// ✅ ASEGURAR QUE ESTA PÁGINA CARGUE CHAT
 window.chatEnabled = true;
+window.chatDisabled = false;
+
+// ✅ VERIFICAR CARGA DESPUÉS DE UN MOMENTO
+setTimeout(() => {
+    console.log('🔍 Verificando sistemas de chat...');
+    console.log('gameOnChatMongo:', window.gameOnChatMongo ? '✅ Disponible' : '❌ NO disponible');
+    console.log('chatManager:', window.chatManager ? '✅ Disponible' : '❌ NO disponible');
+    console.log('ChatManager (clase):', window.ChatManager ? '✅ Disponible' : '❌ NO disponible');
+    console.log('iniciarChatMongoDB función:', window.iniciarChatMongoDB ? '✅ Disponible' : '❌ NO disponible');
+    
+    // ✅ VERIFICAR SI EXISTE LA CLASE ChatManager
+    if (typeof ChatManager !== 'undefined' && !window.chatManager) {
+        console.log('🔧 Creando instancia de ChatManager...');
+        window.chatManager = new ChatManager();
+        console.log('✅ ChatManager instanciado manualmente');
+    }
+    
+    if (!window.gameOnChatMongo) {
+        console.error('🚨 PROBLEMA: MongoDB Chat no se cargó correctamente');
+        console.log('📝 Intentando cargar manualmente...');
+        
+        // ✅ CARGAR MANUALMENTE SI NO EXISTE
+        const mongoScript = document.createElement('script');
+        mongoScript.src = '../../Public/js/chatmongo.js';
+        mongoScript.onload = function() {
+            console.log('✅ MongoDB Chat cargado manualmente');
+        };
+        document.head.appendChild(mongoScript);
+    }
+}, 2000);
 </script>
 
-<!-- Scripts de Chat MongoDB -->
-<script src="../../Public/js/chatmongo.js"></script>
-<!-- Script de chat regular también -->
-<script src="../../Public/js/chat.js"></script>
 <div id="userDataContainer" data-user-id="<?php echo $_SESSION['user_id']; ?>" style="display: none;"></div>
 <?php 
 include_once 'footer.php'; 

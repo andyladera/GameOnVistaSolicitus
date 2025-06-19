@@ -7,13 +7,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard - GameOn Network</title>
-    <?php
-    $current_page = basename($_SERVER['PHP_SELF'], '.php');
-    if ($current_page !== 'torneos' && $current_page !== 'reservas') {
-        echo '<link rel="stylesheet" href="../../Public/css/dashboard.css">';
-    }
-    ?>
-    <link rel="stylesheet" href="../../Public/css/horarios_modal.css">
+    
+    <link rel="stylesheet" href="../../Public/css/header_dep.css">
+    <link rel="stylesheet" href="../../Public/css/footer_dep.css">
+    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
@@ -24,11 +21,14 @@
         </div>
         <nav class="main-nav">
             <ul>
-                <li><a href="dashboard.php">DASHBOARD</a></li>
-                <li><a href="insdepor.php">INSTALACIONES DEPORTIVAS</a></li>
-                <li><a href="torneos.php">TORNEOS</a></li>
-                <li><a href="misequipos.php">AMIGOS Y EQUIPOS</a></li>
-                <li><a href="reservas.php">RESERVAS</a></li>
+                <li><a href="dashboard.php" <?php 
+                    $current_page = basename($_SERVER['PHP_SELF'], '.php');
+                    echo ($current_page === 'dashboard') ? 'class="active"' : ''; 
+                ?>>DASHBOARD</a></li>
+                <li><a href="insdepor.php" <?php echo ($current_page === 'insdepor') ? 'class="active"' : ''; ?>>INSTALACIONES DEPORTIVAS</a></li>
+                <li><a href="torneos.php" <?php echo ($current_page === 'torneos') ? 'class="active"' : ''; ?>>TORNEOS</a></li>
+                <li><a href="misequipos.php" <?php echo ($current_page === 'misequipos') ? 'class="active"' : ''; ?>>AMIGOS Y EQUIPOS</a></li>
+                <li><a href="reservas.php" <?php echo ($current_page === 'reservas') ? 'class="active"' : ''; ?>>RESERVAS</a></li>
             </ul>
         </nav>
         <div class="header-user">

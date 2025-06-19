@@ -126,6 +126,7 @@ class ReservasManager {
             const response = await fetch(`${this.baseUrl}?action=obtener_eventos_mes&fecha_inicio=${fechaInicio}&fecha_fin=${fechaFin}`);
             const data = await response.json();
             
+            // ✅ LIMPIAR EVENTOS ANTERIORES
             document.querySelectorAll('.dia-eventos').forEach(div => {
                 div.innerHTML = '';
             });
@@ -146,8 +147,23 @@ class ReservasManager {
         if (contenedorEventos) {
             const elementoEvento = document.createElement('div');
             elementoEvento.className = `evento-${evento.tipo}`;
-            elementoEvento.textContent = evento.titulo;
-            elementoEvento.title = evento.detalle;
+            
+            // ✅ MOSTRAR INFORMACIÓN SEGÚN EL TIPO
+            if (evento.tipo === 'reserva') {
+                elementoEvento.innerHTML = `
+                    <div class="evento-texto">${evento.titulo}</div>
+                    <div class="evento-subtexto">${evento.detalle}</div>
+                `;
+            } else if (evento.tipo === 'torneo') {
+                elementoEvento.innerHTML = `
+                    <div class="evento-texto">${evento.titulo}</div>
+                    <div class="evento-subtexto">${evento.detalle}</div>
+                `;
+            }
+            
+            // ✅ TOOLTIP CON INFORMACIÓN COMPLETA
+            elementoEvento.title = `${evento.titulo}\n${evento.detalle}`;
+            
             contenedorEventos.appendChild(elementoEvento);
         }
     }
@@ -181,7 +197,7 @@ class ReservasManager {
 
     async cargarProximasActividades() {
         try {
-            // Cargar próximas reservas
+            // ✅ CARGAR PRÓXIMAS RESERVAS CON INFORMACIÓN COMPLETA
             const responseReservas = await fetch(`${this.baseUrl}?action=obtener_proximas_reservas`);
             const dataReservas = await responseReservas.json();
             
@@ -189,22 +205,72 @@ class ReservasManager {
                 let htmlReservas = '';
                 if (dataReservas.data.length > 0) {
                     dataReservas.data.forEach(reserva => {
-                        const fechaFormateada = new Date(reserva.fecha).toLocaleDateString('es-PE');
+                        // ✅ FORMATEAR FECHA Y HORA
+                        const fechaObj = new Date(reserva.fecha + 'T00:00:00');
+                        const fechaFormateada = fechaObj.toLocaleDateString('es-PE', {
+                            weekday: 'short',
+                            month: 'short', 
+                            day: 'numeric'
+                        });
+                        
+                        const horaInicio = reserva.hora_inicio.substring(0, 5);
+                        const horaFin = reserva.hora_fin.substring(0, 5);
+                        
+                        // ✅ DETERMINAR COLOR SEGÚN ESTADO
+                        let estadoClass = '';
+                        let estadoTexto = '';
+                        switch(reserva.estado) {
+                            case 'confirmada':
+                                estadoClass = 'estado-confirmada';
+                                estadoTexto = '✅ Confirmada';
+                                break;
+                            case 'pendiente':
+                                estadoClass = 'estado-pendiente';
+                                estadoTexto = '⏳ Pendiente';
+                                break;
+                            case 'cancelada':
+                                estadoClass = 'estado-cancelada';
+                                estadoTexto = '❌ Cancelada';
+                                break;
+                        }
+                        
                         htmlReservas += `
                             <div class="reserva-item">
-                                <div class="item-fecha">${fechaFormateada} - ${reserva.hora_inicio.substring(0,5)}</div>
-                                <div class="item-titulo">${reserva.deporte} - ${reserva.estado}</div>
-                                <div class="item-detalle">${reserva.instalacion}</div>
+                                <div class="item-fecha">
+                                    <i class="fas fa-calendar-day"></i>
+                                    ${fechaFormateada} • ${horaInicio} - ${horaFin}
+                                </div>
+                                <div class="item-titulo">
+                                    <i class="fas fa-futbol"></i>
+                                    ${reserva.deporte} - ${reserva.nombre_area}
+                                </div>
+                                <div class="item-detalle">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                    ${reserva.instalacion}
+                                </div>
+                                <div class="item-estado ${estadoClass}">
+                                    ${estadoTexto}
+                                </div>
+                                <div class="item-precio">
+                                    <i class="fas fa-dollar-sign"></i>
+                                    S/ ${parseFloat(reserva.tarifa_por_hora).toFixed(2)}/hora
+                                </div>
                             </div>
                         `;
                     });
                 } else {
-                    htmlReservas = '<p style="color: #b0b0b0; text-align: center;">No tienes reservas próximas</p>';
+                    htmlReservas = `
+                        <div class="estado-vacio">
+                            <i class="fas fa-calendar-times"></i>
+                            <p>No tienes reservas próximas</p>
+                            <small>¡Reserva una cancha para empezar a jugar!</small>
+                        </div>
+                    `;
                 }
                 document.getElementById('proximasReservas').innerHTML = htmlReservas;
             }
             
-            // Cargar próximos torneos
+            // ✅ CARGAR PRÓXIMOS TORNEOS (MANTENEMOS IGUAL POR AHORA)
             const responseTorneos = await fetch(`${this.baseUrl}?action=obtener_proximos_torneos`);
             const dataTorneos = await responseTorneos.json();
             
@@ -212,26 +278,64 @@ class ReservasManager {
                 let htmlTorneos = '';
                 if (dataTorneos.data.length > 0) {
                     dataTorneos.data.forEach(torneo => {
-                        const fechaFormateada = new Date(torneo.fecha_partido).toLocaleDateString('es-PE');
-                        const horaFormateada = new Date(torneo.fecha_partido).toLocaleTimeString('es-PE', {hour: '2-digit', minute: '2-digit'});
+                        const fechaObj = new Date(torneo.fecha_partido);
+                        const fechaFormateada = fechaObj.toLocaleDateString('es-PE', {
+                            weekday: 'short',
+                            month: 'short',
+                            day: 'numeric'
+                        });
+                        const horaFormateada = fechaObj.toLocaleTimeString('es-PE', {
+                            hour: '2-digit', 
+                            minute: '2-digit'
+                        });
+                        
                         htmlTorneos += `
                             <div class="torneo-item">
-                                <div class="item-fecha">${fechaFormateada} - ${horaFormateada}</div>
-                                <div class="item-titulo">${torneo.deporte_nombre} - ${torneo.torneo_nombre}</div>
-                                <div class="item-detalle">${torneo.partido_detalle} - ${torneo.sede_nombre}</div>
+                                <div class="item-fecha">
+                                    <i class="fas fa-clock"></i>
+                                    ${fechaFormateada} • ${horaFormateada}
+                                </div>
+                                <div class="item-titulo">
+                                    <i class="fas fa-trophy"></i>
+                                    ${torneo.deporte_nombre} - ${torneo.torneo_nombre}
+                                </div>
+                                <div class="item-detalle">
+                                    <i class="fas fa-users"></i>
+                                    ${torneo.partido_detalle}
+                                </div>
+                                <div class="item-detalle">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                    ${torneo.sede_nombre}
+                                </div>
                             </div>
                         `;
                     });
                 } else {
-                    htmlTorneos = '<p style="color: #b0b0b0; text-align: center;">No tienes partidos de torneo próximos</p>';
+                    htmlTorneos = `
+                        <div class="estado-vacio">
+                            <i class="fas fa-trophy"></i>
+                            <p>No tienes partidos de torneo próximos</p>
+                            <small>¡Únete a un equipo e inscríbete en torneos!</small>
+                        </div>
+                    `;
                 }
                 document.getElementById('proximosTorneos').innerHTML = htmlTorneos;
             }
             
         } catch (error) {
             console.error('Error cargando próximas actividades:', error);
-            document.getElementById('proximasReservas').innerHTML = '<p style="color: #dc3545;">Error cargando reservas</p>';
-            document.getElementById('proximosTorneos').innerHTML = '<p style="color: #dc3545;">Error cargando torneos</p>';
+            document.getElementById('proximasReservas').innerHTML = `
+                <div class="error-estado">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <p style="color: #dc3545;">Error cargando reservas</p>
+                </div>
+            `;
+            document.getElementById('proximosTorneos').innerHTML = `
+                <div class="error-estado">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <p style="color: #dc3545;">Error cargando torneos</p>
+                </div>
+            `;
         }
     }
 

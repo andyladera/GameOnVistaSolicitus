@@ -727,6 +727,56 @@
     color: var(--torneos-primary) !important;
 }
 
+/* ✅ ESTILOS PARA MODAL DE EDICIÓN */
+.modal-torneo .form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.modal-torneo .form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.modal-torneo .form-group.full-width {
+    grid-column: 1 / -1;
+}
+
+.modal-torneo .form-group label {
+    font-weight: 600;
+    color: var(--torneos-text-primary);
+    margin-bottom: 5px;
+    font-size: 0.9em;
+}
+
+.modal-torneo .form-group input,
+.modal-torneo .form-group select,
+.modal-torneo .form-group textarea {
+    padding: 10px 12px;
+    border: 2px solid var(--torneos-border);
+    border-radius: 8px;
+    font-size: 0.9em;
+    transition: var(--torneos-transition);
+}
+
+.modal-torneo .form-group input:focus,
+.modal-torneo .form-group select:focus,
+.modal-torneo .form-group textarea:focus {
+    outline: none;
+    border-color: var(--torneos-primary);
+    box-shadow: 0 0 0 3px rgba(44, 90, 160, 0.1);
+}
+
+.modal-torneo .modal-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    padding-top: 20px;
+    border-top: 1px solid var(--torneos-border-light);
+}
+
 /* Responsive */
 @media (max-width: 768px) {
     .torneos-container {

@@ -110,11 +110,11 @@ class TorneosModel {
                     nombre, descripcion, deporte_id, organizador_tipo, organizador_id,
                     institucion_sede_id, max_equipos, fecha_inicio, fecha_fin,
                     fecha_inscripcion_inicio, fecha_inscripcion_fin, modalidad,
-                    premio_descripcion, costo_inscripcion, imagen_torneo
-                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                    premio_1, premio_2, premio_3, costo_inscripcion, imagen_torneo
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         
         $stmt = $this->conn->prepare($sql);
-        $stmt->bind_param("ssisiissssssds", 
+        $stmt->bind_param("ssisiisssssssssds", 
             $datos['nombre'],
             $datos['descripcion'],
             $datos['deporte_id'],
@@ -127,7 +127,9 @@ class TorneosModel {
             $datos['fecha_inscripcion_inicio'],
             $datos['fecha_inscripcion_fin'],
             $datos['modalidad'],
-            $datos['premio_descripcion'],
+            $datos['premio_1'],
+            $datos['premio_2'],
+            $datos['premio_3'],
             $datos['costo_inscripcion'],
             $datos['imagen_torneo']
         );
@@ -146,29 +148,30 @@ class TorneosModel {
         }
     }
 
-    // ✅ NUEVA FUNCIÓN: Actualizar torneo
+    // ✅ FUNCIÓN ACTUALIZADA: Actualizar torneo
     public function actualizarTorneo($torneoId, $datos) {
         $sql = "UPDATE torneos SET 
                     nombre = ?, descripcion = ?, deporte_id = ?, 
-                    institucion_sede_id = ?, max_equipos = ?, fecha_inicio = ?, 
+                    max_equipos = ?, fecha_inicio = ?, 
                     fecha_fin = ?, fecha_inscripcion_inicio = ?, fecha_inscripcion_fin = ?,
-                    modalidad = ?, premio_descripcion = ?, costo_inscripcion = ?, 
-                    imagen_torneo = ?
+                    modalidad = ?, premio_1 = ?, premio_2 = ?, premio_3 = ?, 
+                    costo_inscripcion = ?, imagen_torneo = ?
                 WHERE id = ? AND organizador_id = ?";
         
         $stmt = $this->conn->prepare($sql);
-        $stmt->bind_param("ssiiisssssdsi", 
+        $stmt->bind_param("ssiissssssssdi", 
             $datos['nombre'],
             $datos['descripcion'],
             $datos['deporte_id'],
-            $datos['institucion_sede_id'],
             $datos['max_equipos'],
             $datos['fecha_inicio'],
             $datos['fecha_fin'],
             $datos['fecha_inscripcion_inicio'],
             $datos['fecha_inscripcion_fin'],
             $datos['modalidad'],
-            $datos['premio_descripcion'],
+            $datos['premio_1'],
+            $datos['premio_2'],
+            $datos['premio_3'],
             $datos['costo_inscripcion'],
             $datos['imagen_torneo'],
             $torneoId,

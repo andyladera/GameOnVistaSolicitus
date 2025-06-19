@@ -225,34 +225,54 @@ class InsDeporManager {
                 position: facility.position,
                 map: this.map,
                 title: facility.name,
+                icon: {
+                    path: google.maps.SymbolPath.CIRCLE,
+                    scale: 8,
+                    fillColor: "#006644",
+                    fillOpacity: 1,
+                    strokeColor: "#00bcd4",
+                    strokeWeight: 2,
+                }
             });
             
             this.markers.push(marker);
             
+            // ✅ ENCONTRAR LA INSTALACIÓN COMPLETA CON IMAGEN
+            const instalacionCompleta = this.instalaciones.find(inst => inst.id === facility.id);
+            const imagenUrl = instalacionCompleta?.imagen || '../../Resources/default_instalacion.jpg';
+            
             marker.addListener("click", () => {
-                this.infoWindow.setContent(
-                    `<div class="info-window">
-                        <h3>${facility.name}</h3>
-                        <p>${facility.type}</p>
-                        <p>Tarifa: ${facility.tarifa}</p>
-                        <p>Calificación: ${facility.calificacion.toFixed(1)} <i class="fas fa-star text-warning"></i></p>
-                        <button onclick="window.insDeporManager.verInstalacion(${facility.id})" class="map-btn">Ver detalles</button>
-                    </div>`
-                );
+                // ✅ INFO WINDOW CON DISEÑO OSCURO Y SIN BOTÓN VER DETALLES
+                const infoContent = `
+                    <div class="info-window-custom">
+                        <div class="info-header">
+                            <img src="${imagenUrl}" alt="${facility.name}" class="info-image" 
+                                 onerror="this.src='../../Resources/default_instalacion.jpg'">
+                        </div>
+                        <div class="info-body">
+                            <h3 class="info-title">${facility.name}</h3>
+                            <div class="info-details">
+                                <p class="info-sport">
+                                    <i class="fas fa-running"></i>
+                                    ${facility.type}
+                                </p>
+                                <p class="info-price">
+                                    <i class="fas fa-money-bill-wave"></i>
+                                    Tarifa: ${facility.tarifa}
+                                </p>
+                                <p class="info-rating">
+                                    <i class="fas fa-star"></i>
+                                    ${facility.calificacion.toFixed(1)} estrellas
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                this.infoWindow.setContent(infoContent);
                 this.infoWindow.open(this.map, marker);
             });
         });
-    }
-    
-    verInstalacion(id) {
-        const instalacion = document.querySelector(`.instalacion-card[data-id="${id}"]`);
-        if (instalacion) {
-            instalacion.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            instalacion.classList.add('highlight');
-            setTimeout(() => {
-                instalacion.classList.remove('highlight');
-            }, 2000);
-        }
     }
     
     toggleHorarios(id, button) {
@@ -426,3 +446,176 @@ function initMap() {
         }, 100);
     }
 }
+
+// ✅ FUNCIÓN PARA MANEJAR CLIC EN BOTONES DE ACCIÓN
+document.addEventListener('DOMContentLoaded', function() {
+    // ✅ AGREGAR EVENT LISTENERS PARA BOTONES DE ACCIÓN
+    document.addEventListener('click', function(e) {
+        // Botón de horarios
+        if (e.target.closest('.btn-horarios')) {
+            const btn = e.target.closest('.btn-horarios');
+            const instalacionId = btn.getAttribute('data-id');
+            toggleHorarios(instalacionId);
+        }
+        
+        // Botón de cronograma
+        if (e.target.closest('.btn-cronograma')) {
+            const btn = e.target.closest('.btn-cronograma');
+            const instalacionId = btn.getAttribute('data-id');
+            mostrarCronograma(instalacionId);
+        }
+        
+        // Botón de mapa
+        if (e.target.closest('.btn-mapa')) {
+            const btn = e.target.closest('.btn-mapa');
+            const lat = parseFloat(btn.getAttribute('data-lat'));
+            const lng = parseFloat(btn.getAttribute('data-lng'));
+            const nombre = btn.getAttribute('data-nombre');
+            centrarMapaEnInstalacion(lat, lng, nombre);
+        }
+        
+        // Botón de comentarios
+        if (e.target.closest('.btn-comentarios')) {
+            const btn = e.target.closest('.btn-comentarios');
+            const instalacionId = btn.getAttribute('data-id');
+            mostrarComentarios(instalacionId);
+        }
+        
+        // Botón de imágenes
+        if (e.target.closest('.btn-imagenes')) {
+            const btn = e.target.closest('.btn-imagenes');
+            const instalacionId = btn.getAttribute('data-id');
+            mostrarGaleria(instalacionId);
+        }
+        
+        // Botón de reservar
+        if (e.target.closest('.btn-reservar')) {
+            const btn = e.target.closest('.btn-reservar');
+            const instalacionId = btn.getAttribute('data-id');
+            iniciarReserva(instalacionId);
+        }
+    });
+});
+
+// ✅ FUNCIÓN PARA MOSTRAR/OCULTAR HORARIOS
+function toggleHorarios(instalacionId) {
+    const horariosDiv = document.getElementById(`horarios-${instalacionId}`);
+    const btn = document.querySelector(`[data-id="${instalacionId}"].btn-horarios`);
+    
+    if (horariosDiv.style.display === 'none' || horariosDiv.style.display === '') {
+        horariosDiv.style.display = 'block';
+        btn.innerHTML = '<i class="fas fa-clock"></i> Ocultar';
+        btn.style.background = 'linear-gradient(135deg, #dc3545, #c82333)';
+    } else {
+        horariosDiv.style.display = 'none';
+        btn.innerHTML = '<i class="fas fa-clock"></i> Horarios';
+        btn.style.background = 'linear-gradient(135deg, var(--info-color), #138496)';
+    }
+}
+
+// ✅ FUNCIÓN PARA CENTRAR MAPA EN INSTALACIÓN
+function centrarMapaEnInstalacion(lat, lng, nombre) {
+    if (window.insDeporManager && window.insDeporManager.map) {
+        const position = new google.maps.LatLng(lat, lng);
+        window.insDeporManager.map.setCenter(position);
+        window.insDeporManager.map.setZoom(17);
+        
+        // Scroll al mapa
+        document.getElementById('map').scrollIntoView({ 
+            behavior: 'smooth', 
+            block: 'center' 
+        });
+        
+        // Mostrar notificación
+        mostrarNotificacion(`📍 Mostrando ubicación de ${nombre}`, 'success');
+    } else {
+        mostrarNotificacion('⚠️ El mapa no está disponible', 'warning');
+    }
+}
+
+// ✅ FUNCIÓN PARA INICIAR RESERVA
+function iniciarReserva(instalacionId) {
+    mostrarNotificacion('🚀 Redirigiendo a reservas...', 'info');
+    setTimeout(() => {
+        window.location.href = `reservas.php?instalacion=${instalacionId}`;
+    }, 1000);
+}
+
+// ✅ FUNCIÓN PARA MOSTRAR NOTIFICACIONES
+function mostrarNotificacion(mensaje, tipo = 'info') {
+    // Crear contenedor si no existe
+    let container = document.getElementById('notificaciones-container');
+    if (!container) {
+        container = document.createElement('div');
+        container.id = 'notificaciones-container';
+        container.style.cssText = `
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            z-index: 1002;
+            pointer-events: none;
+        `;
+        document.body.appendChild(container);
+    }
+    
+    const colores = {
+        'success': { bg: '#28a745', icon: 'check-circle' },
+        'error': { bg: '#dc3545', icon: 'exclamation-circle' },
+        'warning': { bg: '#ffc107', icon: 'exclamation-triangle' },
+        'info': { bg: '#17a2b8', icon: 'info-circle' }
+    };
+    
+    const config = colores[tipo] || colores['info'];
+    
+    const notificacion = document.createElement('div');
+    notificacion.style.cssText = `
+        background: ${config.bg};
+        color: white;
+        padding: 12px 18px;
+        border-radius: 8px;
+        margin-bottom: 10px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        animation: slideInRight 0.3s ease;
+        pointer-events: all;
+        font-size: 14px;
+        font-weight: 500;
+        max-width: 300px;
+    `;
+    
+    notificacion.innerHTML = `
+        <i class="fas fa-${config.icon}"></i>
+        <span>${mensaje}</span>
+    `;
+    
+    container.appendChild(notificacion);
+    
+    // Remover después de 3 segundos
+    setTimeout(() => {
+        if (notificacion.parentNode) {
+            notificacion.style.animation = 'slideOutRight 0.3s ease';
+            setTimeout(() => {
+                if (notificacion.parentNode) {
+                    notificacion.remove();
+                }
+            }, 300);
+        }
+    }, 3000);
+}
+
+// ✅ AGREGAR ANIMACIONES CSS
+const style = document.createElement('style');
+style.textContent = `
+    @keyframes slideInRight {
+        from { transform: translateX(100%); opacity: 0; }
+        to { transform: translateX(0); opacity: 1; }
+    }
+    
+    @keyframes slideOutRight {
+        from { transform: translateX(0); opacity: 1; }
+        to { transform: translateX(100%); opacity: 0; }
+    }
+`;
+document.head.appendChild(style);

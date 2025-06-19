@@ -9,7 +9,6 @@ if (!isset($_SESSION['user_id']) || !isset($_SESSION['user_type']) || $_SESSION[
 include_once 'header.php';
 ?>
 
-<!-- Agregar CSS específico para reservas -->
 <link rel="stylesheet" href="../../Public/css/styles_reservas.css">
 
 <div class="container mt-4">

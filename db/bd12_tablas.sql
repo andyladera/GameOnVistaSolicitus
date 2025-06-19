@@ -242,7 +242,9 @@ CREATE TABLE IF NOT EXISTS `torneos` (
   `fecha_inscripcion_fin` date NOT NULL,
   `estado` enum('proximo','inscripciones_abiertas','inscripciones_cerradas','activo','finalizado','cancelado') NOT NULL DEFAULT 'proximo',
   `modalidad` enum('eliminacion_simple','eliminacion_doble','todos_contra_todos','grupos_eliminatoria') NOT NULL DEFAULT 'eliminacion_simple',
-  `premio_descripcion` text DEFAULT NULL,
+  `premio_1` varchar(255) DEFAULT NULL,
+  `premio_2` varchar(255) DEFAULT NULL,
+  `premio_3` varchar(255) DEFAULT NULL,
   `costo_inscripcion` decimal(10,2) DEFAULT 0.00,
   `imagen_torneo` varchar(255) DEFAULT NULL,
   `creado_en` timestamp NOT NULL DEFAULT current_timestamp(),
@@ -255,7 +257,7 @@ CREATE TABLE IF NOT EXISTS `torneos` (
   KEY `idx_sede` (`institucion_sede_id`),
   CONSTRAINT `torneos_ibfk_1` FOREIGN KEY (`deporte_id`) REFERENCES `deportes` (`id`) ON DELETE CASCADE,
   CONSTRAINT `torneos_ibfk_2` FOREIGN KEY (`institucion_sede_id`) REFERENCES `instituciones_deportivas` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- La exportación de datos fue deseleccionada.
 
@@ -306,9 +308,13 @@ CREATE TABLE IF NOT EXISTS `torneos_estadisticas` (
 CREATE TABLE IF NOT EXISTS `torneos_partidos` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `torneo_id` int(11) NOT NULL,
-  `equipo_local_id` int(11) NOT NULL,
-  `equipo_visitante_id` int(11) NOT NULL,
-  `fase` enum('grupos','octavos','cuartos','semifinal','final','tercer_lugar') NOT NULL,
+  `area_deportiva_id` int(11) DEFAULT NULL,
+  `equipo_local_id` int(11) DEFAULT NULL,
+  `equipo_visitante_id` int(11) DEFAULT NULL,
+  `fase` enum('primera_ronda','segunda_ronda','tercera_ronda','cuartos','semifinal','final','tercer_lugar') NOT NULL,
+  `numero_partido` int(11) DEFAULT NULL,
+  `ronda` int(11) DEFAULT NULL,
+  `descripcion_partido` varchar(255) DEFAULT NULL,
   `numero_grupo` int(11) DEFAULT NULL,
   `fecha_partido` datetime NOT NULL,
   `resultado_local` int(11) DEFAULT NULL,
@@ -323,11 +329,75 @@ CREATE TABLE IF NOT EXISTS `torneos_partidos` (
   KEY `torneos_partidos_ibfk_2` (`equipo_local_id`),
   KEY `torneos_partidos_ibfk_3` (`equipo_visitante_id`),
   KEY `torneos_partidos_ibfk_4` (`equipo_ganador_id`),
+  KEY `torneos_partidos_ibfk_area` (`area_deportiva_id`),
+  KEY `idx_torneo_area` (`torneo_id`,`area_deportiva_id`),
+  KEY `idx_ronda_partido` (`ronda`,`numero_partido`),
+  KEY `idx_torneo_ronda` (`torneo_id`,`ronda`),
   CONSTRAINT `torneos_partidos_ibfk_1` FOREIGN KEY (`torneo_id`) REFERENCES `torneos` (`id`) ON DELETE CASCADE,
   CONSTRAINT `torneos_partidos_ibfk_2` FOREIGN KEY (`equipo_local_id`) REFERENCES `equipos` (`id`),
   CONSTRAINT `torneos_partidos_ibfk_3` FOREIGN KEY (`equipo_visitante_id`) REFERENCES `equipos` (`id`),
-  CONSTRAINT `torneos_partidos_ibfk_4` FOREIGN KEY (`equipo_ganador_id`) REFERENCES `equipos` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  CONSTRAINT `torneos_partidos_ibfk_4` FOREIGN KEY (`equipo_ganador_id`) REFERENCES `equipos` (`id`),
+  CONSTRAINT `torneos_partidos_ibfk_area` FOREIGN KEY (`area_deportiva_id`) REFERENCES `areas_deportivas` (`id`) ON DELETE SET NULL
+) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- La exportación de datos fue deseleccionada.
+
+-- Volcando estructura para tabla gameon.torneos_partidos_asistencias
+CREATE TABLE IF NOT EXISTS `torneos_partidos_asistencias` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `partido_id` int(11) NOT NULL,
+  `jugador_id` int(11) NOT NULL,
+  `equipo_id` int(11) NOT NULL,
+  `gol_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `partido_id` (`partido_id`),
+  KEY `jugador_id` (`jugador_id`),
+  KEY `equipo_id` (`equipo_id`),
+  KEY `gol_id` (`gol_id`),
+  CONSTRAINT `torneos_partidos_asistencias_ibfk_1` FOREIGN KEY (`partido_id`) REFERENCES `torneos_partidos` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `torneos_partidos_asistencias_ibfk_2` FOREIGN KEY (`jugador_id`) REFERENCES `usuarios_deportistas` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `torneos_partidos_asistencias_ibfk_3` FOREIGN KEY (`equipo_id`) REFERENCES `equipos` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `torneos_partidos_asistencias_ibfk_4` FOREIGN KEY (`gol_id`) REFERENCES `torneos_partidos_goleadores` (`id`) ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- La exportación de datos fue deseleccionada.
+
+-- Volcando estructura para tabla gameon.torneos_partidos_estadisticas
+CREATE TABLE IF NOT EXISTS `torneos_partidos_estadisticas` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `partido_id` int(11) NOT NULL,
+  `equipo_id` int(11) NOT NULL,
+  `goles` int(11) DEFAULT 0,
+  `tarjetas_amarillas` int(11) DEFAULT 0,
+  `tarjetas_rojas` int(11) DEFAULT 0,
+  `mvp_jugador_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `partido_id` (`partido_id`),
+  KEY `equipo_id` (`equipo_id`),
+  KEY `mvp_jugador_id` (`mvp_jugador_id`),
+  CONSTRAINT `torneos_partidos_estadisticas_ibfk_1` FOREIGN KEY (`partido_id`) REFERENCES `torneos_partidos` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `torneos_partidos_estadisticas_ibfk_2` FOREIGN KEY (`equipo_id`) REFERENCES `equipos` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `torneos_partidos_estadisticas_ibfk_3` FOREIGN KEY (`mvp_jugador_id`) REFERENCES `usuarios_deportistas` (`id`) ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- La exportación de datos fue deseleccionada.
+
+-- Volcando estructura para tabla gameon.torneos_partidos_goleadores
+CREATE TABLE IF NOT EXISTS `torneos_partidos_goleadores` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `partido_id` int(11) NOT NULL,
+  `jugador_id` int(11) NOT NULL,
+  `equipo_id` int(11) NOT NULL,
+  `minuto_gol` int(11) DEFAULT NULL,
+  `tipo_gol` enum('normal','penal','autogol') DEFAULT 'normal',
+  PRIMARY KEY (`id`),
+  KEY `partido_id` (`partido_id`),
+  KEY `jugador_id` (`jugador_id`),
+  KEY `equipo_id` (`equipo_id`),
+  CONSTRAINT `torneos_partidos_goleadores_ibfk_1` FOREIGN KEY (`partido_id`) REFERENCES `torneos_partidos` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `torneos_partidos_goleadores_ibfk_2` FOREIGN KEY (`jugador_id`) REFERENCES `usuarios_deportistas` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `torneos_partidos_goleadores_ibfk_3` FOREIGN KEY (`equipo_id`) REFERENCES `equipos` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- La exportación de datos fue deseleccionada.
 

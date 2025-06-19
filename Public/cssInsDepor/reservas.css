@@ -179,41 +179,44 @@
 
 /* Leyenda */
 .leyenda-reservas {
-    background: var(--bg-card);
-    border-radius: var(--radius-lg);
-    padding: var(--spacing-lg);
-    margin-bottom: var(--spacing-xl);
-    box-shadow: var(--shadow-md);
     display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: var(--spacing-xl);
+    gap: 20px;
+    align-items: center;
+    padding: 15px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
 }
 
 .leyenda-item {
     display: flex;
     align-items: center;
-    gap: var(--spacing-sm);
-    font-size: 14px;
-    font-weight: 600;
-    color: var(--text-primary);
+    gap: 8px;
+    font-size: 0.9em;
+    color: #495057;
 }
 
 .color-box {
-    width: 20px;
-    height: 20px;
-    border-radius: var(--radius-sm);
-    border: 2px solid var(--border-color);
+    width: 16px;
+    height: 16px;
+    border-radius: 4px;
+    border: 2px solid;
 }
 
 .color-box.disponible {
-    background: linear-gradient(135deg, #d4edda, #c3e6cb);
+    background: linear-gradient(135deg, #e8f5e8, #f0fff0);
     border-color: #28a745;
 }
 
 .color-box.ocupado {
-    background: linear-gradient(135deg, #f8d7da, #f5c6cb);
-    border-color: #dc3545;
+    background: linear-gradient(135deg, #ffeaa7, #fab1a0);
+    border-color: #e17055;
+}
+
+.color-box.partido-torneo {
+    background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+    border-color: #2196f3;
 }
 
 .color-box.mantenimiento {
@@ -222,8 +225,8 @@
 }
 
 .color-box.cerrado {
-    background: linear-gradient(135deg, #d1ecf1, #bee5eb);
-    border-color: #17a2b8;
+    background: linear-gradient(135deg, #f8d7da, #f5c6cb);
+    border-color: #dc3545;
 }
 
 /* Grid de reservas */
@@ -413,110 +416,320 @@
     cursor: default;
 }
 
-.reserva-info {
-    position: absolute;
-    bottom: 2px;
-    left: 2px;
-    right: 2px;
+/* ✅ ESTILOS PARA PARTIDOS DE TORNEOS */
+.horario-bloque.partido-torneo {
+    background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+    border: 2px solid #2196f3;
+    color: #1976d2;
 }
 
-.reserva-info small {
-    font-size: 9px;
+.horario-bloque.partido-torneo:hover {
+    background: linear-gradient(135deg, #bbdefb, #90caf9);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(33, 150, 243, 0.3);
+}
+
+.partido-info {
+    font-size: 0.75em;
+    color: #1976d2;
     font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.3px;
-    background: rgba(255, 255, 255, 0.8);
-    padding: 1px 4px;
-    border-radius: 3px;
-    display: block;
-}
-
-/* Área en mantenimiento */
-.horarios-grid.mantenimiento-area {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 200px;
-}
-
-.mantenimiento-mensaje {
     text-align: center;
-    color: var(--text-secondary);
+    margin-top: 2px;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 4px;
+    padding: 2px 4px;
 }
 
-.mantenimiento-mensaje i {
-    font-size: 3rem;
-    color: var(--warning-color);
-    margin-bottom: var(--spacing-md);
+/* Estilos para el modal de partidos */
+.detalle-partido {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
 }
 
-.mantenimiento-mensaje h4 {
-    color: var(--text-primary);
-    margin-bottom: var(--spacing-sm);
-}
-
-.mantenimiento-mensaje p {
+.detalle-partido h4 {
+    color: #1976d2;
     margin: 0;
-}
-
-/* Estadísticas de reservas */
-.estadisticas-reservas {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: var(--spacing-lg);
-}
-
-.stat-card {
-    background: var(--bg-card);
-    border-radius: var(--radius-lg);
-    padding: var(--spacing-lg);
-    box-shadow: var(--shadow-md);
+    padding-bottom: 15px;
+    border-bottom: 2px solid #e3f2fd;
     display: flex;
     align-items: center;
-    gap: var(--spacing-md);
-    transition: var(--transition-base);
+    gap: 10px;
 }
 
-.stat-card:hover {
-    transform: translateY(-3px);
-    box-shadow: var(--shadow-lg);
-}
-
-.stat-icon {
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
+.partido-header {
     display: flex;
+    justify-content: space-between;
     align-items: center;
-    justify-content: center;
-    font-size: 1.5rem;
+    background: linear-gradient(135deg, #e3f2fd, #f3e5f5);
+    padding: 12px;
+    border-radius: 8px;
+    border-left: 4px solid #2196f3;
+}
+
+.torneo-nombre {
+    font-weight: 700;
+    color: #1976d2;
+    font-size: 1.1em;
+}
+
+.partido-numero {
+    background: #2196f3;
     color: white;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 0.9em;
+    font-weight: 600;
 }
 
-.stat-icon.green {
-    background: linear-gradient(135deg, #28a745, #20c997);
+.equipos-enfrentamiento {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 15px;
+    align-items: center;
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px solid #e9ecef;
 }
 
-.stat-icon.blue {
-    background: linear-gradient(135deg, #007bff, #6f42c1);
+.equipos-enfrentamiento .equipo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 600;
+    color: #495057;
 }
 
-.stat-icon.orange {
-    background: linear-gradient(135deg, #fd7e14, #ffc107);
+.equipos-enfrentamiento .vs {
+    font-weight: 800;
+    color: #6c757d;
+    text-align: center;
+    font-size: 1.2em;
 }
 
-.stat-content h3 {
-    margin: 0 0 var(--spacing-xs) 0;
-    font-size: 1.8rem;
+/* Estados específicos para partidos */
+.badge.programado {
+    background: rgba(23, 162, 184, 0.1);
+    color: #17a2b8;
+    border: 1px solid rgba(23, 162, 184, 0.3);
+}
+
+.badge.en_curso {
+    background: rgba(255, 193, 7, 0.1);
+    color: #ffc107;
+    border: 1px solid rgba(255, 193, 7, 0.3);
+}
+
+.badge.finalizado {
+    background: rgba(40, 167, 69, 0.1);
+    color: #28a745;
+    border: 1px solid rgba(40, 167, 69, 0.3);
+}
+
+.badge.suspendido,
+.badge.cancelado {
+    background: rgba(220, 53, 69, 0.1);
+    color: #dc3545;
+    border: 1px solid rgba(220, 53, 69, 0.3);
+}
+
+/* Grid de horarios */
+.horarios-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: var(--spacing-xs);
+    padding: var(--spacing-md);
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.horario-bloque {
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: var(--spacing-sm);
+    text-align: center;
+    cursor: pointer;
+    transition: var(--transition-base);
+    position: relative;
+    min-height: 80px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: var(--spacing-xs);
+}
+
+.horario-bloque:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.horario-bloque .hora {
+    font-size: 12px;
     font-weight: 700;
     color: var(--text-primary);
 }
 
-.stat-content p {
-    margin: 0;
-    font-size: 14px;
+.horario-bloque .duracion {
+    font-size: 10px;
     color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.horario-bloque.disponible {
+    background: linear-gradient(135deg, #d4edda, #c3e6cb);
+    border-color: #28a745;
+    color: #155724;
+}
+
+.horario-bloque.disponible:hover {
+    background: linear-gradient(135deg, #c3e6cb, #b1dfbb);
+    border-color: #1e7e34;
+}
+
+.horario-bloque.ocupado {
+    background: linear-gradient(135deg, #f8d7da, #f5c6cb);
+    border-color: #dc3545;
+    color: #721c24;
+    cursor: pointer;
+}
+
+.horario-bloque.ocupado:hover {
+    background: linear-gradient(135deg, #f5c6cb, #f1b0b7);
+    border-color: #bd2130;
+}
+
+.horario-bloque.mantenimiento {
+    background: linear-gradient(135deg, #fff3cd, #ffeaa7);
+    border-color: #ffc107;
+    color: #856404;
+    cursor: default;
+}
+
+.horario-bloque.cerrado {
+    background: linear-gradient(135deg, #d1ecf1, #bee5eb);
+    border-color: #17a2b8;
+    color: #0c5460;
+    cursor: default;
+}
+
+/* ✅ ESTILOS PARA PARTIDOS DE TORNEOS */
+.horario-bloque.partido-torneo {
+    background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+    border: 2px solid #2196f3;
+    color: #1976d2;
+}
+
+.horario-bloque.partido-torneo:hover {
+    background: linear-gradient(135deg, #bbdefb, #90caf9);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(33, 150, 243, 0.3);
+}
+
+.partido-info {
+    font-size: 0.75em;
+    color: #1976d2;
     font-weight: 600;
+    text-align: center;
+    margin-top: 2px;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 4px;
+    padding: 2px 4px;
+}
+
+/* Estilos para el modal de partidos */
+.detalle-partido {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.detalle-partido h4 {
+    color: #1976d2;
+    margin: 0;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #e3f2fd;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.partido-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: linear-gradient(135deg, #e3f2fd, #f3e5f5);
+    padding: 12px;
+    border-radius: 8px;
+    border-left: 4px solid #2196f3;
+}
+
+.torneo-nombre {
+    font-weight: 700;
+    color: #1976d2;
+    font-size: 1.1em;
+}
+
+.partido-numero {
+    background: #2196f3;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 0.9em;
+    font-weight: 600;
+}
+
+.equipos-enfrentamiento {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 15px;
+    align-items: center;
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px solid #e9ecef;
+}
+
+.equipos-enfrentamiento .equipo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 600;
+    color: #495057;
+}
+
+.equipos-enfrentamiento .vs {
+    font-weight: 800;
+    color: #6c757d;
+    text-align: center;
+    font-size: 1.2em;
+}
+
+/* Estados específicos para partidos */
+.badge.programado {
+    background: rgba(23, 162, 184, 0.1);
+    color: #17a2b8;
+    border: 1px solid rgba(23, 162, 184, 0.3);
+}
+
+.badge.en_curso {
+    background: rgba(255, 193, 7, 0.1);
+    color: #ffc107;
+    border: 1px solid rgba(255, 193, 7, 0.3);
+}
+
+.badge.finalizado {
+    background: rgba(40, 167, 69, 0.1);
+    color: #28a745;
+    border: 1px solid rgba(40, 167, 69, 0.3);
+}
+
+.badge.suspendido,
+.badge.cancelado {
+    background: rgba(220, 53, 69, 0.1);
+    color: #dc3545;
+    border: 1px solid rgba(220, 53, 69, 0.3);
 }
 
 /* Modal */
@@ -659,6 +872,234 @@
     to {
         opacity: 1;
         transform: translateY(0);
+    }
+}
+
+/* Estadísticas de reservas */
+.estadisticas-reservas {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: var(--spacing-lg);
+    margin-top: var(--spacing-xl);
+    padding: var(--spacing-lg);
+}
+
+.stat-card {
+    background: var(--bg-card);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-lg);
+    box-shadow: var(--shadow-md);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-lg);
+    transition: var(--transition-base);
+    border-left: 4px solid transparent;
+}
+
+.stat-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+}
+
+.stat-card.green {
+    border-left-color: var(--success-color);
+}
+
+.stat-card.blue {
+    border-left-color: var(--info-color);
+}
+
+.stat-card.orange {
+    border-left-color: var(--warning-color);
+}
+
+.stat-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    color: white;
+    flex-shrink: 0;
+}
+
+.stat-icon.green {
+    background: linear-gradient(135deg, var(--success-color), #20c997);
+}
+
+.stat-icon.blue {
+    background: linear-gradient(135deg, var(--info-color), #6f42c1);
+}
+
+.stat-icon.orange {
+    background: linear-gradient(135deg, var(--warning-color), #fd7e14);
+}
+
+.stat-content {
+    flex: 1;
+}
+
+.stat-content h3 {
+    margin: 0 0 var(--spacing-xs) 0;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    line-height: 1;
+}
+
+.stat-content p {
+    margin: 0;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Animación de conteo */
+.stat-content h3 {
+    animation: countUp 0.8s ease-out;
+}
+
+@keyframes countUp {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Estados de carga para estadísticas */
+.stat-content h3:empty::before {
+    content: '-';
+    color: var(--text-muted);
+}
+
+.stat-loading {
+    position: relative;
+    overflow: hidden;
+}
+
+.stat-loading::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.8), transparent);
+    animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+    to {
+        left: 100%;
+    }
+}
+
+/* Mensajes adicionales en estadísticas */
+.estadisticas-footer {
+    text-align: center;
+    margin-top: var(--spacing-lg);
+    padding: var(--spacing-md);
+    background: var(--bg-light);
+    border-radius: var(--radius-md);
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+/* Responsive para estadísticas */
+@media (max-width: 768px) {
+    .estadisticas-reservas {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-md);
+        padding: var(--spacing-md);
+    }
+    
+    .stat-card {
+        padding: var(--spacing-md);
+        gap: var(--spacing-md);
+    }
+    
+    .stat-icon {
+        width: 50px;
+        height: 50px;
+        font-size: 1.2rem;
+    }
+    
+    .stat-content h3 {
+        font-size: 1.6rem;
+    }
+    
+    .stat-content p {
+        font-size: 0.8rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .stat-card {
+        flex-direction: column;
+        text-align: center;
+        gap: var(--spacing-sm);
+    }
+    
+    .stat-icon {
+        width: 45px;
+        height: 45px;
+        font-size: 1.1rem;
+    }
+    
+    .stat-content h3 {
+        font-size: 1.4rem;
+    }
+}
+
+/* Variaciones de colores adicionales */
+.stat-card.purple {
+    border-left-color: #6f42c1;
+}
+
+.stat-card.red {
+    border-left-color: var(--danger-color);
+}
+
+.stat-icon.purple {
+    background: linear-gradient(135deg, #6f42c1, #8b5cf6);
+}
+
+.stat-icon.red {
+    background: linear-gradient(135deg, var(--danger-color), #f56565);
+}
+
+/* Efecto hover mejorado */
+.stat-card:hover .stat-icon {
+    transform: scale(1.1);
+    transition: var(--transition-base);
+}
+
+.stat-card:hover .stat-content h3 {
+    color: var(--primary-color);
+    transition: var(--transition-base);
+}
+
+/* Estado de carga */
+.stats-loading .stat-card {
+    background: linear-gradient(90deg, #f8f9fa 25%, #e9ecef 50%, #f8f9fa 75%);
+    background-size: 200% 100%;
+    animation: loading 1.5s infinite;
+}
+
+@keyframes loading {
+    0% {
+        background-position: 200% 0;
+    }
+    100% {
+        background-position: -200% 0;
     }
 }
 

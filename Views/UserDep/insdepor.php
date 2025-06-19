@@ -15,7 +15,7 @@ $highlightId = isset($_GET['highlight']) ? (int)$_GET['highlight'] : null;
 include_once 'header.php';
 ?>
 
-<!-- Agregar CSS específico para modales de instalaciones -->
+<link rel="stylesheet" href="../../Public/css/insdepor_dep.css">
 <link rel="stylesheet" href="../../Public/css/modal_insdepor.css">
 
 <div class="container mt-4">
@@ -78,48 +78,121 @@ include_once 'header.php';
         <h2>LISTADOS DE INSTALACIONES DEPORTIVAS</h2>
             <div id="listaInstalaciones">
                 <?php foreach ($instalaciones as $instalacion): ?>
-                    <div class="card mb-3 instalacion-card <?= ($highlightId == $instalacion['id']) ? 'highlight' : '' ?>" data-id="<?= $instalacion['id'] ?>" data-deportes="<?= implode(',', array_column($instalacion['deportes'], 'id')) ?>" data-calificacion="<?= $instalacion['calificacion'] ?>">
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-md-8">
-                                    <h2 class="card-title"><?= $instalacion['nombre'] ?></h2>
-                                    <p class="card-text">
-                                        <strong>Dirección:</strong> <?= $instalacion['direccion'] ?><br>
-                                        <strong>Tarifa:</strong> S/. <?= number_format($instalacion['tarifa'], 2) ?><br>
-                                        <strong>Contacto:</strong> <?= $instalacion['telefono'] ?> | <?= $instalacion['email'] ?><br>
-                                        <strong>Deportes:</strong> 
-                                        <?php 
-                                        $nombresDeportes = array_column($instalacion['deportes'], 'nombre');
-                                        echo ucwords(implode(', ', $nombresDeportes)); 
-                                        ?>
-                                    </p>
+                    <div class="card mb-3 instalacion-card card-with-image <?= ($highlightId == $instalacion['id']) ? 'highlight' : '' ?>" 
+                         data-id="<?= $instalacion['id'] ?>" 
+                         data-deportes="<?= implode(',', array_column($instalacion['deportes'], 'id')) ?>" 
+                         data-calificacion="<?= $instalacion['calificacion'] ?>">
+                        
+                        <!-- ✅ CONTENEDOR DE IMAGEN -->
+                        <div class="card-image-container">
+                            <?php if (!empty($instalacion['imagen'])): ?>
+                                <img src="<?= htmlspecialchars($instalacion['imagen']) ?>" 
+                                     alt="<?= htmlspecialchars($instalacion['nombre']) ?>" 
+                                     class="card-image"
+                                     loading="lazy"
+                                     onerror="this.parentElement.innerHTML='<div class=\'image-placeholder\'><i class=\'fas fa-building\'></i><span>Imagen no disponible</span></div>'">
+                                <div class="card-image-overlay">
+                                    <i class="fas fa-eye"></i> Ver instalación
                                 </div>
-                                <div class="col-md-4 text-right">
-                                    <div class="calificacion-container">
-                                        <span class="badge badge-warning p-2">
-                                            <i class="fas fa-star"></i> <?= number_format($instalacion['calificacion'], 1) ?>
-                                        </span>
-                                    </div>
-                                    <button class="btn btn-primary btn-sm mt-2 btn-ver-horarios" data-id="<?= $instalacion['id'] ?>">Ver horarios</button>
-                                    <button class="btn btn-primary btn-sm mt-2 btn-ver-cronograma" data-id="<?= $instalacion['id'] ?>">Ver cronograma</button>
-                                    <button class="btn btn-primary btn-sm mt-2 btn-ver-mapa" data-lat="<?= $instalacion['latitud'] ?>" data-lng="<?= $instalacion['longitud'] ?>" data-nombre="<?= $instalacion['nombre'] ?>">Ver en mapa</button>
-                                    <button class="btn btn-primary btn-sm mt-2 btn-ver-comentarios" data-id="<?= $instalacion['id'] ?>">Ver Comentarios</button>
-                                    <button class="btn btn-primary btn-sm mt-2 btn-ver-imagenes" data-id="<?= $instalacion['id'] ?>">Ver Imagenes</button>
+                            <?php else: ?>
+                                <div class="image-placeholder">
+                                    <i class="fas fa-building"></i>
+                                    <span>Sin imagen</span>
+                                </div>
+                            <?php endif; ?>
+                        </div>
+                        
+                        <!-- ✅ CONTENIDO DE LA TARJETA -->
+                        <div class="card-content-area">
+                            <!-- Header -->
+                            <div class="card-header-section">
+                                <h2 class="card-title" style="border: none; padding: 0; margin-bottom: 8px;">
+                                    <i class="fas fa-building"></i>
+                                    <?= htmlspecialchars($instalacion['nombre']) ?>
+                                </h2>
+                                
+                                <!-- Calificación -->
+                                <div class="rating-badge">
+                                    <i class="fas fa-star"></i>
+                                    <?= number_format($instalacion['calificacion'], 1) ?>
                                 </div>
                             </div>
-                            <div class="horarios-container" id="horarios-<?= $instalacion['id'] ?>" style="display: none;">
-                                <hr>
-                                <h6>Horarios de atención:</h6>
-                                <div class="row">
-                                    <?php foreach ($instalacion['horarios'] as $dia => $horario): ?>
-                                    <div class="col-md-3 mb-2">
-                                        <strong><?= $dia ?>:</strong> <?= $horario ?>
-                                    </div>
+                            
+                            <!-- Información -->
+                            <div class="card-info-section">
+                                <div class="info-item">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                    <span><strong>Dirección:</strong> <?= htmlspecialchars($instalacion['direccion']) ?></span>
+                                </div>
+                                
+                                <div class="info-item">
+                                    <i class="fas fa-money-bill-wave"></i>
+                                    <span><strong>Tarifa:</strong> S/. <?= number_format($instalacion['tarifa'], 2) ?></span>
+                                </div>
+                                
+                                <div class="info-item">
+                                    <i class="fas fa-phone"></i>
+                                    <span><strong>Contacto:</strong> <?= htmlspecialchars($instalacion['telefono']) ?></span>
+                                </div>
+                                
+                                <div class="info-item">
+                                    <i class="fas fa-envelope"></i>
+                                    <span><?= htmlspecialchars($instalacion['email']) ?></span>
+                                </div>
+                                
+                                <!-- Deportes disponibles -->
+                                <div class="sports-tags">
+                                    <?php foreach ($instalacion['deportes'] as $deporte): ?>
+                                        <span class="sport-tag">
+                                            <i class="fas fa-<?= obtenerIconoDeporte($deporte['nombre']) ?>"></i>
+                                            <?= ucfirst($deporte['nombre']) ?>
+                                        </span>
                                     <?php endforeach; ?>
                                 </div>
                             </div>
-                            <div class="col-md-8">
-                                <h2>🏆🥋🥊🏓🎾🏸🏈🏉🎱🎳⛳⛸️⚽</h2>
+                            
+                            <!-- Acciones -->
+                            <div class="card-actions-section">
+                                <div class="action-buttons">
+                                    <button class="action-btn btn-horarios" data-id="<?= $instalacion['id'] ?>">
+                                        <i class="fas fa-clock"></i> Horarios
+                                    </button>
+                                    
+                                    <button class="action-btn btn-cronograma" data-id="<?= $instalacion['id'] ?>">
+                                        <i class="fas fa-calendar"></i> Cronograma
+                                    </button>
+                                    
+                                    <button class="action-btn btn-mapa" 
+                                            data-lat="<?= $instalacion['latitud'] ?>" 
+                                            data-lng="<?= $instalacion['longitud'] ?>" 
+                                            data-nombre="<?= htmlspecialchars($instalacion['nombre']) ?>">
+                                        <i class="fas fa-map"></i> Mapa
+                                    </button>
+                                    
+                                    <button class="action-btn btn-comentarios" data-id="<?= $instalacion['id'] ?>">
+                                        <i class="fas fa-comments"></i> Comentarios
+                                    </button>
+                                    
+                                    <button class="action-btn btn-imagenes" data-id="<?= $instalacion['id'] ?>">
+                                        <i class="fas fa-images"></i> Galería
+                                    </button>
+                                    
+                                    <button class="action-btn btn-reservar" data-id="<?= $instalacion['id'] ?>">
+                                        <i class="fas fa-calendar-plus"></i> RESERVAR AHORA
+                                    </button>
+                                </div>
+                                
+                                <!-- Horarios expandibles -->
+                                <div class="horarios-container" id="horarios-<?= $instalacion['id'] ?>" style="display: none;">
+                                    <h6><i class="fas fa-clock"></i> Horarios de atención:</h6>
+                                    <div class="row">
+                                        <?php foreach ($instalacion['horarios'] as $dia => $horario): ?>
+                                        <div class="col-md-6 mb-2">
+                                            <strong><?= $dia ?>:</strong> <?= $horario ?>
+                                        </div>
+                                        <?php endforeach; ?>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -221,4 +294,30 @@ window.chatDisabled = true;
 
 <?php
 include_once 'footer.php';
+
+
+// ✅ FUNCIÓN PARA OBTENER ICONOS DE DEPORTES
+function obtenerIconoDeporte($nombreDeporte) {
+    $iconos = [
+        'futbol' => 'futbol',
+        'fútbol' => 'futbol',
+        'basketball' => 'basketball-ball',
+        'basquet' => 'basketball-ball',
+        'básquet' => 'basketball-ball',
+        'tenis' => 'table-tennis',
+        'voley' => 'volleyball-ball',
+        'vóley' => 'volleyball-ball',
+        'volleyball' => 'volleyball-ball',
+        'natacion' => 'swimmer',
+        'natación' => 'swimmer',
+        'running' => 'running',
+        'atletismo' => 'running',
+        'ciclismo' => 'biking',
+        'boxeo' => 'fist-raised',
+        'gimnasia' => 'dumbbell',
+    ];
+    
+    $nombre = strtolower($nombreDeporte);
+    return $iconos[$nombre] ?? 'running';
+}
 ?>

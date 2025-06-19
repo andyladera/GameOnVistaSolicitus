@@ -854,4 +854,6 @@ class ChatManager {
 // Inicializar cuando el DOM esté listo
 document.addEventListener('DOMContentLoaded', () => {
     window.chatManager = new ChatManager();
+    window.ChatManager = ChatManager; // ✅ AGREGAR ESTA LÍNEA
+    console.log('✅ ChatManager inicializado:', window.chatManager);
 });

@@ -3,11 +3,11 @@ require_once __DIR__ . '/../Models/AreasDeportivasModel.php';
 
 class AreasDeportivasController {
     private $areasModel;
-    
+
     public function __construct() {
         $this->areasModel = new AreasDeportivasModel();
     }
-    
+
     // Obtener áreas por institución
     public function getAreasByInstitucion($institucionId) {
         return $this->areasModel->getAreasByInstitucion($institucionId);
@@ -52,6 +52,44 @@ class AreasDeportivasController {
     // Obtener deportes
     public function getDeportes() {
         return $this->areasModel->getDeportes();
+    }
+    
+    // ✅ NUEVA FUNCIÓN: Obtener áreas por sede y deporte
+    public function getAreasBySedeAndDeporte($sedeId, $deporteId) {
+        return $this->areasModel->getAreasBySedeAndDeporte($sedeId, $deporteId);
+    }
+    
+    // ✅ NUEVA FUNCIÓN: Obtener cronograma de área para fecha específica
+    public function getCronogramaArea($areaId, $fecha) {
+        require_once __DIR__ . '/../Models/ReservaModel.php';
+        $reservaModel = new ReservaModel();
+        return $reservaModel->obtenerCronogramaAreaDeportiva($areaId, $fecha);
+    }
+}
+
+// ✅ MANEJO AJAX para obtener áreas por sede
+if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action'])) {
+    if ($_GET['action'] === 'obtener_areas_por_sede') {
+        $sedeId = intval($_GET['sede_id'] ?? 0);
+        $deporteId = intval($_GET['deporte_id'] ?? 0);
+        
+        if ($sedeId > 0 && $deporteId > 0) {
+            $controller = new AreasDeportivasController();
+            $areas = $controller->getAreasBySedeAndDeporte($sedeId, $deporteId);
+            
+            header('Content-Type: application/json');
+            echo json_encode([
+                'success' => true,
+                'areas' => $areas
+            ]);
+        } else {
+            header('Content-Type: application/json');
+            echo json_encode([
+                'success' => false,
+                'message' => 'Parámetros inválidos'
+            ]);
+        }
+        exit;
     }
 }
 ?>

@@ -88,7 +88,11 @@ async function verDetalles(torneoId) {
                         
                         <div class="premios">
                             <strong>Premios:</strong>
-                            <p style="white-space: pre-line;">${torneo.premio_descripcion}</p>
+                            <div class="premios-lista">
+                                <div class="premio-item">🥇 <strong>1er Puesto:</strong> ${torneo.premio_1 || 'No definido'}</div>
+                                <div class="premio-item">🥈 <strong>2do Puesto:</strong> ${torneo.premio_2 || 'No definido'}</div>
+                                <div class="premio-item">🥉 <strong>3er Puesto:</strong> ${torneo.premio_3 || 'No definido'}</div>
+                            </div>
                         </div>
                         
                         ${equipos.length > 0 ? `
@@ -464,20 +468,190 @@ function aplicarFiltros() {
     mostrarTorneos(torneosFiltrados);
 }
 
+// ✅ FUNCIÓN NUEVA: Editar torneo
 function editarTorneo(torneoId) {
     const torneo = torneosData.find(t => t.id === torneoId);
     if (!torneo) return;
     
-    console.log('Editar torneo:', torneo);
-    showNotification(`Editando: ${torneo.nombre}`, 'info');
+    // Crear modal de edición
+    const modalContent = `
+        <div class="modal-overlay" id="modalEditarTorneo" style="display: flex;">
+            <div class="modal-torneo">
+                <div class="modal-header">
+                    <h3><i class="fas fa-edit"></i> Editar Torneo</h3>
+                    <button class="btn-close" onclick="cerrarModalEditar()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="formEditarTorneo">
+                        <input type="hidden" id="editTorneoId" value="${torneo.id}">
+                        
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="editNombre">Nombre del Torneo</label>
+                                <input type="text" id="editNombre" value="${torneo.nombre}" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="editDeporte">Deporte</label>
+                                <select id="editDeporte" required>
+                                    <option value="1" ${torneo.deporte_id == 1 ? 'selected' : ''}>Fútbol</option>
+                                    <option value="2" ${torneo.deporte_id == 2 ? 'selected' : ''}>Vóley</option>
+                                    <option value="3" ${torneo.deporte_id == 3 ? 'selected' : ''}>Básquet</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="editMaxEquipos">Máximo de Equipos</label>
+                                <select id="editMaxEquipos" required>
+                                    <option value="4" ${torneo.max_equipos == 4 ? 'selected' : ''}>4 equipos</option>
+                                    <option value="8" ${torneo.max_equipos == 8 ? 'selected' : ''}>8 equipos</option>
+                                    <option value="16" ${torneo.max_equipos == 16 ? 'selected' : ''}>16 equipos</option>
+                                    <option value="32" ${torneo.max_equipos == 32 ? 'selected' : ''}>32 equipos</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="editModalidad">Modalidad</label>
+                                <select id="editModalidad" required>
+                                    <option value="eliminacion_simple" ${torneo.modalidad == 'eliminacion_simple' ? 'selected' : ''}>Eliminación Simple</option>
+                                    <option value="eliminacion_doble" ${torneo.modalidad == 'eliminacion_doble' ? 'selected' : ''}>Eliminación Doble</option>
+                                    <option value="todos_contra_todos" ${torneo.modalidad == 'todos_contra_todos' ? 'selected' : ''}>Todos vs Todos</option>
+                                    <option value="grupos_eliminatoria" ${torneo.modalidad == 'grupos_eliminatoria' ? 'selected' : ''}>Grupos + Eliminatoria</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="editFechaInicio">Fecha de Inicio</label>
+                                <input type="date" id="editFechaInicio" value="${torneo.fecha_inicio}" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="editFechaFin">Fecha de Fin</label>
+                                <input type="date" id="editFechaFin" value="${torneo.fecha_fin || ''}">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="editInscripcionInicio">Inicio de Inscripciones</label>
+                                <input type="date" id="editInscripcionInicio" value="${torneo.fecha_inscripcion_inicio}" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="editInscripcionFin">Fin de Inscripciones</label>
+                                <input type="date" id="editInscripcionFin" value="${torneo.fecha_inscripcion_fin}" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="editCostoInscripcion">Costo de Inscripción (S/.)</label>
+                                <input type="number" id="editCostoInscripcion" step="0.01" min="0" value="${torneo.costo_inscripcion}" required>
+                            </div>
+                            
+                            <div class="form-group full-width">
+                                <label for="editDescripcion">Descripción</label>
+                                <textarea id="editDescripcion" rows="3">${torneo.descripcion || ''}</textarea>
+                            </div>
+                            
+                            <div class="form-group full-width">
+                                <label for="editPremio1">Primer Puesto</label>
+                                <input type="text" id="editPremio1" value="${torneo.premio_1 || ''}" placeholder="Ej: Trofeo + S/. 1000">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="editPremio2">Segundo Puesto</label>
+                                <input type="text" id="editPremio2" value="${torneo.premio_2 || ''}" placeholder="Ej: Medalla + S/. 500">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="editPremio3">Tercer Puesto</label>
+                                <input type="text" id="editPremio3" value="${torneo.premio_3 || ''}" placeholder="Ej: Medalla + S/. 250">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn-secondary" onclick="cerrarModalEditar()">
+                        <i class="fas fa-times"></i> Cancelar
+                    </button>
+                    <button type="button" class="btn-primary" onclick="guardarEdicionTorneo()">
+                        <i class="fas fa-save"></i> Guardar Cambios
+                    </button>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    // Insertar modal en el DOM
+    document.body.insertAdjacentHTML('beforeend', modalContent);
 }
 
+// ✅ FUNCIÓN NUEVA: Guardar edición del torneo
+async function guardarEdicionTorneo() {
+    try {
+        const torneoId = document.getElementById('editTorneoId').value;
+        
+        const datosActualizados = {
+            torneo_id: parseInt(torneoId),
+            nombre: document.getElementById('editNombre').value,
+            descripcion: document.getElementById('editDescripcion').value,
+            deporte_id: parseInt(document.getElementById('editDeporte').value),
+            max_equipos: parseInt(document.getElementById('editMaxEquipos').value),
+            modalidad: document.getElementById('editModalidad').value,
+            fecha_inicio: document.getElementById('editFechaInicio').value,
+            fecha_fin: document.getElementById('editFechaFin').value,
+            fecha_inscripcion_inicio: document.getElementById('editInscripcionInicio').value,
+            fecha_inscripcion_fin: document.getElementById('editInscripcionFin').value,
+            costo_inscripcion: parseFloat(document.getElementById('editCostoInscripcion').value),
+            premio_1: document.getElementById('editPremio1').value,
+            premio_2: document.getElementById('editPremio2').value,
+            premio_3: document.getElementById('editPremio3').value
+        };
+        
+        // Validaciones básicas
+        if (!datosActualizados.nombre || !datosActualizados.fecha_inicio || !datosActualizados.fecha_inscripcion_fin) {
+            showNotification('Por favor completa todos los campos requeridos', 'error');
+            return;
+        }
+        
+        showNotification('Actualizando torneo...', 'info');
+        
+        const response = await fetch('../../Controllers/TorneosController.php?action=actualizar_torneo', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(datosActualizados)
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            showNotification('Torneo actualizado exitosamente', 'success');
+            cerrarModalEditar();
+            
+            // Recargar torneos
+            cargarTorneosReales();
+        } else {
+            showNotification('Error al actualizar torneo: ' + result.message, 'error');
+        }
+        
+    } catch (error) {
+        console.error('Error:', error);
+        showNotification('Error de conexión al actualizar torneo', 'error');
+    }
+}
+
+// ✅ FUNCIÓN NUEVA: Cerrar modal de edición
+function cerrarModalEditar() {
+    const modal = document.getElementById('modalEditarTorneo');
+    if (modal) {
+        modal.remove();
+    }
+}
+
+// ✅ FUNCIONES DE INTERACCIÓN
 function gestionarTorneo(torneoId) {
-    const torneo = torneosData.find(t => t.id === torneoId);
-    if (!torneo) return;
-    
-    console.log('Gestionar torneo:', torneo);
-    showNotification(`Gestionando: ${torneo.nombre}`, 'info');
+    window.location.href = `gestionar_torneo.php?torneo_id=${torneoId}`;
 }
 
 function cerrarModal() {

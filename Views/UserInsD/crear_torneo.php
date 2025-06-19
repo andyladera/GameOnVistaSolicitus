@@ -216,7 +216,9 @@ include_once 'header.php';
                     <div id="infoTorneo"></div>
                     <div id="bracketsPreview"></div>
                     <div id="horariosRecomendados"></div>
+                    <!-- ✅ NUEVO: Contenedor para estructura de partidos -->
                     <div id="estructuraPartidos"></div>
+                    <!-- El calendario se creará dinámicamente aquí -->
                 </div>
                 
                 <div class="form-actions">
@@ -264,16 +266,29 @@ include_once 'header.php';
                     
                     <!-- Premios -->
                     <div class="form-group">
-                        <label for="premioDescripcion">
+                        <label>
                             <i class="fas fa-medal"></i> Descripción de Premios
                         </label>
-                        <textarea id="premioDescripcion" name="premio_descripcion" rows="6" required readonly
-                                  onclick="habilitarEdicionPremios()">🥇 1er puesto: 
-🥈 2do puesto: 
-🥉 3er puesto: </textarea>
-                        <small class="form-hint">
-                            <strong>📋 Instrucciones:</strong> Haz clic en el campo para completar la descripción de cada premio
-                        </small>
+                        <div class="premios-container">
+                            <div class="premio-item">
+                                <label for="premio1">
+                                    <i class="fas fa-trophy" style="color: gold;"></i> 1er Puesto
+                                </label>
+                                <input type="text" id="premio1" name="premio_1" required placeholder="Ej: Trofeo, medallas y S/. 1000">
+                            </div>
+                            <div class="premio-item">
+                                <label for="premio2">
+                                    <i class="fas fa-trophy" style="color: silver;"></i> 2do Puesto
+                                </label>
+                                <input type="text" id="premio2" name="premio_2" required placeholder="Ej: Medallas y S/. 500">
+                            </div>
+                            <div class="premio-item">
+                                <label for="premio3">
+                                    <i class="fas fa-trophy" style="color: #cd7f32;"></i> 3er Puesto
+                                </label>
+                                <input type="text" id="premio3" name="premio_3" required placeholder="Ej: Medallas y S/. 250">
+                            </div>
+                        </div>
                     </div>
                 </div>
                 

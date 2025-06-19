@@ -85,8 +85,20 @@ class ReservaController {
             $usuarioInstalacionId = $_SESSION['user_id'];
             $fecha = $_GET['fecha'] ?? null;
             
+            // Obtener reservas normales
             $reservas = $this->reservaModel->obtenerReservasPorUsuarioInstalacion($usuarioInstalacionId, $fecha);
-            $this->sendSuccess($reservas);
+            
+            // Obtener partidos de torneos
+            $partidos = $this->reservaModel->obtenerPartidosTorneosPorUsuarioInstalacion($usuarioInstalacionId, $fecha);
+            
+            // ✅ CORRECCIÓN: Enviar directamente sin envolver en 'data'
+            header('Content-Type: application/json');
+            echo json_encode([
+                'success' => true,
+                'reservas' => $reservas,
+                'partidos' => $partidos
+            ]);
+            exit;
             
         } catch (Exception $e) {
             $this->sendError('Error obteniendo reservas: ' . $e->getMessage());

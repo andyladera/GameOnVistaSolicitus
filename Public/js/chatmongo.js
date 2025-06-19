@@ -446,15 +446,16 @@ class GameOnChatMongo {
             const messageDiv = document.createElement('div');
             messageDiv.className = `chat-message ${messageClass}`;
             
-            // ⭐ ESTILOS INLINE - MISMO DEGRADADO PARA AMBOS
+            // ⭐ ESTILOS INLINE - IGUAL QUE CHAT INDIVIDUAL CON max-width: 80%
             const messageStyles = `
-                max-width: 70%;
+                max-width: 80% !important;
                 padding: 12px 16px;
                 border-radius: 18px;
                 word-wrap: break-word;
                 box-shadow: 0 2px 8px rgba(0,0,0,0.15);
                 background: linear-gradient(135deg, #007f56 0%, #00bcd4 100%);
                 color: white;
+                min-width: 200px;
             `;
             
             // ⭐ POSICIÓN: Usuario derecha, Miembro izquierda
@@ -669,12 +670,17 @@ class GameOnChatMongo {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+    console.log('🚀 Inicializando GameOnChatMongo...');
     window.gameOnChatMongo = new GameOnChatMongo();
+    console.log('✅ GameOnChatMongo inicializado:', window.gameOnChatMongo);
 });
 
+// ✅ FUNCIÓN GLOBAL PARA COMPATIBILIDAD
 window.iniciarChatMongoDB = function(userId, userName) {
-    console.log('Iniciando chat MongoDB con:', userId, userName);
+    console.log('🔗 Función global iniciarChatMongoDB llamada:', userId, userName);
     if (window.gameOnChatMongo) {
         window.gameOnChatMongo.startConversation(userId, userName);
+    } else {
+        console.error('❌ gameOnChatMongo no disponible en función global');
     }
 };

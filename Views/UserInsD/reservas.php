@@ -83,6 +83,10 @@ include_once 'header.php';
             <span>Reservado</span>
         </div>
         <div class="leyenda-item">
+            <div class="color-box partido-torneo"></div>
+            <span>Partido de Torneo</span>
+        </div>
+        <div class="leyenda-item">
             <div class="color-box mantenimiento"></div>
             <span>Mantenimiento</span>
         </div>
@@ -172,7 +176,7 @@ include_once 'header.php';
 
     <!-- Estadísticas rápidas -->
     <div class="estadisticas-reservas">
-        <div class="stat-card">
+        <div class="stat-card green">
             <div class="stat-icon green">
                 <i class="fas fa-calendar-check"></i>
             </div>
@@ -181,7 +185,7 @@ include_once 'header.php';
                 <p>Reservas Hoy</p>
             </div>
         </div>
-        <div class="stat-card">
+        <div class="stat-card blue">
             <div class="stat-icon blue">
                 <i class="fas fa-clock"></i>
             </div>
@@ -190,7 +194,7 @@ include_once 'header.php';
                 <p>Horas Ocupadas</p>
             </div>
         </div>
-        <div class="stat-card">
+        <div class="stat-card orange">
             <div class="stat-icon orange">
                 <i class="fas fa-chart-line"></i>
             </div>
@@ -199,6 +203,11 @@ include_once 'header.php';
                 <p>Ingresos del Día</p>
             </div>
         </div>
+    </div>
+
+    <!-- Footer informativo opcional -->
+    <div class="estadisticas-footer">
+        <p><i class="fas fa-info-circle"></i> Las estadísticas se actualizan en tiempo real según las reservas del día seleccionado</p>
     </div>
 </div>
 

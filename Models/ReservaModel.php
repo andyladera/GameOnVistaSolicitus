@@ -61,31 +61,33 @@ class ReservaModel {
         $whereDate = $fecha ? "AND DATE(r.fecha) = ?" : "";
         
         $sql = "SELECT r.*, 
-                       ad.nombre_area,
-                       ad.tarifa_por_hora,
-                       id.nombre as instalacion_nombre,
-                       d.nombre as deporte_nombre,
-                       ud.nombre as cliente_nombre,
-                       ud.telefono as cliente_telefono
-                FROM reservas r
-                INNER JOIN areas_deportivas ad ON r.area_deportiva_id = ad.id
-                INNER JOIN instituciones_deportivas id ON ad.institucion_deportiva_id = id.id
-                INNER JOIN deportes d ON ad.deporte_id = d.id
-                INNER JOIN usuarios_deportistas ud ON r.id_usuario = ud.id
-                WHERE id.usuario_instalacion_id = ?
-                $whereDate
-                AND r.estado IN ('confirmada', 'pendiente')
-                ORDER BY r.fecha ASC, r.hora_inicio ASC";
-        
-        $stmt = $this->conn->prepare($sql);
-        if ($fecha) {
-            $stmt->bind_param("is", $usuarioInstalacionId, $fecha);
-        } else {
-            $stmt->bind_param("i", $usuarioInstalacionId);
-        }
-        $stmt->execute();
-        $result = $stmt->get_result();
-        return $result->fetch_all(MYSQLI_ASSOC);
+                   ad.nombre_area,
+                   ad.tarifa_por_hora,
+                   id.nombre as instalacion_nombre,
+                   d.nombre as deporte_nombre,
+                   ud.nombre as cliente_nombre,
+                   ud.telefono as cliente_telefono
+            FROM reservas r
+            INNER JOIN areas_deportivas ad ON r.area_deportiva_id = ad.id
+            INNER JOIN instituciones_deportivas id ON ad.institucion_deportiva_id = id.id
+            INNER JOIN deportes d ON ad.deporte_id = d.id
+            INNER JOIN usuarios_deportistas ud ON r.id_usuario = ud.id
+            WHERE id.usuario_instalacion_id = ?
+            $whereDate
+            AND r.estado IN ('confirmada', 'pendiente')
+            ORDER BY r.fecha ASC, r.hora_inicio ASC";
+    
+    $stmt = $this->conn->prepare($sql);
+    if ($fecha) {
+        $stmt->bind_param("is", $usuarioInstalacionId, $fecha);
+    } else {
+        $stmt->bind_param("i", $usuarioInstalacionId);
+    }
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $reservas = $result->fetch_all(MYSQLI_ASSOC);
+
+    return $reservas;
     }
 
     // ✅ NUEVO: Obtener cronograma de disponibilidad por área deportiva
@@ -352,5 +354,50 @@ class ReservaModel {
         $result = $stmt->get_result();
         return $result->fetch_all(MYSQLI_ASSOC);
     }
+
+    // ✅ NUEVA FUNCIÓN: Obtener partidos de torneos por instalación
+    public function obtenerPartidosTorneosPorUsuarioInstalacion($usuarioInstalacionId, $fecha = null) {
+        $whereDate = $fecha ? "AND DATE(tp.fecha_partido) = ?" : "";
+        
+        $sql = "SELECT tp.*, 
+                   ad.nombre_area,
+                   ad.tarifa_por_hora,
+                   t.nombre as torneo_nombre,
+                   t.modalidad as torneo_modalidad,
+                   d.nombre as deporte_nombre,
+                   el.nombre as equipo_local_nombre,
+                   ev.nombre as equipo_visitante_nombre,
+                   TIME(tp.fecha_partido) as hora_inicio,
+                   ADDTIME(TIME(tp.fecha_partido), '01:00:00') as hora_fin,
+                   DATE(tp.fecha_partido) as fecha_partido_date,
+                   CASE 
+                       WHEN tp.estado_partido = 'programado' THEN 'Programado'
+                       WHEN tp.estado_partido = 'en_curso' THEN 'En Curso'
+                       WHEN tp.estado_partido = 'finalizado' THEN 'Finalizado'
+                       WHEN tp.estado_partido = 'suspendido' THEN 'Suspendido'
+                       WHEN tp.estado_partido = 'cancelado' THEN 'Cancelado'
+                   END as estado_texto
+            FROM torneos_partidos tp
+            INNER JOIN torneos t ON tp.torneo_id = t.id
+            INNER JOIN areas_deportivas ad ON tp.area_deportiva_id = ad.id
+            INNER JOIN instituciones_deportivas id ON ad.institucion_deportiva_id = id.id
+            INNER JOIN deportes d ON t.deporte_id = d.id
+            LEFT JOIN equipos el ON tp.equipo_local_id = el.id
+            LEFT JOIN equipos ev ON tp.equipo_visitante_id = ev.id
+            WHERE id.usuario_instalacion_id = ?
+            $whereDate
+            AND tp.estado_partido IN ('programado', 'en_curso')
+            ORDER BY tp.fecha_partido ASC";
+    
+    $stmt = $this->conn->prepare($sql);
+    if ($fecha) {
+        $stmt->bind_param("is", $usuarioInstalacionId, $fecha);
+    } else {
+        $stmt->bind_param("i", $usuarioInstalacionId);
+    }
+    $stmt->execute();
+    $result = $stmt->get_result();
+    return $result->fetch_all(MYSQLI_ASSOC);
+}
 }
 ?>

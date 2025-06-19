@@ -106,6 +106,7 @@ class TorneosManager {
         }
     }
 
+    // ✅ FUNCIÓN ACTUALIZADA: Mostrar torneos con imágenes de imgbb
     mostrarTorneos(torneos) {
         const container = document.getElementById('torneosContainer');
 
@@ -129,15 +130,23 @@ class TorneosManager {
             
             const precio = parseFloat(torneo.costo_inscripcion) === 0 ? 
                 '<span class="torneo-precio gratis"><i class="fas fa-gift"></i> GRATIS</span>' :
-                `<span class="torneo-precio">S/. ${parseFloat(torneo.costo_inscripcion).toFixed(2)}</span>`;
+                `<span class="torneo-precio"><i class="fas fa-coins"></i> S/. ${parseFloat(torneo.costo_inscripcion).toFixed(2)}</span>`;
 
             const calificacion = this.generarEstrellas(torneo.sede_calificacion);
             
             const estadoClass = `estado-${torneo.estado.replace('_', '-')}`;
             
-            const imagenUrl = torneo.imagen_torneo ? 
-                `../../Resources/images_torneos/${torneo.imagen_torneo}` : 
-                '../../Resources/torneo-default.png';
+            // ✅ USAR IMAGEN DE IMGBB O PLACEHOLDER
+            const imagenHtml = torneo.imagen_torneo ? 
+                `<img src="${torneo.imagen_torneo}" alt="${torneo.nombre}" class="torneo-imagen" 
+                     loading="lazy" onerror="this.parentElement.innerHTML=this.parentElement.querySelector('.torneo-imagen-placeholder').outerHTML;">
+                 <div class="torneo-imagen-overlay">
+                     <i class="fas fa-eye"></i> Ver torneo
+                 </div>` :
+                `<div class="torneo-imagen-placeholder">
+                     <i class="fas fa-trophy"></i>
+                     <span>Torneo ${torneo.deporte_nombre}</span>
+                 </div>`;
 
             // Botones según el estado
             let botones = '';
@@ -160,36 +169,48 @@ class TorneosManager {
 
             html += `
                 <div class="torneo-card">
-                    <img src="${imagenUrl}" alt="${torneo.nombre}" class="torneo-imagen" 
-                         onerror="this.src='../../Resources/torneo-default.png'">
+                    <div class="torneo-imagen-container">
+                        ${imagenHtml}
+                    </div>
                     
                     <div class="torneo-content">
                         <div class="torneo-deporte">
-                            <i class="fas fa-futbol"></i> ${torneo.deporte_nombre}
+                            <i class="fas fa-${this.obtenerIconoDeporte(torneo.deporte_nombre)}"></i> 
+                            ${torneo.deporte_nombre}
                         </div>
                         
                         <h3 class="torneo-titulo">${torneo.nombre}</h3>
                         
                         <div class="torneo-info">
-                            <i class="fas fa-calendar"></i> ${fechaInicio} - ${fechaFin}
+                            <i class="fas fa-calendar"></i> 
+                            <strong>Inicio:</strong> ${fechaInicio}
                         </div>
                         
                         <div class="torneo-info">
-                            <i class="fas fa-clock"></i> Inscripciones hasta: ${inscripcionFin}
+                            <i class="fas fa-calendar-check"></i> 
+                            <strong>Fin:</strong> ${fechaFin}
                         </div>
                         
                         <div class="torneo-info">
-                            <i class="fas fa-users"></i> ${torneo.equipos_inscritos}/${torneo.max_equipos} equipos
+                            <i class="fas fa-clock"></i> 
+                            <strong>Inscripciones hasta:</strong> ${inscripcionFin}
+                        </div>
+                        
+                        <div class="torneo-info">
+                            <i class="fas fa-users"></i> 
+                            <strong>Equipos:</strong> ${torneo.equipos_inscritos}/${torneo.max_equipos}
                         </div>
                         
                         <div class="sede-info">
                             <div class="torneo-info">
-                                <i class="fas fa-map-marker-alt"></i> ${torneo.sede_nombre}
+                                <i class="fas fa-map-marker-alt"></i> 
+                                <strong>Sede:</strong> ${torneo.sede_nombre}
                             </div>
                             <div class="calificacion-sede">
                                 ${calificacion} (${torneo.sede_calificacion}/5)
                             </div>
-                            <div style="font-size: 0.8rem; color: #6c757d;">
+                            <div style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">
+                                <i class="fas fa-${torneo.tipo_usuario === 'ipd' ? 'landmark' : 'building'}"></i>
                                 ${torneo.tipo_usuario === 'ipd' ? 'IPD' : 'Privado'}
                             </div>
                         </div>
@@ -210,6 +231,32 @@ class TorneosManager {
 
         html += '</div>';
         container.innerHTML = html;
+    }
+
+    // ✅ FUNCIÓN NUEVA: Obtener iconos de deportes
+    obtenerIconoDeporte(nombreDeporte) {
+        const iconos = {
+            'futbol': 'futbol',
+            'fútbol': 'futbol',
+            'football': 'futbol',
+            'basketball': 'basketball-ball',
+            'basquet': 'basketball-ball',
+            'básquet': 'basketball-ball',
+            'tenis': 'table-tennis',
+            'voley': 'volleyball-ball',
+            'vóley': 'volleyball-ball',
+            'volleyball': 'volleyball-ball',
+            'natacion': 'swimmer',
+            'natación': 'swimmer',
+            'running': 'running',
+            'atletismo': 'running',
+            'ciclismo': 'biking',
+            'boxeo': 'fist-raised',
+            'gimnasia': 'dumbbell',
+        };
+        
+        const nombre = nombreDeporte.toLowerCase();
+        return iconos[nombre] || 'trophy';
     }
 
     generarEstrellas(calificacion) {

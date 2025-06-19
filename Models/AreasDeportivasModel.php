@@ -9,6 +9,10 @@ class AreasDeportivasModel {
         $this->conn = $database->getConnection();
     }
 
+    private function fetchAllAssoc($result) {
+        return $result->fetch_all(MYSQLI_ASSOC);
+    }
+
     // Obtener todas las áreas deportivas de una institución específica
     public function getAreasByInstitucion($institucionId) {
         $query = "SELECT ad.*, d.nombre as deporte_nombre, id.nombre as institucion_nombre
@@ -395,17 +399,6 @@ class AreasDeportivasModel {
         return $conflictos['conflictos'] == 0;
     }
 
-    // Función auxiliar
-    private function fetchAllAssoc($result) {
-        $rows = [];
-        if ($result) {
-            while ($row = $result->fetch_assoc()) {
-                $rows[] = $row;
-            }
-        }
-        return $rows;
-    }
-
     // ✅ NUEVA FUNCIÓN: Obtener duración por deporte (CORREGIDA para futsal)
     private function obtenerDuracionPorDeporte($deporteId) {
         $duraciones = [
@@ -415,6 +408,24 @@ class AreasDeportivasModel {
         ];
         
         return $duraciones[$deporteId] ?? 1.0; // Default 1 hora
+    }
+
+    // ✅ NUEVA FUNCIÓN: Obtener áreas por sede y deporte
+    public function getAreasBySedeAndDeporte($sedeId, $deporteId) {
+        $query = "SELECT ad.*, d.nombre as deporte_nombre, id.nombre as instalacion_nombre
+                  FROM areas_deportivas ad
+                  INNER JOIN deportes d ON ad.deporte_id = d.id
+                  INNER JOIN instituciones_deportivas id ON ad.institucion_deportiva_id = id.id
+                  WHERE ad.institucion_deportiva_id = ? 
+                  AND ad.deporte_id = ? 
+                  AND ad.estado = 'activa'
+                  ORDER BY ad.nombre_area ASC";
+        
+        $stmt = $this->conn->prepare($query);
+        $stmt->bind_param("ii", $sedeId, $deporteId);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        return $this->fetchAllAssoc($result);
     }
 }
 

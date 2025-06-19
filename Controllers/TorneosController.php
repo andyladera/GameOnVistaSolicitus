@@ -1,12 +1,17 @@
 <?php
-// Controllers/TorneosController.php
-require_once '../Models/TorneosModel.php';
-
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
+?>
+<?php
+require_once __DIR__ . '/../Models/TorneosModel.php';
+require_once __DIR__ . '/../Models/TorneosPartidosModel.php';
 class TorneosController {
     private $torneosModel;
+    private $partidosModel; // ✅ AÑADIR esta propiedad
     
     public function __construct() {
         $this->torneosModel = new TorneosModel();
+        $this->partidosModel = new TorneosPartidosModel(); // ✅ Inicializar en el constructor
     }
     
     private function verificarAutenticacion() {
@@ -67,11 +72,17 @@ class TorneosController {
         
         $input = json_decode(file_get_contents('php://input'), true);
         
+        // Guardar la imagen remota en el servidor local si se proporciona una URL
+        $imagenLocal = null;
+        if (!empty($input['imagen_torneo'])) {
+            $imagenLocal = $this->guardarImagenRemota($input['imagen_torneo']);
+        }
+        
         $datos = [
             'nombre' => trim($input['nombre'] ?? ''),
             'descripcion' => trim($input['descripcion'] ?? ''),
             'deporte_id' => $input['deporte_id'] ?? 0,
-            'organizador_tipo' => 'institucion', // Siempre institucion para esta ruta
+            'organizador_tipo' => 'institucion',
             'organizador_id' => $_SESSION['user_id'],
             'institucion_sede_id' => $input['institucion_sede_id'] ?? 0,
             'max_equipos' => $input['max_equipos'] ?? 16,
@@ -80,22 +91,16 @@ class TorneosController {
             'fecha_inscripcion_inicio' => $input['fecha_inscripcion_inicio'] ?? '',
             'fecha_inscripcion_fin' => $input['fecha_inscripcion_fin'] ?? '',
             'modalidad' => $input['modalidad'] ?? 'eliminacion_simple',
-            'premio_descripcion' => trim($input['premio_descripcion'] ?? ''),
+            'premio_1' => trim($input['premio_1'] ?? ''),
+            'premio_2' => trim($input['premio_2'] ?? ''),
+            'premio_3' => trim($input['premio_3'] ?? ''),
             'costo_inscripcion' => $input['costo_inscripcion'] ?? 0.00,
-            'imagen_torneo' => $input['imagen_torneo'] ?? null
+            'imagen_torneo' => $imagenLocal
         ];
         
-        // Validaciones
+        // Validaciones básicas
         if (empty($datos['nombre']) || empty($datos['deporte_id']) || empty($datos['institucion_sede_id'])) {
             $this->response(['success' => false, 'message' => 'Nombre, deporte y sede son requeridos']);
-        }
-        
-        if ($datos['max_equipos'] < 4 || $datos['max_equipos'] > 32) {
-            $this->response(['success' => false, 'message' => 'El número de equipos debe estar entre 4 y 32']);
-        }
-        
-        if (empty($datos['fecha_inicio']) || empty($datos['fecha_inscripcion_inicio']) || empty($datos['fecha_inscripcion_fin'])) {
-            $this->response(['success' => false, 'message' => 'Todas las fechas son requeridas']);
         }
         
         try {
@@ -104,19 +109,44 @@ class TorneosController {
             if ($resultado['success']) {
                 $torneoId = $resultado['torneo_id'];
                 
-                // ✅ NUEVO: Guardar áreas deportivas si se seleccionaron
-                if (!empty($datos['areas_deportivas'])) {
-                    $resultadoAreas = $this->torneosModel->guardarAreasDelTorneo(
-                        $torneoId, 
-                        $datos['areas_deportivas'], 
-                        $_SESSION['user_id']
-                    );
-                    
-                    if ($resultadoAreas['success']) {
-                        $resultado['message'] .= ' y se reservaron ' . $resultadoAreas['reservas_creadas'] . ' áreas deportivas';
-                    } else {
-                        $resultado['message'] .= ' pero hubo problemas con las reservas de áreas: ' . $resultadoAreas['message'];
+                // Crear partidos programados
+                if (!empty($input['partidos_programados'])) {
+                    $partidosCreados = 0;
+                    foreach ($input['partidos_programados'] as $partido) {
+                        // ✅ CORREGIR: Usar valores por defecto si no existen las claves
+                        $partidoInfo = [
+                            'fase' => $partido['fase'] ?? 'Primera Ronda',
+                            'numeroPartido' => $partido['numeroPartido'] ?? 1,
+                            'ronda' => $partido['ronda'] ?? 1,
+                            'descripcion' => $partido['descripcion'] ?? ($partido['partidoNombre'] ?? 'Partido')
+                        ];
+                        
+                        // Si no existe numeroPartido, extraerlo del partidoId
+                        if (!isset($partido['numeroPartido']) && isset($partido['partidoId'])) {
+                            $partidoIdParts = explode('-', $partido['partidoId']);
+                            $partidoInfo['numeroPartido'] = intval(end($partidoIdParts));
+                            
+                            // Extraer ronda del partidoId también
+                            if (preg_match('/ronda(\d+)/', $partido['partidoId'], $matches)) {
+                                $partidoInfo['ronda'] = intval($matches[1]);
+                            }
+                        }
+                        
+                        $resultadoPartido = $this->partidosModel->crearPartidoTorneo(
+                            $torneoId,
+                            $partido['areaId'],
+                            $partido['fecha'],
+                            $partido['horaInicio'],
+                            $partido['horaFin'],
+                            $partidoInfo
+                        );
+                        
+                        if ($resultadoPartido['success']) {
+                            $partidosCreados++;
+                        }
                     }
+                    
+                    $resultado['message'] .= " Se programaron $partidosCreados partidos.";
                 }
             }
             
@@ -126,7 +156,11 @@ class TorneosController {
         }
     }
 
-    // ✅ NUEVA FUNCIÓN: Actualizar torneo
+    // Método para guardar la imagen desde URL remota
+    private function guardarImagenRemota($url) {
+        return $url;
+    }
+
     public function actualizarTorneo() {
         if (!$this->verificarAutenticacion()) return;
         
@@ -155,14 +189,15 @@ class TorneosController {
             'descripcion' => trim($input['descripcion'] ?? ''),
             'deporte_id' => $input['deporte_id'] ?? 0,
             'organizador_id' => $_SESSION['user_id'],
-            'institucion_sede_id' => $input['institucion_sede_id'] ?? 0,
             'max_equipos' => $input['max_equipos'] ?? 16,
             'fecha_inicio' => $input['fecha_inicio'] ?? '',
             'fecha_fin' => $input['fecha_fin'] ?? '',
             'fecha_inscripcion_inicio' => $input['fecha_inscripcion_inicio'] ?? '',
             'fecha_inscripcion_fin' => $input['fecha_inscripcion_fin'] ?? '',
             'modalidad' => $input['modalidad'] ?? 'eliminacion_simple',
-            'premio_descripcion' => trim($input['premio_descripcion'] ?? ''),
+            'premio_1' => trim($input['premio_1'] ?? ''),
+            'premio_2' => trim($input['premio_2'] ?? ''),
+            'premio_3' => trim($input['premio_3'] ?? ''),
             'costo_inscripcion' => $input['costo_inscripcion'] ?? 0.00,
             'imagen_torneo' => $input['imagen_torneo'] ?? null
         ];
@@ -222,6 +257,49 @@ class TorneosController {
         }
     }
     
+    public function obtenerPartidosTorneo() {
+        if (!$this->verificarAutenticacion()) return;
+        
+        $torneoId = $_GET['torneo_id'] ?? null;
+        
+        if (!$torneoId) {
+            $this->response(['success' => false, 'message' => 'ID de torneo requerido']);
+        }
+        
+        try {
+            $partidos = $this->partidosModel->obtenerEstructuraTorneo($torneoId);
+            $this->response([
+                'success' => true,
+                'partidos' => $partidos
+            ]);
+        } catch (Exception $e) {
+            $this->response(['success' => false, 'message' => 'Error al obtener partidos: ' . $e->getMessage()]);
+        }
+    }
+
+    public function actualizarResultadoPartido() {
+        if (!$this->verificarAutenticacion()) return;
+        
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            $this->response(['success' => false, 'message' => 'Método no permitido']);
+        }
+        
+        $input = json_decode(file_get_contents('php://input'), true);
+        $partidoId = $input['partido_id'] ?? null;
+        
+        if (!$partidoId) {
+            $this->response(['success' => false, 'message' => 'ID de partido requerido']);
+        }
+        
+        try {
+            // Actualizar resultado del partido
+            $resultado = $this->partidosModel->actualizarResultadoPartido($partidoId, $input);
+            $this->response($resultado);
+        } catch (Exception $e) {
+            $this->response(['success' => false, 'message' => 'Error al actualizar partido: ' . $e->getMessage()]);
+        }
+    }
+
     // ✅ MANEJADOR DE RUTAS ACTUALIZADO
     public function handleRequest() {
         $action = $_GET['action'] ?? '';
@@ -238,6 +316,12 @@ class TorneosController {
                 break;
             case 'obtener_detalles':
                 $this->obtenerDetallesTorneo();
+                break;
+            case 'obtener_partidos': // ✅ NUEVO
+                $this->obtenerPartidosTorneo();
+                break;
+            case 'actualizar_resultado': // ✅ NUEVO
+                $this->actualizarResultadoPartido();
                 break;
             case 'inscribir_equipo':
                 $this->inscribirEquipo();

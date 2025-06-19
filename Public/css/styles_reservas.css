@@ -313,373 +313,195 @@ h2 i {
 }
 
 .reserva-item {
-    background-color: #34495e !important;
-    border-radius: 8px !important;
-    padding: 12px !important;
-    margin-bottom: 10px !important;
+    background: linear-gradient(135deg, #2d3e50 0%, #34495e 100%) !important;
+    border-radius: 12px !important;
+    padding: 16px !important;
+    margin-bottom: 15px !important;
     border-left: 4px solid #28a745 !important;
+    position: relative !important;
+    transition: all 0.3s ease !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2) !important;
+}
+
+.reserva-item:hover {
+    transform: translateX(5px) !important;
+    box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3) !important;
 }
 
 .torneo-item {
-    background-color: #34495e !important;
-    border-radius: 8px !important;
-    padding: 12px !important;
-    margin-bottom: 10px !important;
+    background: linear-gradient(135deg, #8e44ad 0%, #9b59b6 100%) !important;
+    border-radius: 12px !important;
+    padding: 16px !important;
+    margin-bottom: 15px !important;
     border-left: 4px solid #dc3545 !important;
+    position: relative !important;
+    transition: all 0.3s ease !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2) !important;
+}
+
+.torneo-item:hover {
+    transform: translateX(5px) !important;
+    box-shadow: 0 4px 15px rgba(220, 53, 69, 0.3) !important;
 }
 
 .item-fecha {
-    color: #007bff !important;
-    font-weight: 600 !important;
+    color: #00bcd4 !important;
+    font-weight: 700 !important;
     font-size: 0.9rem !important;
+    margin-bottom: 8px !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+}
+
+.item-fecha i {
+    color: #00bcd4 !important;
+    font-size: 0.85rem !important;
 }
 
 .item-titulo {
     color: #ffffff !important;
-    font-size: 0.95rem !important;
-    margin: 5px 0 !important;
+    font-size: 1rem !important;
+    font-weight: 600 !important;
+    margin: 8px 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+}
+
+.item-titulo i {
+    color: #28a745 !important;
+    font-size: 0.9rem !important;
+}
+
+.torneo-item .item-titulo i {
+    color: #dc3545 !important;
 }
 
 .item-detalle {
     color: #b0b0b0 !important;
+    font-size: 0.85rem !important;
+    margin: 4px 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+}
+
+.item-detalle i {
+    color: #007bff !important;
+    font-size: 0.8rem !important;
+    width: 12px !important;
+}
+
+.item-estado {
+    font-size: 0.8rem !important;
+    font-weight: 600 !important;
+    padding: 4px 8px !important;
+    border-radius: 6px !important;
+    margin: 8px 0 4px 0 !important;
+    display: inline-block !important;
+}
+
+.estado-confirmada {
+    background: rgba(40, 167, 69, 0.2) !important;
+    color: #28a745 !important;
+    border: 1px solid #28a745 !important;
+}
+
+.estado-pendiente {
+    background: rgba(255, 193, 7, 0.2) !important;
+    color: #ffc107 !important;
+    border: 1px solid #ffc107 !important;
+}
+
+.estado-cancelada {
+    background: rgba(220, 53, 69, 0.2) !important;
+    color: #dc3545 !important;
+    border: 1px solid #dc3545 !important;
+}
+
+.item-precio {
+    color: #00bcd4 !important;
+    font-size: 0.85rem !important;
+    font-weight: 600 !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    margin-top: 6px !important;
+}
+
+.item-precio i {
+    color: #28a745 !important;
     font-size: 0.8rem !important;
 }
 
-/* ========== MODAL DE DÍA ========== */
-.modal-dia {
-    display: none !important;
-    position: fixed !important;
-    top: 0 !important;
-    left: 0 !important;
-    width: 100% !important;
-    height: 100% !important;
-    background-color: rgba(0, 0, 0, 0.8) !important;
-    z-index: 1000 !important;
-}
-
-.modal-dia-contenido {
-    background-color: #2d2d2d !important;
-    border-radius: 15px !important;
-    padding: 30px !important;
-    margin: 5% auto !important;
-    width: 90% !important;
-    max-width: 600px !important;
-    border: 1px solid #444 !important;
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5) !important;
-}
-
-.modal-dia-header {
-    display: flex !important;
-    justify-content: space-between !important;
-    align-items: center !important;
-    margin-bottom: 20px !important;
-    padding-bottom: 15px !important;
-    border-bottom: 2px solid #007bff !important;
-}
-
-.modal-dia-titulo {
-    color: #ffffff !important;
-    font-size: 1.5rem !important;
-    font-weight: 700 !important;
-}
-
-.btn-cerrar-modal {
-    background: none !important;
-    border: none !important;
-    color: #b0b0b0 !important;
-    font-size: 1.5rem !important;
-    cursor: pointer !important;
-    transition: color 0.3s !important;
-}
-
-.btn-cerrar-modal:hover {
-    color: #ffffff !important;
-}
-
-/* ========== DASHBOARD GRID ========== */
-.dashboard-row {
-    display: grid !important;
-    grid-template-columns: 1fr 1fr !important;
-    gap: 30px !important;
-    margin-top: 30px !important;
-}
-
-.dashboard-card {
-    background-color: #2d2d2d !important;
+.estado-vacio {
+    text-align: center !important;
+    padding: 30px 20px !important;
+    background: linear-gradient(135deg, rgba(0, 102, 68, 0.1), rgba(0, 188, 212, 0.1)) !important;
     border-radius: 12px !important;
-    padding: 25px !important;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3) !important;
-    border: 1px solid #444 !important;
+    border: 2px dashed #444 !important;
+    color: #b0b0b0 !important;
 }
 
-.dashboard-card h3 {
-    color: #ffffff !important;
-    font-size: 1.3rem !important;
-    font-weight: 600 !important;
-    margin-bottom: 20px !important;
-    border-bottom: 2px solid #007bff !important;
-    padding-bottom: 10px !important;
-}
-
-.dashboard-card h3 i {
+.estado-vacio i {
+    font-size: 2.5rem !important;
     color: #007bff !important;
-    margin-right: 10px !important;
+    margin-bottom: 15px !important;
+    opacity: 0.7 !important;
 }
 
-/* ========== FORM CONTROLS ========== */
-.form-group {
-    margin-bottom: 20px !important;
-}
-
-.form-group label {
+.estado-vacio p {
     color: #ffffff !important;
+    font-size: 1rem !important;
     font-weight: 600 !important;
     margin-bottom: 8px !important;
-    display: block !important;
-    font-size: 0.9rem !important;
 }
 
-.form-control {
-    background-color: #34495e !important;
-    border: 2px solid #4a5f7a !important;
-    border-radius: 8px !important;
-    padding: 10px 15px !important;
-    font-size: 0.9rem !important;
-    color: #ffffff !important;
-    transition: all 0.3s ease !important;
-    width: 100% !important;
-    box-sizing: border-box !important;
-}
-
-.form-control:focus {
-    border-color: #007bff !important;
-    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25) !important;
-    outline: none !important;
-}
-
-.form-control option {
-    background-color: #34495e !important;
-    color: #ffffff !important;
-}
-
-/* ========== FOOTER ========== */
-.main-footer {
-    background-color: #151515 !important;
-    padding: 30px !important;
-    margin-top: 40px !important;
-    color: #ffffff !important;
-}
-
-.footer-content {
-    max-width: 1200px !important;
-    margin: 0 auto !important;
-    display: flex !important;
-    justify-content: space-between !important;
-    align-items: center !important;
-    flex-wrap: wrap !important;
-}
-
-.footer-info {
-    max-width: 60% !important;
-}
-
-.footer-info h3 {
-    margin-bottom: 10px !important;
-    color: #00bcd4 !important;
-}
-
-.footer-info p {
+.estado-vacio small {
     color: #b0b0b0 !important;
-    font-size: 14px !important;
+    font-size: 0.85rem !important;
 }
 
-.social-links {
-    display: flex !important;
-    gap: 15px !important;
-}
-
-.social-icon {
-    display: flex !important;
-    justify-content: center !important;
-    align-items: center !important;
-    width: 40px !important;
-    height: 40px !important;
-    border-radius: 50% !important;
-    background: #333 !important;
-    color: #ffffff !important;
-    transition: all 0.3s !important;
-    text-decoration: none !important;
-}
-
-.social-icon:hover {
-    background: #006644 !important;
-    transform: translateY(-3px) !important;
-    color: #ffffff !important;
-}
-
-/* ========== CLASES BOOTSTRAP COMPATIBILITY ========== */
-.mb-4 {
-    margin-bottom: 1.5rem !important;
-}
-
-.mt-4 {
-    margin-top: 1.5rem !important;
-}
-
-.mt-3 {
-    margin-top: 1rem !important;
-}
-
-.w-100 {
-    width: 100% !important;
-}
-
-.text-center {
+.error-estado {
     text-align: center !important;
-}
-
-.row {
-    margin-left: -15px !important;
-    margin-right: -15px !important;
-}
-
-.col-md-6 {
-    flex: 0 0 50% !important;
-    max-width: 50% !important;
-    padding-left: 15px !important;
-    padding-right: 15px !important;
-}
-
-/* ========== RESPONSIVE ========== */
-@media (max-width: 768px) {
-    .calendario-grid {
-        gap: 1px !important;
-    }
-    
-    .dia-celda {
-        min-height: 80px !important;
-        padding: 4px !important;
-    }
-    
-    .dia-numero {
-        font-size: 1rem !important;
-    }
-    
-    .evento-reserva, 
-    .evento-torneo, 
-    .evento-disponible {
-        font-size: 0.6rem !important;
-        padding: 1px 4px !important;
-    }
-    
-    .calendario-nav {
-        gap: 10px !important;
-    }
-    
-    .mes-actual {
-        font-size: 1.2rem !important;
-        min-width: 150px !important;
-    }
-    
-    .calendario-leyenda {
-        gap: 15px !important;
-        flex-direction: column !important;
-        align-items: center !important;
-    }
-    
-    .modal-dia-contenido {
-        width: 95% !important;
-        margin: 10% auto !important;
-        padding: 20px !important;
-    }
-}
-
-/* ========== RESPONSIVE DASHBOARD ========== */
-@media (max-width: 992px) {
-    .dashboard-row {
-        grid-template-columns: 1fr !important;
-        gap: 20px !important;
-    }
-    
-    .main-header {
-        padding: 10px 20px !important;
-        flex-direction: column !important;
-        gap: 15px !important;
-    }
-    
-    .main-nav ul {
-        flex-wrap: wrap !important;
-        justify-content: center !important;
-    }
-    
-    .main-nav ul li {
-        margin: 5px 10px !important;
-    }
-    
-    .footer-content {
-        flex-direction: column !important;
-        text-align: center !important;
-        gap: 20px !important;
-    }
-    
-    .footer-info {
-        max-width: 100% !important;
-    }
-}
-
-@media (max-width: 576px) {
-    .dashboard-card {
-        padding: 15px !important;
-    }
-    
-    .dashboard-card h3 {
-        font-size: 1.1rem !important;
-    }
-    
-    .container {
-        padding: 0 10px !important;
-    }
-}
-
-/* ========== BOTONES ========== */
-.btn-reservar {
-    background: linear-gradient(135deg, #28a745 0%, #20c997 100%) !important;
-    border: none !important;
+    padding: 20px !important;
+    background: rgba(220, 53, 69, 0.1) !important;
     border-radius: 8px !important;
-    padding: 12px 24px !important;
-    color: white !important;
-    font-weight: 600 !important;
+    border: 1px solid #dc3545 !important;
+}
+
+.error-estado i {
+    font-size: 2rem !important;
+    color: #dc3545 !important;
+    margin-bottom: 10px !important;
+}
+
+.evento-reserva,
+.evento-torneo {
+    position: relative !important;
     cursor: pointer !important;
-    transition: all 0.3s ease !important;
-    width: 100% !important;
-    margin-top: 15px !important;
+    transition: all 0.2s ease !important;
 }
 
-.btn-reservar:hover {
-    transform: translateY(-2px) !important;
-    box-shadow: 0 4px 15px rgba(40,167,69,0.4) !important;
+.evento-reserva:hover,
+.evento-torneo:hover {
+    transform: scale(1.05) !important;
+    z-index: 10 !important;
 }
 
-.btn-ver-horarios {
-    background: linear-gradient(135deg, #17a2b8 0%, #138496 100%) !important;
-    border: none !important;
-    border-radius: 8px !important;
-    padding: 8px 16px !important;
-    color: white !important;
+.evento-texto {
     font-weight: 600 !important;
-    cursor: pointer !important;
-    transition: all 0.3s ease !important;
-    font-size: 0.8rem !important;
-    width: 100% !important;
-    margin-top: 10px !important;
+    line-height: 1.2 !important;
 }
 
-.btn-ver-horarios:hover {
-    transform: translateY(-2px) !important;
-    box-shadow: 0 4px 15px rgba(23,162,184,0.4) !important;
+.evento-subtexto {
+    font-size: 0.65rem !important;
+    opacity: 0.9 !important;
+    line-height: 1.1 !important;
+    margin-top: 1px !important;
 }
 
-/* ========== LOADING ========== */
 .loading-calendario {
     display: flex !important;
     justify-content: center !important;
@@ -703,3 +525,290 @@ h2 i {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
 }
+
+/* ========== MEJORAS PARA ITEMS DE RESERVAS ========== */
+.reserva-item {
+    background: linear-gradient(135deg, #2d3e50 0%, #34495e 100%) !important;
+    border-radius: 12px !important;
+    padding: 16px !important;
+    margin-bottom: 15px !important;
+    border-left: 4px solid #28a745 !important;
+    position: relative !important;
+    transition: all 0.3s ease !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2) !important;
+}
+
+.reserva-item:hover {
+    transform: translateX(5px) !important;
+    box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3) !important;
+}
+
+.torneo-item {
+    background: linear-gradient(135deg, #8e44ad 0%, #9b59b6 100%) !important;
+    border-radius: 12px !important;
+    padding: 16px !important;
+    margin-bottom: 15px !important;
+    border-left: 4px solid #dc3545 !important;
+    position: relative !important;
+    transition: all 0.3s ease !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2) !important;
+}
+
+.torneo-item:hover {
+    transform: translateX(5px) !important;
+    box-shadow: 0 4px 15px rgba(220, 53, 69, 0.3) !important;
+}
+
+/* ✅ ELEMENTOS MEJORADOS DE ITEMS */
+.item-fecha {
+    color: #00bcd4 !important;
+    font-weight: 700 !important;
+    font-size: 0.9rem !important;
+    margin-bottom: 8px !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+}
+
+.item-fecha i {
+    color: #00bcd4 !important;
+    font-size: 0.85rem !important;
+}
+
+.item-titulo {
+    color: #ffffff !important;
+    font-size: 1rem !important;
+    font-weight: 600 !important;
+    margin: 8px 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+}
+
+.item-titulo i {
+    color: #28a745 !important;
+    font-size: 0.9rem !important;
+}
+
+.torneo-item .item-titulo i {
+    color: #dc3545 !important;
+}
+
+.item-detalle {
+    color: #b0b0b0 !important;
+    font-size: 0.85rem !important;
+    margin: 4px 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+}
+
+.item-detalle i {
+    color: #007bff !important;
+    font-size: 0.8rem !important;
+    width: 12px !important;
+}
+
+/* ✅ NUEVOS ELEMENTOS: ESTADO Y PRECIO */
+.item-estado {
+    font-size: 0.8rem !important;
+    font-weight: 600 !important;
+    padding: 4px 8px !important;
+    border-radius: 6px !important;
+    margin: 8px 0 4px 0 !important;
+    display: inline-block !important;
+}
+
+.estado-confirmada {
+    background: rgba(40, 167, 69, 0.2) !important;
+    color: #28a745 !important;
+    border: 1px solid #28a745 !important;
+}
+
+.estado-pendiente {
+    background: rgba(255, 193, 7, 0.2) !important;
+    color: #ffc107 !important;
+    border: 1px solid #ffc107 !important;
+}
+
+.estado-cancelada {
+    background: rgba(220, 53, 69, 0.2) !important;
+    color: #dc3545 !important;
+    border: 1px solid #dc3545 !important;
+}
+
+.item-precio {
+    color: #00bcd4 !important;
+    font-size: 0.85rem !important;
+    font-weight: 600 !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    margin-top: 6px !important;
+}
+
+.item-precio i {
+    color: #28a745 !important;
+    font-size: 0.8rem !important;
+}
+
+/* ✅ ESTADOS VACÍOS MEJORADOS */
+.estado-vacio {
+    text-align: center !important;
+    padding: 30px 20px !important;
+    background: linear-gradient(135deg, rgba(0, 102, 68, 0.1), rgba(0, 188, 212, 0.1)) !important;
+    border-radius: 12px !important;
+    border: 2px dashed #444 !important;
+    color: #b0b0b0 !important;
+}
+
+.estado-vacio i {
+    font-size: 2.5rem !important;
+    color: #007bff !important;
+    margin-bottom: 15px !important;
+    opacity: 0.7 !important;
+}
+
+.estado-vacio p {
+    color: #ffffff !important;
+    font-size: 1rem !important;
+    font-weight: 600 !important;
+    margin-bottom: 8px !important;
+}
+
+.estado-vacio small {
+    color: #b0b0b0 !important;
+    font-size: 0.85rem !important;
+}
+
+/* ✅ ESTADOS DE ERROR */
+.error-estado {
+    text-align: center !important;
+    padding: 20px !important;
+    background: rgba(220, 53, 69, 0.1) !important;
+    border-radius: 8px !important;
+    border: 1px solid #dc3545 !important;
+}
+
+.error-estado i {
+    font-size: 2rem !important;
+    color: #dc3545 !important;
+    margin-bottom: 10px !important;
+}
+
+/* ✅ MEJORAS EN EVENTOS DEL CALENDARIO */
+.evento-reserva,
+.evento-torneo {
+    position: relative !important;
+    cursor: pointer !important;
+    transition: all 0.2s ease !important;
+}
+
+.evento-reserva:hover,
+.evento-torneo:hover {
+    transform: scale(1.05) !important;
+    z-index: 10 !important;
+}
+
+.evento-texto {
+    font-weight: 600 !important;
+    line-height: 1.2 !important;
+}
+
+.evento-subtexto {
+    font-size: 0.65rem !important;
+    opacity: 0.9 !important;
+    line-height: 1.1 !important;
+    margin-top: 1px !important;
+}
+
+/* ✅ LOADING ESPECÍFICO PARA ACTIVIDADES */
+.loading-actividades {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    padding: 40px !important;
+    background: rgba(0, 0, 0, 0.1) !important;
+    border-radius: 8px !important;
+}
+
+.spinner-actividades {
+    width: 30px !important;
+    height: 30px !important;
+    border: 3px solid #444 !important;
+    border-top: 3px solid #007bff !important;
+    border-radius: 50% !important;
+    animation: spin-actividades 1s linear infinite !important;
+}
+
+@keyframes spin-actividades {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* ✅ RESPONSIVE PARA NUEVOS ELEMENTOS */
+@media (max-width: 768px) {
+    .reserva-item,
+    .torneo-item {
+        padding: 12px !important;
+        margin-bottom: 10px !important;
+    }
+    
+    .item-fecha {
+        font-size: 0.8rem !important;
+    }
+    
+    .item-titulo {
+        font-size: 0.9rem !important;
+    }
+    
+    .item-detalle {
+        font-size: 0.75rem !important;
+    }
+    
+    .item-estado {
+        font-size: 0.7rem !important;
+        padding: 3px 6px !important;
+    }
+    
+    .item-precio {
+        font-size: 0.75rem !important;
+    }
+    
+    .estado-vacio {
+        padding: 20px 15px !important;
+    }
+    
+    .estado-vacio i {
+        font-size: 2rem !important;
+    }
+    
+    .estado-vacio p {
+        font-size: 0.9rem !important;
+    }
+}
+
+/* ✅ ANIMACIONES DE ENTRADA */
+@keyframes slideInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.reserva-item,
+.torneo-item {
+    animation: slideInLeft 0.3s ease-out !important;
+}
+
+.reserva-item:nth-child(1) { animation-delay: 0.1s !important; }
+.reserva-item:nth-child(2) { animation-delay: 0.2s !important; }
+.reserva-item:nth-child(3) { animation-delay: 0.3s !important; }
+
+.torneo-item:nth-child(1) { animation-delay: 0.1s !important; }
+.torneo-item:nth-child(2) { animation-delay: 0.2s !important; }
+.torneo-item:nth-child(3) { animation-delay: 0.3s !important; }

@@ -10,7 +10,7 @@ if (!isset($_SESSION['user_id']) || !isset($_SESSION['user_type']) || $_SESSION[
 include_once 'header.php';
 ?>
 
-<link rel="stylesheet" href="../../Public/css/styles_torneos.css">
+<link rel="stylesheet" href="../../Public/css/torneos_dep.css">
 
 <div class="container mt-4">
     <h2 class="mb-4">

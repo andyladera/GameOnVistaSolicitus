@@ -144,3 +144,44 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 });
+
+// ✅ FUNCIÓN NUEVA: Manejo mejorado de errores de Google Maps
+window.gm_authFailure = function() {
+    console.error('❌ Google Maps: Error de autenticación de API');
+    const mapElements = document.querySelectorAll('#map');
+    mapElements.forEach(map => {
+        map.innerHTML = `
+            <div class="loading" style="background: linear-gradient(135deg, rgba(220, 53, 69, 0.1), rgba(231, 76, 60, 0.1)); border-color: rgba(220, 53, 69, 0.3);">
+                <i class="fas fa-key" style="font-size: 3rem; color: #dc3545; margin-bottom: 15px;"></i>
+                <p style="color: #dc3545;">Error de autenticación de Google Maps</p>
+                <small style="color: #dc3545;">La API key necesita configuración de billing</small>
+            </div>
+        `;
+    });
+};
+
+// ✅ FUNCIÓN NUEVA: Manejo de errores de red
+window.addEventListener('online', function() {
+    console.log('🌐 Conexión restaurada, reintentando cargar mapa...');
+    if (typeof loadGoogleMaps === 'function') {
+        setTimeout(loadGoogleMaps, 1000);
+    }
+});
+
+window.addEventListener('offline', function() {
+    console.log('📡 Sin conexión a internet');
+    const mapElements = document.querySelectorAll('#map');
+    mapElements.forEach(map => {
+        if (map.innerHTML.includes('Cargando')) {
+            map.innerHTML = `
+                <div class="loading" style="background: linear-gradient(135deg, rgba(255, 193, 7, 0.1), rgba(255, 193, 7, 0.1)); border-color: rgba(255, 193, 7, 0.3);">
+                    <i class="fas fa-wifi" style="font-size: 3rem; color: #ffc107; margin-bottom: 15px;"></i>
+                    <p style="color: #ffc107;">Sin conexión a internet</p>
+                    <small style="color: #ffc107;">Verifica tu conexión e intenta de nuevo</small>
+                </div>
+            `;
+        }
+    });
+});
+
+console.log('✅ Main.js: Manejo de errores de Google Maps configurado');

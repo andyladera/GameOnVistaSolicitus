@@ -1,74 +1,238 @@
+// ✅ VERIFICACIÓN DE CARGA Y DEBUG
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('Dashboard perfil JS cargado');
+    console.log('✅ Dashboard perfil JS cargado correctamente');
+    
+    // ✅ VERIFICAR QUE LOS BOTONES EXISTAN
+    setTimeout(() => {
+        const btnEditarPerfil = document.querySelector('button[onclick="abrirModalPerfil()"]');
+        const btnAgregarDeportes = document.querySelector('button[onclick="abrirModalDeportes()"]');
+        
+        console.log('🔍 Verificando botones:');
+        console.log('- Botón Editar Perfil:', btnEditarPerfil ? '✅ Encontrado' : '❌ No encontrado');
+        console.log('- Botón Agregar Deportes:', btnAgregarDeportes ? '✅ Encontrado' : '❌ No encontrado');
+        
+        // ✅ VERIFICAR MODALES
+        const modalPerfil = document.getElementById('modalPerfil');
+        const modalDeportes = document.getElementById('modalDeportes');
+        
+        console.log('- Modal Perfil:', modalPerfil ? '✅ Encontrado' : '❌ No encontrado');
+        console.log('- Modal Deportes:', modalDeportes ? '✅ Encontrado' : '❌ No encontrado');
+        
+        // ✅ VERIFICAR CSS
+        const cssModales = document.querySelector('link[href*="dashboard_modales.css"]');
+        console.log('- CSS Modales:', cssModales ? '✅ Cargado' : '❌ No cargado');
+        
+        // ✅ AGREGAR EVENT LISTENERS COMO BACKUP
+        if (btnEditarPerfil && !btnEditarPerfil.onclick) {
+            console.log('🔧 Agregando event listener de backup para Editar Perfil');
+            btnEditarPerfil.addEventListener('click', abrirModalPerfil);
+        }
+        
+        if (btnAgregarDeportes && !btnAgregarDeportes.onclick) {
+            console.log('🔧 Agregando event listener de backup para Agregar Deportes');
+            btnAgregarDeportes.addEventListener('click', abrirModalDeportes);
+        }
+        
+    }, 1000);
+    
+    // Agregar animaciones CSS necesarias
+    const style = document.createElement('style');
+    style.textContent = `
+        @keyframes slideInRight {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+        
+        .modal-dashboard {
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .modal-dashboard.show {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .modal-container-dashboard {
+            transform: scale(0.8);
+            transition: transform 0.3s ease;
+        }
+        
+        .modal-dashboard.show .modal-container-dashboard {
+            transform: scale(1);
+        }
+    `;
+    document.head.appendChild(style);
 });
 
-// Función para abrir modal de perfil
+// ✅ Variables globales
+let deportesDisponibles = [];
+let deportesUsuario = [];
+
+// ✅ FUNCIÓN RENOMBRADA: Abrir modal de perfil (evita conflicto con horarios_modal.js)
 function abrirModalPerfil() {
-    cargarDatosPerfil();
-    document.getElementById('modalPerfil').style.display = 'flex';
+    console.log('🔧 Intentando abrir modal de perfil...');
+    cargarDatosPerfilActual();
+    mostrarModalDashboard('modalPerfil');
 }
 
-// Función para abrir modal de deportes
+// ✅ FUNCIÓN RENOMBRADA: Abrir modal de deportes (evita conflicto con horarios_modal.js)
 function abrirModalDeportes() {
-    cargarDeportes();
-    document.getElementById('modalDeportes').style.display = 'flex';
+    console.log('🔧 Intentando abrir modal de deportes...');
+    cargarDeportesDisponibles();
+    mostrarModalDashboard('modalDeportes');
 }
 
-// Función para cerrar modal
+// ✅ FUNCIÓN RENOMBRADA: Mostrar modal con animación (nombre único para evitar conflictos)
+function mostrarModalDashboard(modalId) {
+    console.log('🎭 Mostrando modal:', modalId);
+    const modal = document.getElementById(modalId);
+    if (modal) {
+        modal.style.display = 'flex';
+        // Forzar reflow para que la animación funcione
+        modal.offsetHeight;
+        modal.classList.add('show');
+        
+        // Agregar event listener para cerrar con Escape
+        document.addEventListener('keydown', cerrarConEscapeDashboard);
+        
+        console.log('✅ Modal mostrado:', modalId);
+    } else {
+        console.error('❌ Modal no encontrado:', modalId);
+    }
+}
+
+// ✅ FUNCIÓN RENOMBRADA: Cerrar modal con animación (nombre único)
+function cerrarModalDashboard(modalId) {
+    console.log('🔒 Cerrando modal:', modalId);
+    const modal = document.getElementById(modalId);
+    if (modal) {
+        modal.classList.remove('show');
+        
+        // Esperar a que termine la animación antes de ocultar
+        setTimeout(() => {
+            modal.style.display = 'none';
+        }, 300);
+        
+        // Remover event listener de Escape
+        document.removeEventListener('keydown', cerrarConEscapeDashboard);
+        
+        console.log('✅ Modal cerrado:', modalId);
+    }
+}
+
+// ✅ FUNCIÓN RENOMBRADA: Cerrar modal con tecla Escape (nombre único)
+function cerrarConEscapeDashboard(event) {
+    if (event.key === 'Escape') {
+        // Encontrar el modal abierto y cerrarlo
+        const modalAbierto = document.querySelector('.modal-dashboard.show');
+        if (modalAbierto) {
+            const modalId = modalAbierto.getAttribute('id');
+            cerrarModalDashboard(modalId);
+        }
+    }
+}
+
+// ✅ FUNCIÓN GLOBAL PARA CERRAR DESDE HTML (mantiene compatibilidad)
 function cerrarModal(modalId) {
-    document.getElementById(modalId).style.display = 'none';
+    cerrarModalDashboard(modalId);
 }
 
-// Cerrar modal al hacer clic fuera
+// ✅ Cerrar modal al hacer clic fuera (mejorado)
 document.addEventListener('click', function(e) {
-    if (e.target.classList.contains('modal-overlay')) {
-        e.target.style.display = 'none';
+    if (e.target.classList.contains('modal-backdrop')) {
+        const modal = e.target.closest('.modal-dashboard');
+        if (modal) {
+            const modalId = modal.getAttribute('id');
+            cerrarModalDashboard(modalId);
+        }
     }
 });
 
-// Función para cargar datos del perfil
-async function cargarDatosPerfil() {
+// ✅ FUNCIÓN ACTUALIZADA: Cargar datos del perfil actual
+async function cargarDatosPerfilActual() {
     try {
-        const response = await fetch('perfil_ajax.php?action=getPerfil');
-        const data = await response.json();
+        mostrarNotificacion('Cargando datos del perfil...', 'info');
         
-        if (data.success && data.perfil) {
-            const perfil = data.perfil;
+        const response = await fetch('../../Controllers/PerfilController.php?action=obtener_perfil');
+        const result = await response.json();
+        
+        if (result.success && result.data && result.data.perfil) {
+            const perfil = result.data.perfil;
+            
+            // Llenar el formulario
             document.getElementById('nombre').value = perfil.nombre || '';
             document.getElementById('apellidos').value = perfil.apellidos || '';
             document.getElementById('email').value = perfil.email || '';
             document.getElementById('telefono').value = perfil.telefono || '';
             document.getElementById('fecha_nacimiento').value = perfil.fecha_nacimiento || '';
-            document.getElementById('genero').value = perfil.genero || '';
+            document.getElementById('genero').value = perfil.genero || 'Masculino';
+            
+            mostrarNotificacion('Datos cargados correctamente', 'success');
+        } else {
+            throw new Error(result.message || 'Error al cargar perfil');
         }
     } catch (error) {
-        console.error('Error al cargar datos del perfil:', error);
-        mostrarNotificacion('Error al cargar datos del perfil', 'error');
+        console.error('Error cargando perfil:', error);
+        mostrarNotificacion('Error al cargar datos del perfil: ' + error.message, 'error');
     }
 }
 
-// Función para cargar deportes
-async function cargarDeportes() {
+// ✅ FUNCIÓN ACTUALIZADA: Cargar deportes disponibles
+async function cargarDeportesDisponibles() {
     try {
-        const response = await fetch('perfil_ajax.php?action=getDeportes');
-        const data = await response.json();
+        mostrarNotificacion('Cargando deportes disponibles...', 'info');
         
-        if (data.success) {
-            mostrarListaDeportes(data.deportes, data.deportesUsuario);
+        const response = await fetch('../../Controllers/PerfilController.php?action=obtener_deportes');
+        const result = await response.json();
+        
+        if (result.success && result.data) {
+            deportesDisponibles = result.data.deportes || [];
+            deportesUsuario = result.data.deportes_usuario || [];
+            mostrarListaDeportes();
+            mostrarNotificacion('Deportes cargados correctamente', 'success');
+        } else {
+            throw new Error(result.message || 'Error al cargar deportes');
         }
     } catch (error) {
-        console.error('Error al cargar deportes:', error);
-        mostrarNotificacion('Error al cargar deportes', 'error');
+        console.error('Error:', error);
+        mostrarNotificacion('Error al cargar deportes: ' + error.message, 'error');
+        document.getElementById('listaDeportes').innerHTML = `
+            <div class="loading" style="text-align: center; padding: 40px;">
+                <i class="fas fa-exclamation-triangle" style="font-size: 2em; color: #dc3545; margin-bottom: 10px;"></i>
+                <p>Error al cargar deportes. Intenta de nuevo.</p>
+                <button class="btn-primary" onclick="cargarDeportesDisponibles()" style="margin-top: 10px;">
+                    <i class="fas fa-redo"></i> Reintentar
+                </button>
+            </div>
+        `;
     }
 }
 
-// Función para mostrar la lista de deportes
-function mostrarListaDeportes(deportes, deportesUsuario) {
+// ✅ FUNCIÓN ACTUALIZADA: Mostrar lista de deportes
+function mostrarListaDeportes() {
     const container = document.getElementById('listaDeportes');
-    let html = '<div class="deportes-grid">';
     
-    deportes.forEach(deporte => {
-        const yaAgregado = deportesUsuario.includes(deporte.id);
+    if (!deportesDisponibles || deportesDisponibles.length === 0) {
+        container.innerHTML = `
+            <div class="loading" style="text-align: center; padding: 40px;">
+                <i class="fas fa-info-circle" style="font-size: 2em; color: #17a2b8; margin-bottom: 10px;"></i>
+                <p>No hay deportes disponibles</p>
+            </div>
+        `;
+        return;
+    }
+    
+    let html = '<div class="deportes-grid">';
+    deportesDisponibles.forEach(deporte => {
+        const yaAgregado = deportesUsuario.some(d => d.id == deporte.id);
         const iconoDeporte = obtenerIconoDeporte(deporte.nombre);
         
         html += `
@@ -80,32 +244,42 @@ function mostrarListaDeportes(deportes, deportesUsuario) {
                     <h4>${deporte.nombre.charAt(0).toUpperCase() + deporte.nombre.slice(1)}</h4>
                 </div>
                 <div class="deporte-accion">
-                    <button class="btn-deporte ${yaAgregado ? 'btn-eliminar' : 'btn-agregar'}" 
-                            onclick="${yaAgregado ? 'eliminarDeporteModal' : 'agregarDeporteModal'}(${deporte.id})"
-                            ${yaAgregado ? 'disabled' : ''}>
-                        <i class="fas fa-${yaAgregado ? 'check' : 'plus'}"></i>
-                        ${yaAgregado ? 'Agregado' : 'Agregar'}
-                    </button>
+                    ${yaAgregado ? 
+                        `<button class="btn-deporte btn-eliminar" disabled>
+                            <i class="fas fa-check"></i> Agregado
+                        </button>` :
+                        `<button class="btn-deporte btn-agregar" onclick="agregarDeporte(${deporte.id}, '${deporte.nombre}')">
+                            <i class="fas fa-plus"></i> Agregar
+                        </button>`
+                    }
                 </div>
             </div>
         `;
     });
-    
     html += '</div>';
+    
     container.innerHTML = html;
 }
 
-// Función para obtener icono según el deporte
+// ✅ FUNCIÓN ACTUALIZADA: Obtener icono según el deporte
 function obtenerIconoDeporte(nombreDeporte) {
     const iconos = {
         'futbol': 'futbol',
+        'fútbol': 'futbol',
         'basketball': 'basketball-ball',
         'basquet': 'basketball-ball',
+        'básquet': 'basketball-ball',
         'tenis': 'table-tennis',
         'voley': 'volleyball-ball',
+        'vóley': 'volleyball-ball',
+        'volleyball': 'volleyball-ball',
         'natacion': 'swimmer',
+        'natación': 'swimmer',
         'running': 'running',
+        'atletismo': 'running',
         'ciclismo': 'biking',
+        'boxeo': 'fist-raised',
+        'gimnasia': 'dumbbell',
         'default': 'running'
     };
     
@@ -113,149 +287,116 @@ function obtenerIconoDeporte(nombreDeporte) {
     return iconos[nombre] || iconos['default'];
 }
 
-// Función para agregar deporte desde modal
-async function agregarDeporteModal(deporteId) {
+// ✅ FUNCIÓN ACTUALIZADA: Agregar deporte
+async function agregarDeporte(deporteId, nombreDeporte) {
     try {
-        const formData = new FormData();
-        formData.append('action', 'agregarDeporte');
-        formData.append('deporte_id', deporteId);
+        mostrarNotificacion(`Agregando ${nombreDeporte}...`, 'info');
         
-        const response = await fetch('perfil_ajax.php', {
+        const response = await fetch('../../Controllers/PerfilController.php?action=agregar_deporte', {
             method: 'POST',
-            body: formData
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ deporte_id: deporteId })
         });
         
-        const data = await response.json();
+        const result = await response.json();
         
-        if (data.success) {
-            mostrarNotificacion(data.message, 'success');
-            // Actualizar la tarjeta del deporte en el modal
-            const deporteItem = document.querySelector(`[data-deporte-id="${deporteId}"]`);
-            if (deporteItem) {
-                deporteItem.classList.add('agregado');
-                const btn = deporteItem.querySelector('.btn-deporte');
-                btn.className = 'btn-deporte btn-eliminar';
-                btn.innerHTML = '<i class="fas fa-check"></i> Agregado';
-                btn.disabled = true;
-                btn.onclick = null;
-            }
-            // Actualizar la lista en el dashboard
-            setTimeout(() => {
-                actualizarDeportesDashboard();
-            }, 500);
-        } else {
-            mostrarNotificacion(data.message, 'error');
-        }
-    } catch (error) {
-        console.error('Error:', error);
-        mostrarNotificacion('Error de conexión', 'error');
-    }
-}
-
-// Función para eliminar deporte desde modal
-async function eliminarDeporteModal(deporteId) {
-    if (!confirm('¿Estás seguro de que quieres eliminar este deporte?')) {
-        return;
-    }
-    
-    try {
-        const formData = new FormData();
-        formData.append('action', 'eliminarDeporte');
-        formData.append('deporte_id', deporteId);
-        
-        const response = await fetch('perfil_ajax.php', {
-            method: 'POST',
-            body: formData
-        });
-        
-        const data = await response.json();
-        
-        if (data.success) {
-            mostrarNotificacion(data.message, 'success');
-            // Actualizar la tarjeta del deporte en el modal
-            const deporteItem = document.querySelector(`[data-deporte-id="${deporteId}"]`);
-            if (deporteItem) {
-                deporteItem.classList.remove('agregado');
-                const btn = deporteItem.querySelector('.btn-deporte');
-                btn.className = 'btn-deporte btn-agregar';
-                btn.innerHTML = '<i class="fas fa-plus"></i> Agregar';
-                btn.disabled = false;
-                btn.onclick = () => agregarDeporteModal(deporteId);
-            }
-            // Actualizar la lista en el dashboard
-            setTimeout(() => {
-                actualizarDeportesDashboard();
-            }, 500);
-        } else {
-            mostrarNotificacion(data.message, 'error');
-        }
-    } catch (error) {
-        console.error('Error:', error);
-        mostrarNotificacion('Error de conexión', 'error');
-    }
-}
-
-// Función para eliminar deporte directamente desde el dashboard
-async function eliminarDeporte(deporteId) {
-    if (!confirm('¿Estás seguro de que quieres eliminar este deporte?')) {
-        return;
-    }
-    
-    try {
-        const formData = new FormData();
-        formData.append('action', 'eliminarDeporte');
-        formData.append('deporte_id', deporteId);
-        
-        const response = await fetch('perfil_ajax.php', {
-            method: 'POST',
-            body: formData
-        });
-        
-        const data = await response.json();
-        
-        if (data.success) {
-            mostrarNotificacion(data.message, 'success');
-            actualizarDeportesDashboard();
-        } else {
-            mostrarNotificacion(data.message, 'error');
-        }
-    } catch (error) {
-        console.error('Error:', error);
-        mostrarNotificacion('Error de conexión', 'error');
-    }
-}
-
-// Función para actualizar deportes en el dashboard
-async function actualizarDeportesDashboard() {
-    try {
-        const response = await fetch('perfil_ajax.php?action=getDeportes');
-        const data = await response.json();
-        
-        if (data.success) {
-            const deportesContainer = document.getElementById('deportesFavoritos');
-            const deportes = data.deportes.filter(d => data.deportesUsuario.includes(d.id));
+        if (result.success) {
+            // Actualizar la lista local
+            deportesUsuario.push({ id: deporteId, nombre: nombreDeporte });
             
-            if (deportes.length > 0) {
-                let html = '';
-                deportes.forEach(deporte => {
-                    html += `
-                        <span class="sport-tag" data-deporte-id="${deporte.id}">
-                            ${deporte.nombre.charAt(0).toUpperCase() + deporte.nombre.slice(1)}
-                            <i class="fas fa-times ms-1" onclick="eliminarDeporte(${deporte.id})" style="cursor: pointer;" title="Eliminar deporte"></i>
-                        </span>
-                    `;
-                });
-                deportesContainer.innerHTML = html;
-            } else {
-                deportesContainer.innerHTML = '<p class="text-muted">No tienes deportes agregados</p>';
-            }
+            // Actualizar la vista del modal
+            mostrarListaDeportes();
+            
+            // Actualizar la vista del dashboard
+            actualizarDeportesFavoritosEnDashboard();
+            
+            mostrarNotificacion(`✅ ${nombreDeporte} agregado correctamente`, 'success');
+        } else {
+            throw new Error(result.message || 'Error al agregar deporte');
         }
     } catch (error) {
-        console.error('Error al actualizar deportes:', error);
+        console.error('Error:', error);
+        mostrarNotificacion('❌ Error al agregar deporte: ' + error.message, 'error');
     }
 }
 
-// Función para mostrar notificaciones
+// ✅ FUNCIÓN ACTUALIZADA: Eliminar deporte directamente desde el dashboard
+async function eliminarDeporte(deporteId) {
+    try {
+        const deporte = deportesUsuario.find(d => d.id == deporteId);
+        const nombreDeporte = deporte ? deporte.nombre : 'deporte';
+        
+        if (!confirm(`¿Estás seguro de que quieres eliminar ${nombreDeporte} de tus deportes favoritos?`)) {
+            return;
+        }
+        
+        mostrarNotificacion(`Eliminando ${nombreDeporte}...`, 'info');
+        
+        const response = await fetch('../../Controllers/PerfilController.php?action=eliminar_deporte', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ deporte_id: deporteId })
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            // Actualizar la lista local
+            deportesUsuario = deportesUsuario.filter(d => d.id != deporteId);
+            
+            // Actualizar la vista del dashboard
+            actualizarDeportesFavoritosEnDashboard();
+            
+            // Si hay modal abierto, actualizarlo también
+            const modalDeportes = document.getElementById('modalDeportes');
+            if (modalDeportes && modalDeportes.classList.contains('show')) {
+                mostrarListaDeportes();
+            }
+            
+            mostrarNotificacion(`✅ ${nombreDeporte} eliminado correctamente`, 'success');
+        } else {
+            throw new Error(result.message || 'Error al eliminar deporte');
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        mostrarNotificacion('❌ Error al eliminar deporte: ' + error.message, 'error');
+    }
+}
+
+// ✅ FUNCIÓN ACTUALIZADA: Actualizar deportes en el dashboard
+function actualizarDeportesFavoritosEnDashboard() {
+    const container = document.getElementById('deportesFavoritos');
+    
+    if (!container) {
+        console.warn('Contenedor deportesFavoritos no encontrado');
+        return;
+    }
+    
+    if (deportesUsuario.length === 0) {
+        container.innerHTML = '<p class="text-muted">No tienes deportes agregados</p>';
+        return;
+    }
+    
+    let html = '';
+    deportesUsuario.forEach(deporte => {
+        const icono = obtenerIconoDeporte(deporte.nombre);
+        html += `
+            <span class="sport-tag" data-deporte-id="${deporte.id}">
+                <i class="fas fa-${icono}"></i>
+                ${deporte.nombre.charAt(0).toUpperCase() + deporte.nombre.slice(1)}
+                <i class="fas fa-times" onclick="eliminarDeporte(${deporte.id})" title="Eliminar deporte" style="cursor: pointer; margin-left: 8px;"></i>
+            </span>
+        `;
+    });
+    
+    container.innerHTML = html;
+}
+
+// ✅ FUNCIÓN ACTUALIZADA: Mostrar notificaciones mejoradas
 function mostrarNotificacion(mensaje, tipo = 'success') {
     // Crear contenedor de notificaciones si no existe
     let container = document.getElementById('notificaciones-container');
@@ -267,70 +408,155 @@ function mostrarNotificacion(mensaje, tipo = 'success') {
             top: 80px;
             right: 20px;
             z-index: 1002;
+            pointer-events: none;
         `;
         document.body.appendChild(container);
     }
     
+    const colores = {
+        'success': {
+            bg: 'linear-gradient(135deg, #28a745, #20c997)',
+            icon: 'check-circle'
+        },
+        'error': {
+            bg: 'linear-gradient(135deg, #dc3545, #e74c3c)',
+            icon: 'exclamation-circle'
+        },
+        'info': {
+            bg: 'linear-gradient(135deg, #17a2b8, #00bcd4)',
+            icon: 'info-circle'
+        }
+    };
+    
+    const config = colores[tipo] || colores['info'];
+    
     const notificacion = document.createElement('div');
     notificacion.className = `notificacion-toast ${tipo}`;
     notificacion.style.cssText = `
-        background: ${tipo === 'success' ? 'linear-gradient(135deg, #28a745, #20c997)' : 'linear-gradient(135deg, #dc3545, #e74c3c)'};
+        background: ${config.bg};
         color: white;
         padding: 15px 20px;
         border-radius: 8px;
         margin-bottom: 10px;
-        box-shadow: 0 5px 15px ${tipo === 'success' ? 'rgba(40, 167, 69, 0.3)' : 'rgba(220, 53, 69, 0.3)'};
+        box-shadow: 0 5px 15px rgba(0,0,0,0.2);
         display: flex;
         align-items: center;
         gap: 10px;
         animation: slideInRight 0.3s ease;
         min-width: 280px;
+        max-width: 400px;
+        pointer-events: all;
+        font-size: 14px;
+        font-weight: 500;
     `;
+    
     notificacion.innerHTML = `
-        <i class="fas fa-${tipo === 'success' ? 'check-circle' : 'exclamation-circle'}"></i>
-        <span>${mensaje}</span>
+        <i class="fas fa-${config.icon}" style="font-size: 16px;"></i>
+        <span style="flex: 1;">${mensaje}</span>
+        <i class="fas fa-times" onclick="this.parentElement.remove()" 
+           style="cursor: pointer; opacity: 0.8; font-size: 12px;" 
+           title="Cerrar"></i>
     `;
     
     container.appendChild(notificacion);
     
-    // Remover después de 3 segundos
+    // Remover automáticamente después de 4 segundos
     setTimeout(() => {
-        notificacion.remove();
-    }, 3000);
+        if (notificacion.parentNode) {
+            notificacion.style.animation = 'slideOutRight 0.3s ease';
+            setTimeout(() => {
+                if (notificacion.parentNode) {
+                    notificacion.remove();
+                }
+            }, 300);
+        }
+    }, 4000);
 }
 
-// Event listener para el formulario de perfil
+// ✅ FUNCIÓN ACTUALIZADA: Event listener para el formulario de perfil
 document.addEventListener('DOMContentLoaded', function() {
     const formPerfil = document.getElementById('formPerfil');
     if (formPerfil) {
         formPerfil.addEventListener('submit', async function(e) {
             e.preventDefault();
             
-            const formData = new FormData(this);
-            formData.append('action', 'actualizarPerfil');
-            
             try {
-                const response = await fetch('perfil_ajax.php', {
+                mostrarNotificacion('Guardando cambios en el perfil...', 'info');
+                
+                const formData = new FormData(this);
+                const datos = Object.fromEntries(formData);
+                
+                const response = await fetch('../../Controllers/PerfilController.php?action=actualizar_perfil', {
                     method: 'POST',
-                    body: formData
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(datos)
                 });
                 
-                const data = await response.json();
+                const result = await response.json();
                 
-                if (data.success) {
-                    mostrarNotificacion(data.message, 'success');
-                    cerrarModal('modalPerfil');
-                    // Actualizar la información en el dashboard
+                if (result.success) {
+                    mostrarNotificacion('✅ Perfil actualizado correctamente', 'success');
+                    cerrarModalDashboard('modalPerfil');
+                    
+                    // Recargar la página para mostrar los cambios
                     setTimeout(() => {
                         location.reload();
-                    }, 1000);
+                    }, 1500);
                 } else {
-                    mostrarNotificacion(data.message, 'error');
+                    throw new Error(result.message || 'Error al actualizar perfil');
                 }
             } catch (error) {
                 console.error('Error:', error);
-                mostrarNotificacion('Error de conexión', 'error');
+                mostrarNotificacion('❌ Error al actualizar perfil: ' + error.message, 'error');
             }
         });
     }
+    
+    // Cargar deportes del usuario al iniciar
+    setTimeout(() => {
+        cargarDeportesUsuarioInicial();
+    }, 1000);
 });
+
+// ✅ FUNCIÓN ACTUALIZADA: Cargar deportes del usuario al inicializar
+async function cargarDeportesUsuarioInicial() {
+    try {
+        const response = await fetch('../../Controllers/PerfilController.php?action=obtener_deportes');
+        const result = await response.json();
+        
+        if (result.success && result.data) {
+            deportesDisponibles = result.data.deportes || [];
+            deportesUsuario = result.data.deportes_usuario || [];
+            console.log('✅ Deportes del usuario cargados:', deportesUsuario.length);
+        }
+    } catch (error) {
+        console.error('Error cargando deportes iniciales:', error);
+    }
+}
+
+// ✅ Agregar animación slideOutRight
+const additionalStyles = document.createElement('style');
+additionalStyles.textContent = `
+    @keyframes slideOutRight {
+        from {
+            transform: translateX(0);
+            opacity: 1;
+        }
+        to {
+            transform: translateX(100%);
+            opacity: 0;
+        }
+    }
+`;
+document.head.appendChild(additionalStyles);
+
+// ✅ HACER FUNCIONES GLOBALES (con nombres únicos para evitar conflictos)
+window.abrirModalPerfil = abrirModalPerfil;
+window.abrirModalDeportes = abrirModalDeportes;
+window.cerrarModal = cerrarModal;
+window.agregarDeporte = agregarDeporte;
+window.eliminarDeporte = eliminarDeporte;
+
+console.log('✅ Dashboard-perfil.js completamente actualizado y cargado');
