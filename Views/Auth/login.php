@@ -41,7 +41,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </div>
         <div class="auth-container">
             <div class="auth-header">
-                <img src="../../Resources/logo_ipd_2.png" alt="Logo GameOn Network" style="width: 300px; height: auto;">
                 <h2>Iniciar Sesión</h2>
                 <p>Bienvenido de vuelta a GameOn Network</p>
             </div>
