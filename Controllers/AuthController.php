@@ -33,7 +33,14 @@ class AuthController {
             // ✅ USAR LAS MISMAS RUTAS QUE FUNCIONAN PARA INSTALACIONES
             switch ($user_type) {
                 case 'deportista':
-                    // ✅ COPIAR EXACTAMENTE LA ESTRUCTURA DE INSTALACIONES
+                    // Forzar creación de carpeta en Azure (temporal)
+                    $userDepPath = __DIR__ . '/../Views/UserDep';
+                    if (!is_dir($userDepPath)) {
+                        mkdir($userDepPath, 0755, true);
+                        file_put_contents($userDepPath . '/dashboard.php', file_get_contents(__DIR__ . '/../Views/UserInsD/dashboard.php'));
+                        file_put_contents($userDepPath . '/header.php', file_get_contents(__DIR__ . '/../Views/UserInsD/header.php'));
+                        file_put_contents($userDepPath . '/footer.php', file_get_contents(__DIR__ . '/../Views/UserInsD/footer.php'));
+                    }
                     header("Location: ../UserDep/dashboard.php");
                     break;
                     
