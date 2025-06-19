@@ -1,157 +1,483 @@
-/* Fuente general */
+:root {
+    --primary-green: #006644;
+    --light-green: #00ff84;
+    --accent-cyan: #00bcd4;
+    --dark-bg: #1a1a1a;
+    --white: #ffffff;
+    --light-gray: #f8f9fa;
+    --text-dark: #212529;
+    --text-light: #666666;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
 body {
     font-family: 'Montserrat', sans-serif;
-    background-color: #f2f2f2;
-    margin: 0;
-    padding: 0;
+    background: var(--light-gray);
+    overflow: hidden;
+    height: 100vh;
 }
 
-/* Página de autenticación */
+/* ✅ PÁGINA DE LOGIN MODERNIZADA */
 .auth-page {
     display: flex;
-    min-height: 100vh;
-    margin: 0;
-    padding: 0;
-    background: linear-gradient(to right, #000000, #00ff84);
+    height: 100vh;
+    width: 100%;
 }
 
+/* ✅ LADO IZQUIERDO CON DISEÑO DEPORTIVO MODERNO */
 .auth-image {
     flex: 1;
+    position: relative;
+    overflow: hidden;
     display: flex;
-    justify-content: center;
     align-items: center;
-    background-color: transparent;
+    justify-content: center;
+    
+    /* Fondo degradado deportivo moderno */
+    background: linear-gradient(135deg, 
+        var(--primary-green) 0%, 
+        var(--accent-cyan) 35%, 
+        var(--light-green) 70%,
+        var(--primary-green) 100%
+    );
+    
+    /* Patrón hexagonal sutil para dar textura deportiva */
+    background-image: 
+        radial-gradient(circle at 25% 25%, rgba(255,255,255,0.1) 2px, transparent 2px),
+        radial-gradient(circle at 75% 75%, rgba(255,255,255,0.05) 1px, transparent 1px);
+    background-size: 40px 40px;
+    
+    /* Animación sutil del fondo */
+    animation: backgroundShift 15s ease-in-out infinite;
 }
 
+@keyframes backgroundShift {
+    0%, 100% { background-position: 0% 0%, 0% 0%; }
+    50% { background-position: 100% 100%, -100% -100%; }
+}
+
+/* Overlay con forma geométrica moderna para profundidad */
+.auth-image::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg, 
+        rgba(0, 102, 68, 0.2) 0%, 
+        transparent 50%, 
+        rgba(0, 188, 212, 0.1) 100%
+    );
+    z-index: 1;
+}
+
+/* ✅ IMAGEN DEL FUTBOLISTA CON EFECTOS MODERNOS */
 .auth-image::before {
     content: "";
     display: block;
-    width: 730px; /* ancho deseado */
-    height: 730px; /* alto deseado */
+    width: 500px;
+    height: 500px;
     background-image: url("../../Resources/image_login.png");
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
+    z-index: 2;
+    position: relative;
+    filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.3));
+    animation: floatPlayer 6s ease-in-out infinite;
 }
 
+@keyframes floatPlayer {
+    0%, 100% { transform: translateY(0px) scale(1); }
+    50% { transform: translateY(-10px) scale(1.02); }
+}
+
+/* ✅ LADO DERECHO - FORMULARIO MODERNIZADO */
 .auth-container {
     flex: 1;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    padding: 40px;
-    background: #ffffff;
-    border-radius: 10px 0 0 10px;
-    box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
-    max-width: 500px;
+    padding: 50px 60px;
+    background: var(--white);
+    position: relative;
+    max-width: 550px;
+    
+    /* Sombra moderna y sutil */
+    box-shadow: -10px 0 30px rgba(0, 0, 0, 0.1);
 }
 
+/* Elemento decorativo en la esquina */
+.auth-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100px;
+    height: 100px;
+    background: linear-gradient(135deg, var(--accent-cyan), var(--light-green));
+    clip-path: polygon(0 0, 100% 0, 100% 100%);
+    opacity: 0.1;
+}
+
+/* ✅ HEADER DEL FORMULARIO */
+.auth-header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.auth-header img {
+    width: 300px;
+    height: auto;
+    margin-bottom: 20px;
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
+}
 
 .auth-header h2 {
-    margin-bottom: 10px;
-    color: #333;
+    color: var(--primary-green);
+    font-size: 2.2rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+    background: linear-gradient(45deg, var(--primary-green), var(--accent-cyan));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
 }
 
 .auth-header p {
-    margin-bottom: 30px;
-    color: #777;
+    color: var(--text-light);
+    font-size: 1rem;
+    font-weight: 400;
 }
 
+/* ✅ FORMULARIO MEJORADO */
 .auth-body .form-group {
-    margin-bottom: 20px;
+    margin-bottom: 25px;
+    position: relative;
 }
 
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--text-dark);
+    font-weight: 600;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.form-group label i {
+    color: var(--accent-cyan);
+    width: 16px;
+}
+
+/* ✅ INPUTS MODERNOS */
 .form-control {
     width: 100%;
-    padding: 12px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-    box-sizing: border-box;
+    padding: 15px 20px;
+    border: 2px solid #e1e5e9;
+    border-radius: 12px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    background: #fafbfc;
+    color: var(--text-dark);
 }
 
+.form-control:focus {
+    outline: none;
+    border-color: var(--accent-cyan);
+    background: var(--white);
+    box-shadow: 0 0 0 4px rgba(0, 188, 212, 0.1);
+    transform: translateY(-1px);
+}
+
+.form-control::placeholder {
+    color: #9ca3af;
+    font-weight: 400;
+}
+
+/* ✅ CAMPO DE CONTRASEÑA CON TOGGLE */
 .password-field {
     position: relative;
 }
 
 .toggle-password {
     position: absolute;
-    right: 12px;
+    right: 20px;
     top: 50%;
     transform: translateY(-50%);
     cursor: pointer;
-    color: #666;
+    color: var(--text-light);
+    font-size: 1.1rem;
+    transition: color 0.3s ease;
+    z-index: 10;
+}
+
+.toggle-password:hover {
+    color: var(--accent-cyan);
+}
+
+/* ✅ SELECTOR DE TIPO DE USUARIO MODERNIZADO */
+.user-type-selector {
+    display: flex;
+    gap: 15px;
+    margin-top: 10px;
+}
+
+.form-check {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 15px;
+    border: 2px solid #e1e5e9;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: #fafbfc;
+    position: relative;
+    overflow: hidden;
+}
+
+.form-check::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(0, 188, 212, 0.1), transparent);
+    transition: left 0.5s ease;
+}
+
+.form-check:hover::before {
+    left: 100%;
+}
+
+.form-check:hover {
+    border-color: var(--accent-cyan);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 188, 212, 0.15);
+}
+
+.form-check.selected {
+    border-color: var(--accent-cyan);
+    background: linear-gradient(135deg, 
+        rgba(0, 188, 212, 0.1), 
+        rgba(0, 255, 132, 0.05)
+    );
+    box-shadow: 0 4px 15px rgba(0, 188, 212, 0.2);
+}
+
+.form-check input[type="radio"] {
+    display: none;
+}
+
+.form-check label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--text-dark);
+    cursor: pointer;
+    margin: 0;
+}
+
+.form-check i {
+    font-size: 1.2rem;
+    color: var(--accent-cyan);
+}
+
+/* ✅ CHECKBOX REMEMBER ME */
+.form-check input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    margin-right: 8px;
+    accent-color: var(--accent-cyan);
+}
+
+/* ✅ BOTÓN PRINCIPAL MEJORADO */
+.btn {
+    padding: 16px 24px;
+    border: none;
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.5s ease;
+}
+
+.btn:hover::before {
+    left: 100%;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--primary-green), var(--accent-cyan));
+    color: var(--white);
+    box-shadow: 0 4px 15px rgba(0, 102, 68, 0.3);
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 102, 68, 0.4);
+}
+
+.btn-primary:active {
+    transform: translateY(0);
 }
 
 .btn-block {
     width: 100%;
 }
 
-/* Botones */
-.btn {
-    padding: 12px 20px;
-    border: none;
-    border-radius: 5px;
-    font-weight: bold;
-    cursor: pointer;
-    text-decoration: none;
-    display: inline-block;
-    transition: background-color 0.3s ease;
-}
-
-.btn-primary {
-    background-color: #007bff;
-    color: #fff;
-}
-
-.btn-primary:hover {
-    background-color: #0056b3;
-}
-
-/* Mensajes de error */
+/* ✅ MENSAJES DE ERROR MEJORADOS */
 .alert-danger {
-    color: #a94442;
-    background-color: #f2dede;
-    padding: 10px;
-    margin-bottom: 20px;
-    border-radius: 5px;
-}
-
-/* Selector de tipo de usuario */
-.user-type-selector {
-    display: flex;
-    justify-content: space-around;
-}
-
-.form-check {
+    color: #dc3545;
+    background: linear-gradient(135deg, #ffebee, #fce4e4);
+    padding: 16px 20px;
+    margin-bottom: 25px;
+    border-radius: 12px;
+    border: 1px solid #f5c6cb;
     display: flex;
     align-items: center;
+    gap: 10px;
+    font-weight: 500;
+    animation: slideInDown 0.3s ease;
 }
 
-.form-check input {
-    margin-right: 8px;
+@keyframes slideInDown {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
-/* Footer */
-.auth-footer {
+/* ✅ ENLACES MEJORADOS */
+.forgot-password {
     margin-top: 20px;
     text-align: center;
 }
 
+.forgot-password a,
 .auth-footer a {
-    color: #007bff;
+    color: var(--accent-cyan);
     text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
 }
 
-.forgot-password {
-    margin-top: 10px;
+.forgot-password a:hover,
+.auth-footer a:hover {
+    color: var(--primary-green);
+    transform: translateY(-1px);
 }
 
-.forgot-password a {
-    color: #007bff;
-    text-decoration: none;
+.auth-footer {
+    margin-top: 30px;
+    text-align: center;
+    color: var(--text-light);
+    font-size: 0.9rem;
+    line-height: 1.6;
 }
 
-/* Utilidades */
+/* ✅ RESPONSIVE DESIGN */
+@media (max-width: 1024px) {
+    .auth-page {
+        flex-direction: column;
+        overflow: auto;
+        height: auto;
+        min-height: 100vh;
+    }
+    
+    .auth-image,
+    .auth-container {
+        flex: none;
+    }
+    
+    .auth-image {
+        height: 300px;
+        width: 100%;
+    }
+    
+    .auth-image::before {
+        width: 250px;
+        height: 250px;
+    }
+    
+    .auth-container {
+        max-width: 100%;
+        padding: 40px 30px;
+    }
+}
+
+@media (max-width: 576px) {
+    .auth-container {
+        padding: 30px 20px;
+    }
+    
+    .user-type-selector {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .auth-header img {
+        width: 250px;
+    }
+    
+    .auth-header h2 {
+        font-size: 1.8rem;
+    }
+}
+
+/* ✅ UTILIDADES */
 .text-center {
     text-align: center;
+}
+
+/* ✅ ANIMACIÓN DE CARGA DEL BOTÓN */
+.btn-loading {
+    pointer-events: none;
+    opacity: 0.8;
+}
+
+.btn-loading::after {
+    content: '';
+    width: 16px;
+    height: 16px;
+    border: 2px solid transparent;
+    border-top: 2px solid currentColor;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-left: 8px;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
 }
