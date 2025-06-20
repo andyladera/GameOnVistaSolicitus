@@ -11,7 +11,6 @@ class MongoDBConnection {
     private function __construct() {
         try {
             // ⭐⭐⭐ SOLUCIÓN DEFINITIVA: CONEXIÓN ROBUSTA PARA AZURE ⭐⭐⭐
-            
             // 1. TU CONNECTION STRING DE ATLAS (MODO "STANDARD")
             // Ve a Atlas -> Database -> Tu Cluster -> Connect -> Drivers
             // Elige PHP y la versión 2.2.0 or later.
