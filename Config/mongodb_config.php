@@ -8,61 +8,43 @@ class MongoDBConnection {
     private $client;
     private $database;
     
-    // ⭐ CONNECTION STRING SIN OPCIONES TLS CONFLICTIVAS
-    private $connectionString = 'mongodb+srv://gameon_user:uenyQ7knyG8tonjC@gameoncluster.4jrdsxk.mongodb.net/gameon_chat?retryWrites=true&w=majority';
-    private $databaseName = 'gameon_chat';
-    
     private function __construct() {
         try {
-            if (!class_exists('MongoDB\Client')) {
-                throw new Exception('❌ MongoDB Client no disponible');
-            }
+            // ⭐⭐⭐ SOLUCIÓN DEFINITIVA: CONEXIÓN ROBUSTA PARA AZURE ⭐⭐⭐
             
-            // ⭐ CONFIGURACIÓN ESPECÍFICA PARA TU CLUSTER
+            // 1. TU CONNECTION STRING DE ATLAS (MODO "STANDARD")
+            // Ve a Atlas -> Database -> Tu Cluster -> Connect -> Drivers
+            // Elige PHP y la versión 2.2.0 or later.
+            // Copia el string de conexión que te da. NO USES el "+srv".
+            // Ejemplo: mongodb://user:pass@ac-XXXX.mongodb.net/?retryWrites=true&w=majority
+            // ✅ REEMPLAZA ESTA LÍNEA CON LA TUYA DE ATLAS
+            $connectionString = "mongodb://gamebon_usuario:uenyQ7knyG8tonjC@gameoncluster.4jrdsxk.mongodb.net/?retryWrites=true&w=majority"; 
+
+            // 2. NOMBRE DE TU BASE DE DATOS
+            $dbName = "GameOn"; // O el nombre que uses
+
+            // 3. OPCIONES DE CONEXIÓN EXPLÍCITAS PARA AZURE
+            // Estas opciones fuerzan el uso de SSL, que es lo que Azure necesita.
             $options = [
-                // Timeouts generosos para conexión estable
-                'serverSelectionTimeoutMS' => 30000,
-                'connectTimeoutMS' => 30000,
-                'socketTimeoutMS' => 30000,
-                
-                // Configuración mínima SSL para Azure
                 'ssl' => true,
                 'authSource' => 'admin',
-                
-                // Optimización para tu cluster específico
-                'retryWrites' => true,
-                'retryReads' => true,
-                'maxPoolSize' => 5,
-                
-                // Configuración de red
-                'serverSelectionTryOnce' => false,
             ];
-            
-            // ⭐ DETECCIÓN DE ENTORNO (Azure vs Local)
-            if (isset($_SERVER['WEBSITE_SITE_NAME'])) {
-                // Estamos en Azure Web App
-                error_log("🌍 Conectando desde Azure Web App: " . $_SERVER['WEBSITE_SITE_NAME']);
-                // No usamos opciones TLS especiales en Azure
-            } else {
-                // Estamos en desarrollo local
-                error_log("💻 Conectando desde entorno local");
-                // Solo una opción TLS para evitar conflictos
-                $options['tlsAllowInvalidCertificates'] = true;
-            }
-            
-            $this->client = new MongoDB\Client($this->connectionString, $options);
-            $this->database = $this->client->selectDatabase($this->databaseName);
-            
-            // ✅ TEST DE PING a tu cluster específico
-            $result = $this->client->selectDatabase('admin')->command(['ping' => 1], [
-                'maxTimeMS' => 30000
-            ]);
-            
-            error_log("✅ Conectado exitosamente a gameoncluster.4jrdsxk.mongodb.net");
-            
+
+            $this->client = new MongoDB\Client($connectionString, $options);
+            $this->database = $this->client->selectDatabase($dbName);
+
         } catch (Exception $e) {
-            error_log("❌ Error conectando a MongoDB Atlas: " . $e->getMessage());
-            throw new Exception("❌ Error de conexión MongoDB: " . $e->getMessage());
+            // En caso de fallo, termina de forma controlada y muestra un error JSON claro.
+            if (!headers_sent()) {
+                header('Content-Type: application/json; charset=utf-8');
+                http_response_code(500);
+            }
+            die(json_encode([
+                'success' => false,
+                'error' => 'DB_CONNECTION_FAILED',
+                'message' => 'No se pudo conectar a la base de datos.',
+                'details' => $e->getMessage()
+            ]));
         }
     }
     
