@@ -9,27 +9,43 @@ class MongoDBConnection {
     private $client;
     private $database;
     
-    // ⭐ TU CONNECTION STRING DE ATLAS
-    private $connectionString = 'mongodb+srv://gameon_user:uenyQ7knyG8tonjC@gameoncluster.4jrdsxk.mongodb.net/?retryWrites=true&w=majority&appName=GameOnCluster';
+    // ⭐ CONNECTION STRING ACTUALIZADO
+    private $connectionString = 'mongodb+srv://gameon_user:uenyQ7knyG8tonjC@gameoncluster.4jrdsxk.mongodb.net/gameon_chat?retryWrites=true&w=majority&appName=GameOnCluster';
     private $databaseName = 'gameon_chat';
     
     private function __construct() {
         try {
-            // ✅ VERIFICAR AUTOLOADER
             if (!class_exists('MongoDB\Client')) {
                 throw new Exception('❌ MongoDB Client no está disponible. Verifica que composer autoload esté incluido.');
             }
             
-            // ⭐ CONEXIÓN A MONGODB ATLAS
-            $this->client = new MongoDB\Client($this->connectionString, [
-                'serverSelectionTimeoutMS' => 5000,
-                'connectTimeoutMS' => 10000,
-            ]);
+            // ⭐ CONFIGURACIÓN SSL MEJORADA
+            $options = [
+                'serverSelectionTimeoutMS' => 30000,    // 30 segundos
+                'connectTimeoutMS' => 30000,             // 30 segundos
+                'socketTimeoutMS' => 30000,              // 30 segundos
+                'maxPoolSize' => 5,                      // Límite de conexiones
+                'retryWrites' => true,                   // Reintentar escrituras
+                'retryReads' => true,                    // Reintentar lecturas
+                'ssl' => true,                           // ⭐ FORZAR SSL
+                'tlsAllowInvalidCertificates' => true,   // ⭐ PERMITIR CERTIFICADOS INVÁLIDOS
+                'tlsAllowInvalidHostnames' => true,      // ⭐ PERMITIR HOSTNAMES INVÁLIDOS
+            ];
             
+            // ⭐ CONFIGURACIÓN ESPECÍFICA PARA WINDOWS XAMPP
+            if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
+                $options['tlsCAFile'] = null;           // No usar archivo CA en Windows
+                $options['tlsInsecure'] = true;         // Permitir conexiones inseguras
+            }
+            
+            $this->client = new MongoDB\Client($this->connectionString, $options);
             $this->database = $this->client->selectDatabase($this->databaseName);
             
-            // ✅ TEST DE CONEXIÓN
-            $this->client->selectDatabase('admin')->command(['ping' => 1]);
+            // ✅ TEST DE CONEXIÓN CON TIMEOUT MAYOR
+            $this->client->selectDatabase('admin')->command(['ping' => 1], [
+                'maxTimeMS' => 30000
+            ]);
+            
             error_log("✅ MongoDB Atlas conectado exitosamente");
             
         } catch (Exception $e) {
@@ -183,7 +199,9 @@ class MongoDBConnection {
     // ✅ MÉTODO DE PRUEBA
     public function testConnection() {
         try {
-            $result = $this->client->selectDatabase('admin')->command(['ping' => 1]);
+            $result = $this->client->selectDatabase('admin')->command(['ping' => 1], [
+                'maxTimeMS' => 30000
+            ]);
             return [
                 'success' => true, 
                 'message' => '✅ Conexión exitosa a MongoDB Atlas',
