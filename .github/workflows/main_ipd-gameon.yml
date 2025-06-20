@@ -24,15 +24,15 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: '8.1'
-          # ✅ LA COMBINACIÓN MÁS RECIENTE, ESTABLE Y COMPATIBLE
+          # Usamos la combinación estable más reciente y probada
           extensions: mongodb-1.18.1, gd, imagick, redis
           
       - name: 'Install Composer dependencies'
         run: composer install --no-interaction --no-dev --optimize-autoloader
 
-      # ✅ Mantenemos este paso como la máxima garantía
-      - name: 'Remove Composer files before deployment'
-        run: rm composer.json composer.lock
+      # ✅ PASO CLAVE: Crear un paquete .zip sellado con todo el contenido
+      - name: 'Create zip package for deployment'
+        run: zip -r deployment.zip . -x ".git/*" -x ".github/*"
 
       - name: 'Deploy to Azure Web App'
         id: deploy-to-webapp
@@ -40,5 +40,6 @@ jobs:
         with:
           app-name: 'IPD-GameOn'
           slot-name: 'Production'
-          package: .
+          # ✅ PASO CLAVE: Desplegar el paquete sellado, no los archivos sueltos
+          package: deployment.zip
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_CA1C706A601649A6B4B0C8E61A25B604 }}
