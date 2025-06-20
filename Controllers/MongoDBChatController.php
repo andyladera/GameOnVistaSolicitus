@@ -1,96 +1,83 @@
 <?php
 // Controllers/MongoDBChatController.php
 
-// ✅ PARA AZURE - SIN CLASES, SOLO FUNCIONES SIMPLES
-ob_start();
-ob_clean();
+// ✅ MÁXIMA PROTECCIÓN: Limpiar cualquier output accidental
+if (ob_get_level() > 0) {
+    ob_end_clean();
+}
 
-// ✅ HEADERS OBLIGATORIOS
+// ✅ RESPUESTA JSON POR DEFECTO EN CASO DE ERROR FATAL
 header('Content-Type: application/json; charset=utf-8');
 
-// ✅ CONTROL DE ERRORES - SIEMPRE JSON
-set_error_handler(function($errno, $errstr) {
-    echo json_encode(['success' => false, 'error' => "Error: $errstr"]);
-    exit;
-});
-
+// ✅ MANEJO DE ERRORES A PRUEBA DE BALAS
 register_shutdown_function(function() {
     $error = error_get_last();
-    if ($error && in_array($error['type'], [E_ERROR, E_PARSE, E_CORE_ERROR])) {
-        echo json_encode(['success' => false, 'error' => "Error fatal: " . $error['message']]);
+    if ($error !== null && in_array($error['type'], [E_ERROR, E_PARSE, E_CORE_ERROR, E_COMPILE_ERROR, E_USER_ERROR])) {
+        // Si los headers ya se enviaron, no podemos hacer nada.
+        // Pero si no, forzamos una respuesta JSON de error.
+        if (!headers_sent()) {
+            header('Content-Type: application/json; charset=utf-8');
+            echo json_encode([
+                'success' => false,
+                'error' => 'Error fatal del servidor.',
+                'details' => $error['message'] // No mostrar en producción real, solo para debug
+            ]);
+        }
     }
 });
 
-// ✅ SESIÓN
-session_start();
-if (!isset($_SESSION['user_id'])) {
-    echo json_encode(['success' => false, 'error' => 'Usuario no autenticado']);
-    exit;
-}
-
 try {
-    // ✅ MONGODB
-    require_once __DIR__ . '/../Config/mongodb_config.php';
+    // ✅ VERIFICAR SESIÓN
+    if (session_status() == PHP_SESSION_NONE) {
+        session_start();
+    }
+
+    if (!isset($_SESSION['user_id'])) {
+        throw new Exception('Usuario no autenticado. Por favor, inicie sesión.');
+    }
+
+    // ✅ INCLUIR MONGODB (Punto común de fallo)
+    $mongoConfigFile = __DIR__ . '/../Config/mongodb_config.php';
+    if (!file_exists($mongoConfigFile)) {
+        throw new Exception('Error crítico: No se encuentra el archivo de configuración de MongoDB.');
+    }
+    require_once $mongoConfigFile;
+
+    // ✅ OBTENER ACCIÓN
+    $action = $_GET['action'] ?? $_POST['action'] ?? '';
+    if (empty($action)) {
+        throw new Exception('Acción no especificada.');
+    }
+
+    // ✅ CREAR INSTANCIA MONGODB
     $mongo = MongoDBConnection::getInstance();
+    $currentUserId = (int)$_SESSION['user_id'];
     
-    // ✅ ACCIÓN
-    $action = $_GET['action'] ?? '';
-    
-    // ✅ PROCESAMIENTO SEGÚN ACCIÓN
+    $response_data = null;
+
+    // ✅ EJECUTAR ACCIONES
     switch ($action) {
-        case 'test':
-            echo json_encode([
-                'success' => true, 
-                'data' => [
-                    'message' => 'MongoDB Controller funcionando',
-                    'user_id' => $_SESSION['user_id'],
-                    'timestamp' => date('Y-m-d H:i:s')
-                ]
-            ]);
-            break;
-            
         case 'start_conversation':
             $input = json_decode(file_get_contents('php://input'), true);
-            if (!$input || !isset($input['target_user_id'])) {
-                throw new Exception('target_user_id requerido');
-            }
-            
-            $targetUserId = (int)$input['target_user_id'];
-            $currentUserId = (int)$_SESSION['user_id'];
+            $targetUserId = (int)($input['target_user_id'] ?? 0);
+            if ($targetUserId === 0) throw new Exception('ID de usuario objetivo no válido.');
             
             $participants = [$currentUserId, $targetUserId];
             sort($participants);
             
-            $conversationId = $mongo->getOrCreateConversation($participants);
-            
-            echo json_encode([
-                'success' => true,
-                'data' => [
-                    'conversation_id' => $conversationId,
-                    'current_user' => $currentUserId,
-                    'target_user' => $targetUserId
-                ]
-            ]);
+            $conversationId = $mongo->getOrCreateConversation($participants, 'private');
+            $response_data = ['conversation_id' => $conversationId];
             break;
-            
+
         case 'start_team_conversation':
             $input = json_decode(file_get_contents('php://input'), true);
-            if (!$input || !isset($input['team_id'])) {
-                throw new Exception('team_id requerido');
-            }
-            
-            $teamId = (int)$input['team_id'];
+            $teamId = (int)($input['team_id'] ?? 0);
+            if ($teamId === 0) throw new Exception('ID de equipo no válido.');
+
             $conversationId = $mongo->getOrCreateConversation([], 'team', $teamId);
-            
-            echo json_encode([
-                'success' => true,
-                'data' => [
-                    'conversation_id' => $conversationId,
-                    'team_id' => $teamId
-                ]
-            ]);
+            $response_data = ['conversation_id' => $conversationId, 'team_id' => $teamId];
             break;
-            
+        
         case 'get_messages':
             $conversationId = $_GET['conversation_id'] ?? '';
             if (empty($conversationId)) {
@@ -202,12 +189,17 @@ try {
             break;
             
         default:
-            echo json_encode(['success' => false, 'error' => 'Acción no válida: ' . $action]);
-            break;
+            throw new Exception('Acción no válida: ' . htmlspecialchars($action));
     }
-    
+
+    // ✅ ENVIAR RESPUESTA EXITOSA
+    echo json_encode(['success' => true, 'data' => $response_data]);
+
 } catch (Exception $e) {
-    echo json_encode(['success' => false, 'error' => $e->getMessage()]);
+    // ✅ ENVIAR ERROR CONTROLADO
+    if (!headers_sent()) {
+        echo json_encode(['success' => false, 'error' => $e->getMessage()]);
+    }
 }
 
 exit;

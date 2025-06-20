@@ -29,6 +29,7 @@ class GameOnChatMongo {
             this.cleanupAllChats();
             this.currentUserName = targetUserName;
             this.isTeamChat = false;
+            // Ejemplo de una llamada fetch CORRECTA para Azure
             const response = await fetch('/Controllers/MongoDBChatController.php?action=start_conversation', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },

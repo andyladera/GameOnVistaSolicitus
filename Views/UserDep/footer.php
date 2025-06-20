@@ -17,67 +17,43 @@
     </footer>
     <!-- Incluir Font Awesome para los iconos sociales -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <script src="../../Public/js/horarios_modal.js"></script>
-    
-    <!-- ✅ CARGAR CHATMONGO ESPECÍFICAMENTE PARA MISEQUIPOS -->
+    <script src="/Public/js/horarios_modal.js" defer></script>
+
+    <!-- ✅ CARGA DE SCRIPTS DE CHAT ORDENADA Y CORRECTA PARA AZURE -->
     <?php 
+    // Solo cargar los scripts de chat en la página de "misequipos"
     $current_page = basename($_SERVER['PHP_SELF'], '.php');
     if ($current_page === 'misequipos'): 
     ?>
-    <script src="../../Public/js/chatmongo.js"></script>
-    <script>
-        console.log('✅ ChatMongo.js cargado para misequipos');
-    </script>
-    <?php endif; ?>
-    
-    <!-- ✅ CARGAR CHAT.JS CON VERIFICACIÓN MEJORADA -->
-    <script>
-        // Solo cargar chat si está habilitado o es la página de misequipos
-        const currentPath = window.location.pathname;
-        const isMinsequiposPage = currentPath.includes('misequipos');
+        <!-- 1. Cargar chat.js (que define ChatManager) PRIMERO -->
+        <script src="/Public/js/chat.js" defer></script>
         
-        if (window.chatEnabled || isMinsequiposPage) {
-            console.log('🔄 Intentando cargar chat.js...');
-            
-            if (!window.ChatManager && !window.chatManager && !window.chatLoaded) {
-                const chatScript = document.createElement('script');
-                chatScript.src = '../../Public/js/chat.js';
-                chatScript.onload = function() {
-                    window.chatLoaded = true;
-                    console.log('✅ Chat.js cargado exitosamente');
+        <!-- 2. Cargar chatmongo.js (que usa ChatManager) DESPUÉS -->
+        <script src="/Public/js/chatmongo.js" defer></script>
+        
+        <script>
+            // Este script se ejecutará después de que todo el HTML esté listo
+            document.addEventListener('DOMContentLoaded', () => {
+                console.log('✅ DOM listo. Los scripts de chat deberían estar cargados.');
+                
+                // Verificación final para asegurar que todo está en su lugar
+                setTimeout(() => {
+                    console.log('🔍 Verificación final de objetos de chat:');
+                    if (window.chatManager) {
+                        console.log('✅ ChatManager (MySQL) está disponible.');
+                    } else {
+                        console.error('❌ ChatManager (MySQL) NO está disponible. Revisa la carga de chat.js');
+                    }
                     
-                    // ✅ VERIFICAR QUE AMBOS SISTEMAS ESTÉN DISPONIBLES
-                    setTimeout(() => {
-                        if (window.gameOnChatMongo) {
-                            console.log('✅ MongoDB Chat disponible');
-                        } else {
-                            console.error('❌ MongoDB Chat NO disponible');
-                        }
-                        
-                        // ✅ VERIFICAR AMBAS VARIACIONES
-                        if (window.chatManager || window.ChatManager) {
-                            console.log('✅ ChatManager disponible');
-                        } else {
-                            console.error('❌ ChatManager NO disponible');
-                            console.log('🔄 Intentando crear manualmente...');
-                            // ✅ CREAR MANUALMENTE SI NO EXISTE
-                            if (typeof ChatManager !== 'undefined') {
-                                window.chatManager = new ChatManager();
-                                console.log('✅ ChatManager creado manualmente');
-                            }
-                        }
-                    }, 500);
-                };
-                chatScript.onerror = function() {
-                    console.error('❌ Error cargando chat.js');
-                };
-                document.body.appendChild(chatScript);
-            } else {
-                console.log('✅ Chat ya está cargado o ChatManager existe');
-            }
-        } else {
-            console.log('ℹ️ Chat no habilitado para esta página');
-        }
-    </script>
+                    if (window.gameOnChatMongo) {
+                        console.log('✅ GameOnChatMongo está disponible.');
+                    } else {
+                        console.error('❌ GameOnChatMongo NO está disponible. Revisa la carga de chatmongo.js');
+                    }
+                }, 500);
+            });
+        </script>
+    <?php endif; ?>
+
 </body>
 </html>
