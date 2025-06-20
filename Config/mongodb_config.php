@@ -43,6 +43,7 @@ class MongoDBConnection {
                 // ⭐ CONFIGURACIÓN SSL PERMISIVA para resolver TLS handshake
                 'tlsAllowInvalidCertificates' => true,
                 'tlsAllowInvalidHostnames' => true,
+                'tlsInsecure' => true,
             ];
             
             // ⭐ DETECCIÓN DE ENTORNO (Azure vs Local)

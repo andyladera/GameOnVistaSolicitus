@@ -29,7 +29,7 @@ class GameOnChatMongo {
             this.cleanupAllChats();
             this.currentUserName = targetUserName;
             this.isTeamChat = false;
-            const response = await fetch('../../Controllers/MongoDBChatController.php?action=start_conversation', {
+            const response = await fetch('/Controllers/MongoDBChatController.php?action=start_conversation', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -55,7 +55,7 @@ class GameOnChatMongo {
         if (!this.currentConversationId) return;
         
         try {
-            const response = await fetch(`../../Controllers/MongoDBChatController.php?action=get_messages&conversation_id=${this.currentConversationId}`);
+            const response = await fetch(`/Controllers/MongoDBChatController.php?action=get_messages&conversation_id=${this.currentConversationId}`);
             const result = await response.json();
             
             if (result.success) {
@@ -73,7 +73,7 @@ class GameOnChatMongo {
         if (!message || !this.currentConversationId) return;
         
         try {
-            const response = await fetch('../../Controllers/MongoDBChatController.php?action=send_message', {
+            const response = await fetch('/Controllers/MongoDBChatController.php?action=send_message', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -319,7 +319,7 @@ class GameOnChatMongo {
             
             this.cleanupAllChats();
             
-            const response = await fetch('../../Controllers/MongoDBChatController.php?action=start_team_conversation', {
+            const response = await fetch('/Controllers/MongoDBChatController.php?action=start_team_conversation', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -362,7 +362,7 @@ class GameOnChatMongo {
         console.log('🔄 Cargando mensajes de equipo para conversación:', this.currentConversationId);
         
         try {
-            const url = `../../Controllers/MongoDBChatController.php?action=get_team_messages&conversation_id=${this.currentConversationId}`;
+            const url = `/Controllers/MongoDBChatController.php?action=get_team_messages&conversation_id=${this.currentConversationId}`;
             console.log('🌐 URL de solicitud:', url);
             
             const response = await fetch(url);
@@ -388,7 +388,7 @@ class GameOnChatMongo {
         if (!message || !this.currentConversationId) return;
         
         try {
-            const response = await fetch('../../Controllers/MongoDBChatController.php?action=send_team_message', {
+            const response = await fetch('/Controllers/MongoDBChatController.php?action=send_team_message', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
