@@ -30,10 +30,11 @@ jobs:
         with:
           files: 'composer.json'
 
-      # 🎯 SOLUCIÓN DEFINITIVA Y SIMPLIFICADA
-      - name: Install Composer dependencies (Standard Method)
+      # 🎯 SOLUCIÓN FINAL Y ESTRICTA
+      - name: Install Composer dependencies (Strict Method)
         if: steps.check_files.outputs.files_exists == 'true'
-        run: composer install --no-interaction --prefer-dist --no-dev --optimize-autoloader --ignore-platform-reqs
+        # Se elimina --ignore-platform-reqs para forzar una construcción correcta
+        run: composer install --no-interaction --prefer-dist --no-dev --optimize-autoloader
 
       - name: Zip artifact for deployment
         run: zip release.zip ./* -r
