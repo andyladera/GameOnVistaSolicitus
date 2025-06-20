@@ -24,8 +24,9 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: '8.1'
-          extensions: mongodb-1.16.2, gd, imagick, redis # Extensiones comunes
-          
+          # ✅ SOLUCIÓN FINAL: Alineamos la versión de la extensión con la librería
+          extensions: mongodb-1.17.0, gd, imagick, redis
+
       - name: 'Install Composer dependencies'
         run: composer install --no-interaction --no-dev --optimize-autoloader
 
