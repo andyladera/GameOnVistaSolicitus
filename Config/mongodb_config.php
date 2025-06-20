@@ -8,8 +8,8 @@ class MongoDBConnection {
     private $client;
     private $database;
     
-    // ⭐ TUS DATOS EXACTOS DE MONGODB ATLAS
-    private $connectionString = 'mongodb+srv://gameon_user:uenyQ7knyG8tonjC@gameoncluster.4jrdsxk.mongodb.net/gameon_chat?retryWrites=true&w=majority&ssl=true&tlsAllowInvalidCertificates=true';
+    // ⭐ CONNECTION STRING SIN OPCIONES TLS CONFLICTIVAS
+    private $connectionString = 'mongodb+srv://gameon_user:uenyQ7knyG8tonjC@gameoncluster.4jrdsxk.mongodb.net/gameon_chat?retryWrites=true&w=majority';
     private $databaseName = 'gameon_chat';
     
     private function __construct() {
@@ -25,36 +25,29 @@ class MongoDBConnection {
                 'connectTimeoutMS' => 30000,
                 'socketTimeoutMS' => 30000,
                 
-                // Configuración SSL para Azure/Cloud
+                // Configuración mínima SSL para Azure
                 'ssl' => true,
-                'tls' => true,
                 'authSource' => 'admin',
                 
                 // Optimización para tu cluster específico
                 'retryWrites' => true,
                 'retryReads' => true,
                 'maxPoolSize' => 5,
-                'minPoolSize' => 1,
                 
                 // Configuración de red
                 'serverSelectionTryOnce' => false,
-                'heartbeatFrequencyMS' => 30000,
-                
-                // ⭐ CONFIGURACIÓN SSL PERMISIVA para resolver TLS handshake
-                'tlsAllowInvalidCertificates' => true,
-                'tlsAllowInvalidHostnames' => true,
-                'tlsInsecure' => true,
             ];
             
             // ⭐ DETECCIÓN DE ENTORNO (Azure vs Local)
             if (isset($_SERVER['WEBSITE_SITE_NAME'])) {
                 // Estamos en Azure Web App
                 error_log("🌍 Conectando desde Azure Web App: " . $_SERVER['WEBSITE_SITE_NAME']);
-                $options['tlsAllowInvalidCertificates'] = false; // Azure tiene certificados válidos
+                // No usamos opciones TLS especiales en Azure
             } else {
                 // Estamos en desarrollo local
                 error_log("💻 Conectando desde entorno local");
-                $options['tlsInsecure'] = true; // Para desarrollo local
+                // Solo una opción TLS para evitar conflictos
+                $options['tlsAllowInvalidCertificates'] = true;
             }
             
             $this->client = new MongoDB\Client($this->connectionString, $options);
