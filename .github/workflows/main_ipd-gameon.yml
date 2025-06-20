@@ -24,8 +24,8 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: '8.1'
-          # ✅ LA VERSIÓN CORRECTA BASADA EN TU PHPINFO
-          extensions: mongodb-2.0.0, gd, imagick, redis
+          # ✅ LA COMBINACIÓN MÁS RECIENTE, ESTABLE Y COMPATIBLE
+          extensions: mongodb-1.18.1, gd, imagick, redis
           
       - name: 'Install Composer dependencies'
         run: composer install --no-interaction --no-dev --optimize-autoloader
