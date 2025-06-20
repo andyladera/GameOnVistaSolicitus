@@ -182,7 +182,6 @@ setTimeout(() => {
     }
 }, 2000);
 </script>
-
 <div id="userDataContainer" data-user-id="<?php echo $_SESSION['user_id']; ?>" style="display: none;"></div>
 <?php 
 include_once 'footer.php'; 
