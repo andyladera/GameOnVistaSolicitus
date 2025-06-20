@@ -24,13 +24,13 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: '8.1'
-          extensions: mongodb-1.17.0, gd, imagick, redis
+          # ✅ LA VERSIÓN CORRECTA BASADA EN TU PHPINFO
+          extensions: mongodb-2.0.0, gd, imagick, redis
           
       - name: 'Install Composer dependencies'
         run: composer install --no-interaction --no-dev --optimize-autoloader
 
-      # ✅ PASO CLAVE: Eliminar los archivos de Composer antes de desplegar.
-      # Esto evita que el sistema de construcción de Azure (Oryx) se active.
+      # ✅ Mantenemos este paso como la máxima garantía
       - name: 'Remove Composer files before deployment'
         run: rm composer.json composer.lock
 
