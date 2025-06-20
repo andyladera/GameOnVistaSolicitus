@@ -143,7 +143,6 @@ class MongoDBChatController {
                 'timestamp' => new MongoDB\BSON\UTCDateTime(),
                 'read_by' => [(int)$senderId]
             ];
-            
             $messageId = $this->mongo->insertDocument('messages', $messageDoc);
             
             // Actualizar conversación
@@ -175,10 +174,30 @@ class MongoDBChatController {
                 return;
             }
             
-            $messages = $this->mongo->findDocuments('messages', 
+            // ⭐ BUSCAR DE AMBAS FORMAS: como string Y como ObjectId
+            $messages = [];
+            
+            // Buscar como string
+            $messagesAsString = $this->mongo->findDocuments('messages', 
                 ['conversation_id' => $conversationId], 
                 ['sort' => ['timestamp' => 1], 'limit' => 50]
             );
+            
+            // Buscar como ObjectId si es posible
+            if (strlen($conversationId) === 24) {
+                try {
+                    $conversationObjectId = new MongoDB\BSON\ObjectId($conversationId);
+                    $messagesAsObjectId = $this->mongo->findDocuments('messages', 
+                        ['conversation_id' => $conversationObjectId], 
+                        ['sort' => ['timestamp' => 1], 'limit' => 50]
+                    );
+                    $messages = count($messagesAsObjectId) > 0 ? $messagesAsObjectId : $messagesAsString;
+                } catch (Exception $e) {
+                    $messages = $messagesAsString;
+                }
+            } else {
+                $messages = $messagesAsString;
+            }
             
             $formattedMessages = [];
             foreach ($messages as $msg) {
@@ -338,10 +357,6 @@ class MongoDBChatController {
 
     private function getTeamMessages() {
         try {
-            if (ob_get_level()) {
-                ob_clean();
-            }
-            
             if (!isset($_SESSION['user_id'])) {
                 $this->error('Usuario no autenticado');
                 return;
@@ -354,36 +369,32 @@ class MongoDBChatController {
                 return;
             }
             
-            // ⭐ DEBUG: Ver qué buscamos
-            error_log("🔍 GET - conversationId recibido: " . $conversationId . " (tipo: " . gettype($conversationId) . ")");
+            // ⭐ BUSCAR DE AMBAS FORMAS: como string Y como ObjectId
+            $messages = [];
             
-            // ⭐ BUSCAR DE AMBAS FORMAS para debug
-            // 1. Como ObjectId
-            try {
-                $conversationObjectId = new MongoDB\BSON\ObjectId($conversationId);
-                $messagesAsObjectId = $this->mongo->findDocuments('messages', 
-                    ['conversation_id' => $conversationObjectId], 
-                    ['sort' => ['timestamp' => 1], 'limit' => 50]
-                );
-                error_log("🔍 GET - Mensajes encontrados como ObjectId: " . count($messagesAsObjectId));
-            } catch (Exception $mongoError) {
-                $messagesAsObjectId = [];
-                error_log("🔍 GET - Error buscando como ObjectId: " . $mongoError->getMessage());
-            }
-            
-            // 2. Como string
+            // Buscar como string
             $messagesAsString = $this->mongo->findDocuments('messages', 
                 ['conversation_id' => $conversationId], 
                 ['sort' => ['timestamp' => 1], 'limit' => 50]
             );
-            error_log("🔍 GET - Mensajes encontrados como string: " . count($messagesAsString));
             
-            // ⭐ USAR el que tenga resultados
-            $messages = count($messagesAsObjectId) > 0 ? $messagesAsObjectId : $messagesAsString;
+            // Buscar como ObjectId si es posible
+            if (strlen($conversationId) === 24) {
+                try {
+                    $conversationObjectId = new MongoDB\BSON\ObjectId($conversationId);
+                    $messagesAsObjectId = $this->mongo->findDocuments('messages', 
+                        ['conversation_id' => $conversationObjectId], 
+                        ['sort' => ['timestamp' => 1], 'limit' => 50]
+                    );
+                    $messages = count($messagesAsObjectId) > 0 ? $messagesAsObjectId : $messagesAsString;
+                } catch (Exception $e) {
+                    $messages = $messagesAsString;
+                }
+            } else {
+                $messages = $messagesAsString;
+            }
             
-            error_log("🔍 GET - Total mensajes finales: " . count($messages));
-            
-            // ... resto del código igual
+            // ⭐ OBTENER NOMBRES DE USUARIOS
             require_once '../Config/database.php';
             $database = new Database();
             $mysqli = $database->getConnection();
@@ -410,7 +421,6 @@ class MongoDBChatController {
             $this->success($formattedMessages);
             
         } catch (Exception $e) {
-            error_log("💥 GET - Error: " . $e->getMessage());
             $this->error('Error obteniendo mensajes de equipo: ' . $e->getMessage());
         }
     }
@@ -433,22 +443,19 @@ class MongoDBChatController {
                 return;
             }
             
-            // ⭐ DEBUG: Ver qué tipo de conversationId recibimos
-            error_log("🔍 SEND - conversationId recibido: " . $conversationId . " (tipo: " . gettype($conversationId) . ")");
-            
-            // ⭐ DECIDIR: ¿Guardar como ObjectId o como string?
-            // OPCIÓN A: Guardar como ObjectId
-            try {
-                $conversationObjectId = new MongoDB\BSON\ObjectId($conversationId);
-                $finalConversationId = $conversationObjectId;
-                error_log("🔍 SEND - Guardando como ObjectId");
-            } catch (Exception $e) {
-                $finalConversationId = $conversationId; // Mantener como string
-                error_log("🔍 SEND - Guardando como string");
+            // ⭐ CONVERTIR conversationId a ObjectId si es string de 24 caracteres
+            $finalConversationId = $conversationId;
+            if (is_string($conversationId) && strlen($conversationId) === 24) {
+                try {
+                    $finalConversationId = new MongoDB\BSON\ObjectId($conversationId);
+                } catch (Exception $e) {
+                    // Si falla, mantener como string
+                    $finalConversationId = $conversationId;
+                }
             }
             
             $messageDoc = [
-                'conversation_id' => $finalConversationId, // ← USAR la variable decidida
+                'conversation_id' => $finalConversationId,
                 'sender_id' => (int)$senderId,
                 'message' => $message,
                 'timestamp' => new MongoDB\BSON\UTCDateTime(),
@@ -458,8 +465,6 @@ class MongoDBChatController {
             
             $messageId = $this->mongo->insertDocument('messages', $messageDoc);
             
-            error_log("✅ SEND - Mensaje guardado con ID: " . $messageId);
-            
             $this->success([
                 'message_id' => (string)$messageId,
                 'timestamp' => date('Y-m-d H:i:s'),
@@ -467,7 +472,6 @@ class MongoDBChatController {
             ]);
             
         } catch (Exception $e) {
-            error_log("💥 SEND - Error: " . $e->getMessage());
             $this->error('Error enviando mensaje de equipo: ' . $e->getMessage());
         }
     }
