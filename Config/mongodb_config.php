@@ -18,7 +18,7 @@ class MongoDBConnection {
             // Copia el string de conexión que te da. NO USES el "+srv".
             // Ejemplo: mongodb://user:pass@ac-XXXX.mongodb.net/?retryWrites=true&w=majority
             // ✅ REEMPLAZA ESTA LÍNEA CON LA TUYA DE ATLAS (VERSIÓN +SRV)
-            $connectionString = "mongodb+srv://gamebon_usuario:uenyQ7knyG8tonjC@gameoncluster.4jrdsxk.mongodb.net/?retryWrites=true&w=majority"; 
+            $connectionString = "mongodb+srv://gameon_user:uenyQ7knyG8tonjC@gameoncluster.4jrdsxk.mongodb.net/?retryWrites=true&w=majority"; 
 
             // 2. NOMBRE DE TU BASE DE DATOS
             $dbName = "GameOn"; // O el nombre que uses
