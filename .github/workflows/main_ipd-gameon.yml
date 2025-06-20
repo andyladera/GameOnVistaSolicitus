@@ -9,32 +9,12 @@ on:
       - main
   workflow_dispatch:
 
-jobs: 
+jobs:
   build:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
 
     steps:
       - uses: actions/checkout@v4
-
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: '8.1'
-          extensions: mongodb-1.16.2
-
-      - name: Check if composer.json exists
-        id: check_files
-        uses: andstor/file-existence-action@v2
-        with:
-          files: 'composer.json'
-
-      # 🎯 SOLUCIÓN FINAL Y ESTRICTA
-      - name: Install Composer dependencies (Strict Method)
-        if: steps.check_files.outputs.files_exists == 'true'
-        # Se elimina --ignore-platform-reqs para forzar una construcción correcta
-        run: composer install --no-interaction --prefer-dist --no-dev --optimize-autoloader
 
       - name: Zip artifact for deployment
         run: zip release.zip ./* -r
