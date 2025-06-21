@@ -28,7 +28,7 @@ jobs:
           extensions: mongodb-2.0.0, gd, imagick, redis
           
       - name: 'Install Composer dependencies'
-        run: composer install --no-interaction --no-dev --optimize-autoloader
+        run: composer install --no-interaction --no-dev --optimize-autoloader --ignore-platform-req=ext-mongodb
 
       # ✅ PASO CLAVE: Crear un paquete .zip sellado con todo el contenido
       - name: 'Create zip package for deployment'
