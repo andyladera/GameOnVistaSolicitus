@@ -29,8 +29,8 @@ jobs:
           
       - name: 'Install Composer dependencies'
         run: |
-          # Forzar la instalación de una versión compatible con ext-mongodb 2.0.0
-          composer require mongodb/mongodb:dev-master --ignore-platform-req=ext-mongodb
+          # ✅ USAR LA VERSIÓN 2.0.0 QUE SÍ EXISTE
+          composer require mongodb/mongodb:2.0.0 --ignore-platform-req=ext-mongodb
           composer install --no-interaction --no-dev --optimize-autoloader --ignore-platform-req=ext-mongodb
 
       # ✅ CREAR PAQUETE ZIP SELLADO
