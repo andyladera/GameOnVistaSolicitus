@@ -10,30 +10,16 @@ class MongoDBConnection {
     
     private function __construct() {
         try {
-            // ⭐⭐⭐ SOLUCIÓN DEFINITIVA: CONEXIÓN ROBUSTA PARA AZURE ⭐⭐⭐
-            // 1. TU CONNECTION STRING DE ATLAS (MODO "STANDARD")
-            // Ve a Atlas -> Database -> Tu Cluster -> Connect -> Drivers
-            // Elige PHP y la versión 2.2.0 or later.
-            // Copia el string de conexión que te da. NO USES el "+srv".
-            // Ejemplo: mongodb://user:pass@ac-XXXX.mongodb.net/?retryWrites=true&w=majority
-            // ✅ REEMPLAZA ESTA LÍNEA CON LA TUYA DE ATLAS (VERSIÓN +SRV)
-            $connectionString = "mongodb+srv://gameon_user:uenyQ7knyG8tonjC@gameoncluster.4jrdsxk.mongodb.net/?retryWrites=true&w=majority&appName=GameOnCluster"; 
+            // ✅ RAILWAY MONGODB - Tus credenciales reales
+            $connectionString = "mongodb://mongo:eyQlSOAqnvZXIlwliWbUlZDROyDEhpEw@hopper.proxy.rlwy.net:25700";
 
-            // 2. NOMBRE DE TU BASE DE DATOS
-            $dbName = "GameOn"; // O el nombre que uses
+            // Nombre de tu base de datos
+            $dbName = "GameOn";
 
-            // 3. OPCIONES DE CONEXIÓN EXPLÍCITAS PARA AZURE
-            // Estas opciones fuerzan el uso de SSL, que es lo que Azure necesita.
-            $options = [
-                'ssl' => true,
-                'authSource' => 'admin',
-            ];
-
-            $this->client = new MongoDB\Client($connectionString, $options);
+            $this->client = new MongoDB\Client($connectionString);
             $this->database = $this->client->selectDatabase($dbName);
 
         } catch (Exception $e) {
-            // En caso de fallo, termina de forma controlada y muestra un error JSON claro.
             if (!headers_sent()) {
                 header('Content-Type: application/json; charset=utf-8');
                 http_response_code(500);
@@ -61,8 +47,6 @@ class MongoDBConnection {
     public function getClient() {
         return $this->client;
     }
-    
-    // ✅ MÉTODOS PARA TUS COLECCIONES: conversations (8 docs) y messages (54 docs)
     
     public function insertDocument($collectionName, $document) {
         try {
@@ -136,36 +120,6 @@ class MongoDBConnection {
         } catch (Exception $e) {
             error_log("❌ Error en conversación: " . $e->getMessage());
             throw $e;
-        }
-    }
-    
-    public function testConnection() {
-        try {
-            $result = $this->client->selectDatabase('admin')->command(['ping' => 1], [
-                'maxTimeMS' => 30000
-            ]);
-            
-            // ✅ VERIFICAR TUS COLECCIONES ESPECÍFICAS
-            $conversations = $this->database->selectCollection('conversations')->countDocuments();
-            $messages = $this->database->selectCollection('messages')->countDocuments();
-            
-            return [
-                'success' => true, 
-                'message' => '✅ Conexión exitosa a gameoncluster.4jrdsxk.mongodb.net',
-                'database' => $this->databaseName,
-                'cluster' => 'GameOnCluster',
-                'collections' => [
-                    'conversations' => $conversations,
-                    'messages' => $messages
-                ],
-                'environment' => isset($_SERVER['WEBSITE_SITE_NAME']) ? 'Azure' : 'Local'
-            ];
-        } catch (Exception $e) {
-            return [
-                'success' => false, 
-                'message' => '❌ Error: ' . $e->getMessage(),
-                'environment' => isset($_SERVER['WEBSITE_SITE_NAME']) ? 'Azure' : 'Local'
-            ];
         }
     }
 }
