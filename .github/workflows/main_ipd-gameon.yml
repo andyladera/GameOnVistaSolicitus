@@ -24,13 +24,16 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: '8.1'
-          # ✅ ALINEADO CON TU SERVIDOR AZURE (ext-mongodb 2.0.0)
+          # ✅ USAR LA MISMA VERSIÓN QUE AZURE
           extensions: mongodb-2.0.0, gd, imagick, redis
           
       - name: 'Install Composer dependencies'
-        run: composer install --no-interaction --no-dev --optimize-autoloader --ignore-platform-req=ext-mongodb
+        run: |
+          # Forzar la instalación de una versión compatible con ext-mongodb 2.0.0
+          composer require mongodb/mongodb:dev-master --ignore-platform-req=ext-mongodb
+          composer install --no-interaction --no-dev --optimize-autoloader --ignore-platform-req=ext-mongodb
 
-      # ✅ PASO CLAVE: Crear un paquete .zip sellado con todo el contenido
+      # ✅ CREAR PAQUETE ZIP SELLADO
       - name: 'Create zip package for deployment'
         run: zip -r deployment.zip . -x ".git/*" -x ".github/*"
 
@@ -40,6 +43,5 @@ jobs:
         with:
           app-name: 'IPD-GameOn'
           slot-name: 'Production'
-          # ✅ PASO CLAVE: Desplegar el paquete sellado, no los archivos sueltos
           package: deployment.zip
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_CA1C706A601649A6B4B0C8E61A25B604 }}
