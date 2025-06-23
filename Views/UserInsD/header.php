@@ -28,6 +28,7 @@
                 <li><a href="areas_deportivas.php">ÁREAS DEPORTIVAS</a></li>
                 <li><a href="reservas.php">RESERVAS</a></li>
                 <li><a href="torneos.php">TORNEOS</a></li>
+                <li><a href="gestionar_solicitudes.php">GESTIONAR SOLICITUDES</a></li>
             </ul>
         </nav>
         <div class="header-user-inst">

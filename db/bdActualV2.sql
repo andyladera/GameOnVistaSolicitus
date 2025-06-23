@@ -19,6 +19,27 @@
 CREATE DATABASE IF NOT EXISTS `railway` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
 USE `railway`;
 
+-- Limpiando tablas existentes para una importación segura
+SET FOREIGN_KEY_CHECKS = 0;
+DROP TABLE IF EXISTS `amistades`;
+DROP TABLE IF EXISTS `areas_deportivas`;
+DROP TABLE IF EXISTS `areas_horarios`;
+DROP TABLE IF EXISTS `deportes`;
+DROP TABLE IF EXISTS `equipos`;
+DROP TABLE IF EXISTS `equipo_miembros`;
+DROP TABLE IF EXISTS `horarios_atencion`;
+DROP TABLE IF EXISTS `instituciones_deportivas`;
+DROP TABLE IF EXISTS `instituciones_deportes`;
+DROP TABLE IF EXISTS `notificaciones`;
+DROP TABLE IF EXISTS `ocupaciones`;
+DROP TABLE IF EXISTS `reservas`;
+DROP TABLE IF EXISTS `solicitudes_registro`;
+DROP TABLE IF EXISTS `torneos`;
+DROP TABLE IF EXISTS `torneo_participantes`;
+DROP TABLE IF EXISTS `usuarios_deportistas`;
+DROP TABLE IF EXISTS `usuarios_instalaciones`;
+
+
 -- Volcando estructura para tabla railway.amistades
 CREATE TABLE IF NOT EXISTS `amistades` (
   `id` int NOT NULL AUTO_INCREMENT,
@@ -353,6 +374,7 @@ CREATE TABLE IF NOT EXISTS `instituciones_deportivas` (
   `id` int NOT NULL AUTO_INCREMENT,
   `usuario_instalacion_id` int NOT NULL,
   `nombre` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `ruc` varchar(11) COLLATE utf8mb4_general_ci NOT NULL,
   `direccion` varchar(200) COLLATE utf8mb4_general_ci NOT NULL,
   `latitud` decimal(10,8) NOT NULL,
   `longitud` decimal(11,8) NOT NULL,
@@ -365,16 +387,17 @@ CREATE TABLE IF NOT EXISTS `instituciones_deportivas` (
   `estado` tinyint(1) NOT NULL DEFAULT '1',
   `creado_en` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
+  UNIQUE KEY `ruc` (`ruc`),
   KEY `usuario_instalacion_id` (`usuario_instalacion_id`),
   CONSTRAINT `instituciones_deportivas_ibfk_1` FOREIGN KEY (`usuario_instalacion_id`) REFERENCES `usuarios_instalaciones` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- Volcando datos para la tabla railway.instituciones_deportivas: ~4 rows (aproximadamente)
-INSERT INTO `instituciones_deportivas` (`id`, `usuario_instalacion_id`, `nombre`, `direccion`, `latitud`, `longitud`, `imagen`, `tarifa`, `calificacion`, `telefono`, `email`, `descripcion`, `estado`, `creado_en`) VALUES
-	(1, 1, 'Top Gol Tacna', 'Av. Bolognesi 1234, Tacna', -17.99927959, -70.23738205, 'https://i.ibb.co/dJG8hdzS/images.png', 51.00, 4.50, '946143071', 'contacto@topgoltacna.com', 'Canchas de fútbol con césped sintético de primera calidad PREMIUM', 1, '2025-05-21 19:15:21'),
-	(2, 1, 'Complejo Deportivo Municipal', 'Calle Patricio Meléndez 500, Tacna', -18.01220000, -70.25360000, 'https://i.ibb.co/Qvc2gsKS/complejodeportivo.jpg', 35.00, 4.20, '052987654', 'deportes@munitacna.gob.pe', 'Complejo deportivo municipal con múltiples canchas', 1, '2025-05-21 19:15:21'),
-	(3, 1, 'Club Deportivo Tacna', 'Av. Cusco 750, Tacna', -18.00550000, -70.23980000, 'https://i.ibb.co/gb2kHZCq/111111.jpg', 65.00, 4.80, '052456789', 'info@clubdeportivotacna.com', 'Club exclusivo con instalaciones de primer nivel', 1, '2025-05-21 19:15:21'),
-	(4, 2, 'IPD Tacna - Complejo Deportivo', 'Av. Gregorio Albarracín s/n, Tacna', -18.01500000, -70.25800000, NULL, 0.00, 5.00, '052-427070', 'ipd.tacna@ipd.gob.pe', 'Complejo deportivo del Instituto Peruano del Deporte', 1, '2025-06-04 20:03:09');
+INSERT INTO `instituciones_deportivas` (`id`, `usuario_instalacion_id`, `nombre`, `ruc`, `direccion`, `latitud`, `longitud`, `imagen`, `tarifa`, `calificacion`, `telefono`, `email`, `descripcion`, `estado`, `creado_en`) VALUES
+    (1, 1, 'Complejo Deportivo El Crack', '20123456789', 'Av. Siempre Viva 123, Tacna', -18.0146, -70.2534, 'https://i.ibb.co/Vvz1d9q/complejo-el-crack.jpg', 70.00, 4.50, '999888777', 'contacto@elcrack.com', 'Complejo con 2 canchas de fútbol 7 y 1 de fútbol 5.', 1, '2025-05-19 17:21:05'),
+    (2, 2, 'Estadio IPD Tacna', '20987654321', 'Av. Hipólito Unanue s/n, Tacna', -18.005, -70.245, 'https://i.ibb.co/L8ySgS2/ipd-tacna.jpg', 50.00, 4.00, '987654321', 'informes@ipdtacna.gob.pe', 'Estadio principal de la ciudad, administrado por el IPD.', 1, '2025-06-04 20:03:52'),
+    (3, 1, 'Grama Sintética "El Pelotero"', '20112233445', 'Calle Los Peloteros 456, Tacna', -18.021, -70.259, 'https://i.ibb.co/yBNtG2R/el-pelotero.jpg', 60.00, 4.20, '911222333', 'reservas@elpelotero.com', 'Canchas de grass sintético para fulbito.', 1, '2025-06-16 21:43:55'),
+    (4, 1, 'Coliseo "La Bombonera"', '20556677889', 'Jr. Bombonera 789, Tacna', -18.018, -70.251, 'https://i.ibb.co/8mN5J0f/la-bombonera.jpg', 40.00, 3.80, '944555666', 'info@labombonera.pe', 'Coliseo cerrado para futsal, vóley y básquet.', 1, '2025-06-16 21:43:55');
 
 -- Volcando estructura para tabla railway.password_recovery_tokens
 CREATE TABLE IF NOT EXISTS `password_recovery_tokens` (
@@ -690,3 +713,6 @@ CREATE TABLE IF NOT EXISTS `solicitudes_registro` (
 /*!40014 SET FOREIGN_KEY_CHECKS=IFNULL(@OLD_FOREIGN_KEY_CHECKS, 1) */;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40111 SET SQL_NOTES=IFNULL(@OLD_SQL_NOTES, 1) */;
+
+-- Reactivando la revisión de claves foráneas
+SET FOREIGN_KEY_CHECKS = 1;

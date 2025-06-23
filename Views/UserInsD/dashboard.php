@@ -46,6 +46,7 @@ include_once 'header.php';
             <button class="btn-secondary-inst btn-ver-promociones">
                 <i class="fas fa-bullhorn"></i> Crear Torneos
             </button>
+
         </div>
     </div>
 
