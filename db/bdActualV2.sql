@@ -667,6 +667,24 @@ INSERT INTO `usuarios_instalaciones` (`id`, `username`, `password`, `estado`, `c
 	(1, 'andy', '$2y$10$IJrd1jNkOJNb73BS68/c.OeQG2R7NQmcuNoktqQINYtBYo1C4moOG', 1, '2025-05-19 17:20:31', 'privado'),
 	(2, 'ipd_tacna', '$2y$10$DetTzM9npZHxn9dufxtAoekAOZBzfmlQ568JEkpg4wIc3VrLJ6XEO', 1, '2025-06-04 20:03:09', 'ipd');
 
+-- Volcando estructura para tabla railway.solicitudes_registro
+CREATE TABLE IF NOT EXISTS `solicitudes_registro` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `nombre_institucion` VARCHAR(255) NOT NULL,
+  `ruc` VARCHAR(11) NOT NULL,
+  `email` VARCHAR(255) NOT NULL,
+  `password` VARCHAR(255) NOT NULL, -- Se guardará hasheada
+  `documento_path` VARCHAR(255) NOT NULL, -- Ruta al PDF subido
+  `estado` ENUM('pendiente', 'aprobada', 'rechazada') NOT NULL DEFAULT 'pendiente',
+  `motivo_rechazo` TEXT NULL, -- Para guardar la razón del rechazo
+  `fecha_solicitud` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `fecha_revision` TIMESTAMP NULL ON UPDATE CURRENT_TIMESTAMP,
+  `revisado_por` INT NULL, -- ID del admin que revisó
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `email_unico` (`email`),
+  UNIQUE KEY `ruc_unico` (`ruc`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
 /*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
 /*!40014 SET FOREIGN_KEY_CHECKS=IFNULL(@OLD_FOREIGN_KEY_CHECKS, 1) */;
