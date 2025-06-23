@@ -16,7 +16,7 @@
 
 
 -- Volcando estructura de base de datos para railway
-CREATE DATABASE IF NOT EXISTS `railway` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
+CREATE DATABASE IF NOT EXISTS `railway` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
 USE `railway`;
 
 -- Volcando estructura para tabla railway.amistades
@@ -56,7 +56,7 @@ CREATE TABLE IF NOT EXISTS `areas_deportivas` (
   KEY `deporte_id` (`deporte_id`),
   CONSTRAINT `areas_deportivas_ibfk_1` FOREIGN KEY (`institucion_deportiva_id`) REFERENCES `instituciones_deportivas` (`id`) ON DELETE CASCADE,
   CONSTRAINT `areas_deportivas_ibfk_2` FOREIGN KEY (`deporte_id`) REFERENCES `deportes` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- Volcando datos para la tabla railway.areas_deportivas: ~13 rows (aproximadamente)
 INSERT INTO `areas_deportivas` (`id`, `institucion_deportiva_id`, `deporte_id`, `nombre_area`, `descripcion`, `capacidad_jugadores`, `tarifa_por_hora`, `estado`, `imagen_area`, `creado_en`) VALUES
@@ -72,7 +72,8 @@ INSERT INTO `areas_deportivas` (`id`, `institucion_deportiva_id`, `deporte_id`, 
 	(25, 3, 1, 'Campo Principal del Estadio', 'Campo reglamentario con césped natural y capacidad para 5000 espectadores', 22, 120.00, 'activa', 'https://i.ibb.co/1f4vkrHz/fe.jpg', '2025-06-16 21:44:51'),
 	(26, 3, 2, 'Cancha de Vóley Municipal', 'Cancha oficial para torneos municipales', 12, 45.00, 'activa', 'https://i.ibb.co/fz9YKBbK/fefefe.jpg', '2025-06-16 21:44:51'),
 	(27, 3, 3, 'Cancha de Básquet Municipal', 'Cancha de básquet para eventos municipales', 10, 50.00, 'activa', 'https://i.ibb.co/sdD20DRS/rera.jpg', '2025-06-16 21:44:51'),
-	(28, 3, 1, 'Campo de Entrenamiento', 'Campo auxiliar para entrenamientos y partidos menores', 22, 90.00, 'mantenimiento', 'https://i.ibb.co/C5mV0P8c/gaga.jpg', '2025-06-16 21:44:51');
+	(28, 3, 1, 'Campo de Entrenamiento', 'Campo auxiliar para entrenamientos y partidos menores', 22, 90.00, 'mantenimiento', 'https://i.ibb.co/C5mV0P8c/gaga.jpg', '2025-06-16 21:44:51'),
+	(29, 3, 3, 'Supremacia James', 'Supremacia...', 22, 50.00, 'activa', 'https://i.ibb.co/Fk6NG1T3/VICTOR.jpg', '2025-06-23 06:24:09');
 
 -- Volcando estructura para tabla railway.areas_horarios
 CREATE TABLE IF NOT EXISTS `areas_horarios` (
@@ -393,7 +394,7 @@ CREATE TABLE IF NOT EXISTS `password_recovery_tokens` (
   KEY `idx_email` (`email`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Volcando datos para la tabla railway.password_recovery_tokens: ~3 rows (aproximadamente)
+-- Volcando datos para la tabla railway.password_recovery_tokens: ~0 rows (aproximadamente)
 INSERT INTO `password_recovery_tokens` (`id`, `user_type`, `user_id`, `email`, `token`, `expires_at`, `used`, `created_at`, `used_at`) VALUES
 	(1, 'deportista', 7, 'ac202207425@virtual.upt.pe', 'f65f62e854024b73c15a61761e8c09926c94067a449050162b8f90cdf76f52aa', '2025-06-23 01:26:54', 1, '2025-06-23 00:26:54', '2025-06-23 00:27:32'),
 	(2, 'deportista', 7, 'ac202207425@virtual.upt.pe', '3eefa26bceb6cfb3a71706dc811542d89ff2d667ef4421753ec8a7f5a8234c1b', '2025-06-23 01:32:57', 1, '2025-06-23 00:32:57', '2025-06-23 00:33:25'),
